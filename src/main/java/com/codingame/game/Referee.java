@@ -1,6 +1,8 @@
 package com.codingame.game;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
@@ -20,18 +22,37 @@ public class Referee extends AbstractReferee {
     private static int PADDLE_HEIGHT = 150;
 
     @Inject private MultiplayerGameManager<Player> gameManager;
-    @Inject private GraphicEntityModule graphicEntityModule;
+    @Inject public GraphicEntityModule graphicEntityModule;
     @Inject private AnimatedEventModule animatedEventModule;
 
     private int ballX, ballY;
     private int ballVX, ballVY;
     private Circle ball;
 
+    private int unitId = 0;
+    private List<Unit> unitList;
+    private List<Unit> newUnitList;
+
+    public final List<Unit> GetUnits(){
+        return unitList;
+    }
+
+    public void addUnit(Unit u){
+        newUnitList.add(u);
+    }
+
+    public int getId(){
+        return unitId++;
+    }
+
     private int clamp(int val, int min, int max) {
         return Math.max(min, Math.min(max, val));
     }
 
     private void sendPlayerInputs() {
+
+        //TODO: send input to players
+
         List<Player> allPlayers = gameManager.getPlayers();
         for (Player p : gameManager.getActivePlayers()) {
             p.sendInputLine(String.valueOf(p.y));
@@ -113,70 +134,88 @@ public class Referee extends AbstractReferee {
         }
     }
 
+    void updateUnits(){
+        //purge dead units
+        unitList = unitList.stream().filter(x -> x.health > 0).collect(Collectors.toList());
+        //add new units
+        unitList.addAll(newUnitList);
+        newUnitList = new ArrayList<>();
+    }
+
+    void doTurn(){
+        double t = 0;
+        while(t < 1){
+            for (Unit u : unitList){
+                u.graphicsTick(t);
+            }
+            for (Unit u : unitList){
+                u.tick();
+            }
+            // TODO: damage application
+            updateUnits();
+            for (Unit u : unitList){
+                u.move();
+            }
+
+            t += 0.1;
+        }
+    }
+
     @Override
     public void init() {
+        unitList = new ArrayList<>();
+        newUnitList = new ArrayList<>();
+
         gameManager.setFrameDuration(300);
-
-        ballX = WIDTH / 2;
-        ballY = HEIGHT / 2;
-        ballVX = 148;
-        ballVY = 132;
-
-        
         
         graphicEntityModule.createSprite().setImage("Background.jpg").setAnchor(0);
 
         for (Player p : gameManager.getPlayers()) {
-            p.previousY = p.y = HEIGHT / 2;
+            int faction = p.getIndex();
+            Ship s = new Ship(new Vector2d(faction == 0 ? WIDTH/4 : WIDTH/4*3,HEIGHT/2), Vector2d.zero, faction, this);
 
-            p.paddle = graphicEntityModule.createLine()
-                    .setLineWidth(PADDLE_WIDTH)
-                    .setX(p.getIndex() == 0 ? PADDLE_WIDTH / 2 : WIDTH - PADDLE_WIDTH / 2)
-                    .setY(p.y - PADDLE_HEIGHT / 2)
-                    .setX2(p.getIndex() == 0 ? PADDLE_WIDTH / 2 : WIDTH - PADDLE_WIDTH / 2)
-                    .setY2(p.y + PADDLE_HEIGHT / 2)
-                    .setLineColor(0xffffff);
+            addUnit(s);
+            p.ship = s;
         }
-
-        ball = graphicEntityModule.createCircle()
-                .setRadius(BALL_RADIUS)
-                .setFillColor(0xffffff)
-                .setX(ballX)
-                .setY(ballY);
+        updateUnits();
     }
 
     @Override
     public void gameTurn(int turn) {
         // Send new inputs with the updated positions
         sendPlayerInputs();
+        System.out.println(turn);
 
         // Update new positions
+        // TODO: receiving orders from the player
         for (Player p : gameManager.getActivePlayers()) {
             int deltaMove;
             try {
+
                 deltaMove = p.getAction() - p.y;
-
-                deltaMove = clamp(deltaMove, -120, 120);
-                int newPosY = p.y + deltaMove;
-
-                p.previousY = p.y;
-                p.y = clamp(newPosY, PADDLE_HEIGHT / 2, HEIGHT - PADDLE_HEIGHT / 2);
-                p.paddle.setY(p.y - PADDLE_HEIGHT / 2);
-                p.paddle.setY2(p.y + PADDLE_HEIGHT / 2);
+                p.ship.setBurn(new Vector2d(10,0));
+                p.ship.fire(new Vector2d(1,1));
+//                deltaMove = clamp(deltaMove, -120, 120);
+//                int newPosY = p.y + deltaMove;
+//
+//                p.previousY = p.y;
+//                p.y = clamp(newPosY, PADDLE_HEIGHT / 2, HEIGHT - PADDLE_HEIGHT / 2);
+//                p.paddle.setY(p.y - PADDLE_HEIGHT / 2);
+//                p.paddle.setY2(p.y + PADDLE_HEIGHT / 2);
             } catch (NumberFormatException | TimeoutException e) {
                 p.deactivate("Eliminated!");
             }
         }
 
-        moveBall();
+        doTurn();
 
-        if (ballX < 0) {
-            gameManager.getPlayer(0).deactivate();
-        } else if (ballX >= WIDTH) {
-            gameManager.getPlayer(1).deactivate();
+        for (Player p : gameManager.getActivePlayers()) {
+            if(p.ship.health <= 0){
+                p.deactivate();
+            }
         }
 
-        if (gameManager.getActivePlayers().size() < 2) {
+        if (gameManager.getActivePlayers().size() < 2 || turn > 200) {
             gameManager.endGame();
         }
     }

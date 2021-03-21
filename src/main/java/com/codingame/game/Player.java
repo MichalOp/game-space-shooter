@@ -5,6 +5,7 @@ import com.codingame.gameengine.module.entities.Line;
 
 public class Player extends AbstractMultiplayerPlayer {
     int y;
+    public Ship ship;
     Line paddle;
     boolean lost;
     public int previousY;
