@@ -13,7 +13,7 @@ public class Bullet extends Unit{
     Circle graphics;
 
     public Bullet(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref){
-        super(startPosition, startVelocity, faction, ref);
+        super(startPosition, startVelocity, faction, ref, UnitType.Bullet);
         health = Consts.BULLET_MAX_HEALTH;
         closestEnemy = Double.POSITIVE_INFINITY;
         graphics = ref.graphicEntityModule.createCircle()
@@ -25,7 +25,7 @@ public class Bullet extends Unit{
 
     @Override
     public void tick(){
-        List<Unit> units = referee.GetUnits();
+        List<Unit> units = referee.getUnits();
         Optional<Unit> closest = units.stream().filter(x -> x.faction != faction).min(
                 Comparator.comparingDouble(x -> position.distance(x.position)));
 

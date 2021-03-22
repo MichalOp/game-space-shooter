@@ -2,15 +2,14 @@ package com.codingame.game;
 
 import com.codingame.gameengine.module.entities.Circle;
 
-public class Ship extends Unit{
+public class Ship extends Unit {
 
     Vector2d acceleration;
     double gunCooldown;
-
     Circle graphics;
 
     public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref){
-        super(startPosition, startVelocity, faction, ref);
+        super(startPosition, startVelocity, faction, ref, UnitType.Ship);
         System.out.println(position.x);
         health = Consts.SHIP_MAX_HEALTH;
         gunCooldown = Consts.GUN_COOLDOWN;
