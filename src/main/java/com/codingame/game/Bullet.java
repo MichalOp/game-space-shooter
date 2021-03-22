@@ -13,14 +13,19 @@ public class Bullet extends Unit{
     Circle graphics;
 
     public Bullet(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref){
-        super(startPosition, startVelocity, faction, ref, UnitType.Bullet);
+        super(startPosition, startVelocity, faction, ref);
         health = Consts.BULLET_MAX_HEALTH;
         closestEnemy = Double.POSITIVE_INFINITY;
         graphics = ref.graphicEntityModule.createCircle()
                 .setRadius(3)
-                .setFillColor(0xffffff)
+                .setFillColor(faction==1 ? Consts.COLOR_1 : Consts.COLOR_0)
                 .setX((int)position.x)
                 .setY((int)position.y);
+    }
+
+    @Override
+    public String getUnitType() {
+        return "B";
     }
 
     @Override

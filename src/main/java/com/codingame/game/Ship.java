@@ -9,16 +9,21 @@ public class Ship extends Unit {
     Circle graphics;
 
     public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref){
-        super(startPosition, startVelocity, faction, ref, UnitType.Ship);
+        super(startPosition, startVelocity, faction, ref);
         System.out.println(position.x);
         health = Consts.SHIP_MAX_HEALTH;
         gunCooldown = Consts.GUN_COOLDOWN;
         acceleration = Vector2d.zero;
         graphics = ref.graphicEntityModule.createCircle()
                 .setRadius(10)
-                .setFillColor(0xffffff)
+                .setFillColor(faction==1 ? Consts.COLOR_1 : Consts.COLOR_0)
                 .setX((int)position.x)
                 .setY((int)position.y);
+    }
+
+    @Override
+    public String getUnitType() {
+        return "S";
     }
 
     public void setBurn(Vector2d direction){
