@@ -102,7 +102,7 @@ public class Referee extends AbstractReferee {
 
             addUnit(s);
             p.ship = s;
-            p.expectedOutputLines += 2;
+            p.expectedOutputLines += 1;
         }
         updateUnits();
     }
@@ -133,7 +133,7 @@ public class Referee extends AbstractReferee {
                     }
                 }
 
-            } catch (TimeoutException | NoSuchMethodException | InputMismatchException e) {
+            } catch (TimeoutException | NoSuchMethodException | InputMismatchException | NumberFormatException e) {
                 p.deactivate(String.format("%s eliminated! Reason: %s", p.getNicknameToken(), e));
             }
         }

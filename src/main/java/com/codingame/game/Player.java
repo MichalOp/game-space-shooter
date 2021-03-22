@@ -1,11 +1,9 @@
 package com.codingame.game;
 
 import com.codingame.gameengine.core.AbstractMultiplayerPlayer;
+import com.google.common.collect.Iterables;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
@@ -39,44 +37,51 @@ public class Player extends AbstractMultiplayerPlayer {
         }
     }
 
-    List<Action> getAction(List<Unit> units) throws TimeoutException, NoSuchMethodException, InputMismatchException {
+    List<Action> getAction(List<Unit> units) throws TimeoutException, NoSuchMethodException, InputMismatchException, NumberFormatException {
         List<Action> moves = new ArrayList<>();
+        HashSet<Integer> usedUnits = new HashSet<>();
         for (String out : this.getOutputs()) {
-            Scanner scanner = new Scanner(out);
-            Action action = new Action();
-            switch (scanner.next()) {
-                case "M":
-                    // it's a move (for a ship or a player-controlled missile)
-                    action.unitId = scanner.nextInt();
-                    action.type = Action.ActionType.Move;
-                    action.direction.x = scanner.nextInt();
-                    action.direction.y = scanner.nextInt();
-                    break;
-                case "F":
-                    // fire a weapon in certain direction
-                    action.unitId = scanner.nextInt();
-                    action.type = Action.ActionType.Fire;
-                    action.direction.x = scanner.nextInt();
-                    action.direction.y = scanner.nextInt();
-                    break;
-                case "D":
-                    // detonate missile
-                    action.unitId = scanner.nextInt();
-                    action.type = Action.ActionType.Detonate;
-                    break;
-                case "W":
-                    // wait - this is a dummy action, but we want to have it
-                    // as we can only set a constant as a number of lines we expect to get from the player
-                    action.unitId = scanner.nextInt();
-                    action.type = Action.ActionType.Wait;
-                    break;
-                default:
-                    throw new NoSuchMethodException(String.format("Bad Action: %s", out));
+            String[] orders = out.split("\\|");
+            Scanner scanner = new Scanner(orders[0]);
+            int unitId = scanner.nextInt();
+            if (usedUnits.contains(unitId)) {
+                throw new NoSuchMethodException("At least two orders for the same unit provided");
             }
-            if (checkValidAction(action, units)) {
-                moves.add(action);
-            } else {
-                throw new NoSuchMethodException(String.format("Invalid action: %s", action.toString() ));
+            usedUnits.add(unitId);
+            for (String order : Arrays.stream(orders).collect(Collectors.toList()).subList(1, orders.length)) {
+                scanner = new Scanner(order);
+                Action action = new Action();
+                action.unitId = unitId;
+                switch (scanner.next()) {
+                    case "M":
+                        // it's a move (for a ship or a player-controlled missile)
+                        action.type = Action.ActionType.Move;
+                        action.direction.x = scanner.nextInt();
+                        action.direction.y = scanner.nextInt();
+                        break;
+                    case "F":
+                        // fire a weapon in certain direction
+                        action.type = Action.ActionType.Fire;
+                        action.direction.x = scanner.nextInt();
+                        action.direction.y = scanner.nextInt();
+                        break;
+                    case "D":
+                        // detonate missile
+                        action.type = Action.ActionType.Detonate;
+                        break;
+                    case "W":
+                        // wait - this is a dummy action, but we want to have it
+                        // as we can only set a constant as a number of lines we expect to get from the player
+                        action.type = Action.ActionType.Wait;
+                        break;
+                    default:
+                        throw new NoSuchMethodException(String.format("Bad Action: %s", out));
+                }
+                if (checkValidAction(action, units)) {
+                    moves.add(action);
+                } else {
+                    throw new NoSuchMethodException(String.format("Invalid action: %s", action.toString()));
+                }
             }
         }
 
