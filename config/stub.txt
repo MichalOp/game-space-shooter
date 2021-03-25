@@ -1,10 +1,22 @@
 gameloop
-read y:int
-read oppY:int
-read ballX:int ballY:int
-read speedX:int speedY:int
+read units:int
+loop units read unitId:int faction:int type:word(32) health:float posX:float posY:float velX:float velY:float
+write join("0", "|", "W")
 
-write 0
+INPUT
+units: number of units on the map
+unitId: unit's unique ID
+faction: 1 if the unit belongs to the player, -1 if to opponent
+type: 'S' for ship, 'B' for bullet
+health: remaining unit's health points
+posX: X coordinate of the unit's position
+posY: Y coordinate of the unit's position
+velX: X coordinate of the unit's velocity
+velY: Y coordinate of the unit's velocity
+
+STATEMENT
+Move your ship, fire, win!
 
 OUTPUT
-The destination y coordinate of your paddle
+One line for each of the (actively) controlled unit with at least one action specified
+unitId [| M x y] [| F x y] [| W]
