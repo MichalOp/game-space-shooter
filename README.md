@@ -4,7 +4,7 @@
 ---
 ### Purpose
 
-This project is based on an example game skeleton for the [CodinGame SDK](https://github.com/CodinGame/game-skeleton).
+This project is based on an example [game skeleton](https://github.com/CodinGame/game-skeleton) for the [CodinGame SDK](https://www.codingame.com/playgrounds/25775).
 
 It contains a 2 player bot game where both players perform actions simultaneously.
 
