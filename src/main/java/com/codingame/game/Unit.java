@@ -23,6 +23,8 @@ public abstract class Unit {
         position.y = position.y % Consts.MAP_Y;
     }
 
+    public abstract String getUnitType();
+
     public void graphicsTick(double t){}
 
     public void tick(){}

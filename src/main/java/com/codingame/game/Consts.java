@@ -10,4 +10,6 @@ public final class Consts {
     public static final double GUN_BLAST_RADIUS = 100;
     public static final int MAP_X = 1920;
     public static final int MAP_Y = 1080;
+    public static final int COLOR_0 = 0xff0000;
+    public static final int COLOR_1 = 0x00ff00;
 }

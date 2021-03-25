@@ -2,11 +2,10 @@ package com.codingame.game;
 
 import com.codingame.gameengine.module.entities.Circle;
 
-public class Ship extends Unit{
+public class Ship extends Unit {
 
     Vector2d acceleration;
     double gunCooldown;
-
     Circle graphics;
 
     public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref){
@@ -17,9 +16,14 @@ public class Ship extends Unit{
         acceleration = Vector2d.zero;
         graphics = ref.graphicEntityModule.createCircle()
                 .setRadius(10)
-                .setFillColor(0xffffff)
+                .setFillColor(faction==1 ? Consts.COLOR_1 : Consts.COLOR_0)
                 .setX((int)position.x)
                 .setY((int)position.y);
+    }
+
+    @Override
+    public String getUnitType() {
+        return "S";
     }
 
     public void setBurn(Vector2d direction){

@@ -18,14 +18,19 @@ public class Bullet extends Unit{
         closestEnemy = Double.POSITIVE_INFINITY;
         graphics = ref.graphicEntityModule.createCircle()
                 .setRadius(3)
-                .setFillColor(0xffffff)
+                .setFillColor(faction==1 ? Consts.COLOR_1 : Consts.COLOR_0)
                 .setX((int)position.x)
                 .setY((int)position.y);
     }
 
     @Override
+    public String getUnitType() {
+        return "B";
+    }
+
+    @Override
     public void tick(){
-        List<Unit> units = referee.GetUnits();
+        List<Unit> units = referee.getUnits();
         Optional<Unit> closest = units.stream().filter(x -> x.faction != faction).min(
                 Comparator.comparingDouble(x -> position.distance(x.position)));
 
