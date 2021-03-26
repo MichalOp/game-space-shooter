@@ -1,12 +1,12 @@
 package com.codingame.game;
 
-import com.codingame.gameengine.module.entities.Circle;
+import com.codingame.gameengine.module.entities.Sprite;
 
 public class Ship extends Unit {
 
     Vector2d acceleration;
     double gunCooldown;
-    Circle graphics;
+    Sprite graphics;
 
     public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref){
         super(startPosition, startVelocity, faction, ref);
@@ -14,9 +14,9 @@ public class Ship extends Unit {
         health = Consts.SHIP_MAX_HEALTH;
         gunCooldown = Consts.GUN_COOLDOWN;
         acceleration = Vector2d.zero;
-        graphics = ref.graphicEntityModule.createCircle()
-                .setRadius(10)
-                .setFillColor(faction==1 ? Consts.COLOR_1 : Consts.COLOR_0)
+        graphics = ref.graphicEntityModule.createSprite()
+                .setImage(faction==1 ? "Spaceship_BLUE.png" : "Spaceship_GREEN.png")
+                .setScale(0.5)
                 .setX((int)position.x)
                 .setY((int)position.y);
     }
@@ -48,7 +48,8 @@ public class Ship extends Unit {
 
     @Override
     public void graphicsTick(double t){
-        graphics.setX(((int)position.x)).setY(((int)position.y));
+        //TODO rotation probablyq should use Vector2d methods
+        graphics.setRotation(Math.acos((position.x-graphics.getX())/Math.sqrt(Math.pow(position.x-graphics.getX(), 2)+Math.pow(position.y-graphics.getY(), 2)))).setX(((int)position.x)).setY(((int)position.y));
         System.out.println(graphics.getX() + " " + graphics.getY());
         referee.graphicEntityModule.commitEntityState(t, graphics);
     }

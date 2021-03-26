@@ -1,5 +1,5 @@
 import { GraphicEntityModule } from './entity-module/GraphicEntityModule.js';
-import { AnimatedEventModule } from './animations/AnimatedEventModule.js';
+import { AnimatedEventModule } from './assets/AnimatedEventModule.js';
 
 export const modules = [
   GraphicEntityModule,
