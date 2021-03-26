@@ -21,7 +21,8 @@ public class Bullet extends Unit{
 
         graphics = ref.graphicEntityModule.createSprite()
                 .setImage(faction==1 ? "Bullet_BLUE.png" : "Bullet_GREEN.png")
-                .setScale(0.5)
+                .setScale(0.2)
+                .setAnchor(0.5)
                 .setX((int)position.x)
                 .setY((int)position.y)
                 .setRotation(Math.acos(startVelocity.x/startVelocity.length()));

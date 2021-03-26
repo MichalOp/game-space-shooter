@@ -16,9 +16,11 @@ public class Ship extends Unit {
         acceleration = Vector2d.zero;
         graphics = ref.graphicEntityModule.createSprite()
                 .setImage(faction==1 ? "Spaceship_BLUE.png" : "Spaceship_GREEN.png")
-                .setScale(0.5)
+                .setScale(0.2)
+                .setAnchor(0.5)
                 .setX((int)position.x)
-                .setY((int)position.y);
+                .setY((int)position.y)
+                .setRotation(Math.acos(startVelocity.x/startVelocity.length()));
     }
 
     @Override
@@ -48,8 +50,10 @@ public class Ship extends Unit {
 
     @Override
     public void graphicsTick(double t){
-        //TODO rotation probablyq should use Vector2d methods
-        graphics.setRotation(Math.acos((position.x-graphics.getX())/Math.sqrt(Math.pow(position.x-graphics.getX(), 2)+Math.pow(position.y-graphics.getY(), 2)))).setX(((int)position.x)).setY(((int)position.y));
+        //TODO smooth rotation
+        graphics.setRotation(Math.acos((position.x-graphics.getX())/(position.distance(new Vector2d(graphics.getX(), graphics.getY())))))
+                .setX(((int)position.x))
+                .setY(((int)position.y));
         System.out.println(graphics.getX() + " " + graphics.getY());
         referee.graphicEntityModule.commitEntityState(t, graphics);
     }
