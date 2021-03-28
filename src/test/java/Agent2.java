@@ -10,7 +10,7 @@ public class Agent2 {
 
         while (true) {
             int units = scanner.nextInt();
-            System.err.println(String.format("%d", units));
+            System.err.printf("%d%n", units);
             for (int i=0; i<units; i++) {
                 int id = scanner.nextInt();
                 int faction = scanner.nextInt();
@@ -24,10 +24,10 @@ public class Agent2 {
                 Vector2d pos = new Vector2d(posX, posY);
                 Vector2d vel = new Vector2d(velX, velY);
 
-                System.err.println(String.format("%d, %s, %d, %.2f, %.2f", id, type, faction, posX, posY));
+                System.err.printf("%d, %s, %d, %.2f, %.2f%n", id, type, faction, posX, posY);
 
                 if (type.equals("S") && faction == 1) {
-                    System.out.println(String.format("%d | F %d %d | M %d %d", id, 1, 1, 0, 10));
+                    System.out.printf("%d | M %d %d%n", id, 0, 0);
                 }
             }
 

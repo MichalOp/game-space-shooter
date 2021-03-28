@@ -48,8 +48,24 @@ public class Bullet extends Unit{
     }
 
     void Detonate(){
-        // TODO: Damage, graphics
         health = 0;
+    }
+
+    @Override
+    public void onDeath(double t){
+        for(Unit u : referee.getUnits()){
+            double distance = u.position.distance(position);
+            if(distance <= Consts.GUN_BLAST_RADIUS){
+                u.health -= Consts.GUN_DAMAGE * (Consts.GUN_BLAST_RADIUS - distance) / Consts.GUN_BLAST_RADIUS;
+            }
+        }
+        //TODO: Nicer graphics
+        graphics.setRadius(3);
+        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA/10, graphics);
+
+        graphics.setVisible(false);
+        graphics.setRadius((int)Consts.GUN_BLAST_RADIUS);
+        referee.graphicEntityModule.commitEntityState(t, graphics);
     }
 
     @Override
