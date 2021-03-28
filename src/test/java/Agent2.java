@@ -27,7 +27,7 @@ public class Agent2 {
                 System.err.printf("%d, %s, %d, %.2f, %.2f%n", id, type, faction, posX, posY);
 
                 if (type.equals("S") && faction == 1) {
-                    System.out.printf("%d | M %d %d%n", id, 0, 0);
+                    System.out.println(String.format("%d | F %d %d | M %d %d", id, 2, 2, 0, -2));
                 }
             }
 
