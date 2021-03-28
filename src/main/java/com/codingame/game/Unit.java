@@ -19,8 +19,8 @@ public abstract class Unit {
 
     public void move(){
         position = position.add(velocity.mul(Consts.TIME_DELTA));
-        position.x = position.x % Consts.MAP_X;
-        position.y = position.y % Consts.MAP_Y;
+        position.x = (position.x + Math.ceil(1 + Math.abs(position.x / Consts.MAP_X))*Consts.MAP_X) % Consts.MAP_X;
+        position.y = (position.y + Math.ceil(1 + Math.abs(position.y / Consts.MAP_Y))*Consts.MAP_Y) % Consts.MAP_Y;
     }
 
     public void onDeath(double t){};
