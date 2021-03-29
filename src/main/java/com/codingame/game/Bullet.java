@@ -61,7 +61,8 @@ public class Bullet extends Unit{
 
     void Detonate(){
         // TODO: Damage, graphics
-        fire.setX(graphics.getX()).setY(graphics.getY()).setScale(0);//graphics, not tested
+        graphics.setScale(0);//not pretty way to get rid of a bullet
+        fire.setX(graphics.getX()).setY(graphics.getY()).setScale(0.1);//graphics, not tested
         referee.graphicEntityModule.commitEntityState(0.1, fire);
 
         health = 0;
@@ -72,10 +73,10 @@ public class Bullet extends Unit{
         graphics.setX(((int)position.x)%1920).setY(((int)position.y)%1080);
 
         if(fire.getScaleX()==0.1){//detonation,  should bullet be deconstructed after detonation?
-            fire.setScale(1);
+            fire.setScale(2);
             referee.graphicEntityModule.commitEntityState(0.9, fire);
         }
-        if (fire.getScaleX()==1){
+        if (fire.getScaleX()==2){
             fire.setScale(0);
             referee.graphicEntityModule.commitEntityState(1, fire);
         }
