@@ -23,9 +23,11 @@ public abstract class Unit {
         position.y = (position.y + Math.ceil(1 + Math.abs(position.y / Consts.MAP_Y))*Consts.MAP_Y) % Consts.MAP_Y;
     }
 
+    public void onDeath(double t){};
+
     public abstract String getUnitType();
 
-    public void graphicsTick(double t){}
+    public abstract void graphicsTick(double t);
 
     public void tick(){}
 }
