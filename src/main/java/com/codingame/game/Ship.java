@@ -50,7 +50,7 @@ public class Ship extends Unit {
 
     @Override
     public void graphicsTick(double t){
-        //TODO smooth rotation
+        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
         graphics.setRotation(Math.acos((position.x-graphics.getX())/(position.distance(new Vector2d(graphics.getX(), graphics.getY())))))
                 .setX(((int)position.x))
                 .setY(((int)position.y));

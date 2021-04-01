@@ -28,6 +28,7 @@ public class Bullet extends Unit{
         fire = ref.graphicEntityModule.createSprite()
                 .setImage("FireBullet.png")
                 .setScale(0)
+                .setAnchor(0.5)
                 .setX(graphics.getX())
                 .setY(graphics.getY());
         ref.graphicEntityModule.commitEntityState(0, fire);
@@ -73,27 +74,23 @@ public class Bullet extends Unit{
                 u.health -= Consts.GUN_DAMAGE * (Consts.GUN_BLAST_RADIUS - distance) / Consts.GUN_BLAST_RADIUS;
             }
         }
-        //TODO: Nicer graphics
-      /*  graphics.setRadius(3);
-        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA/10, graphics);
+
 
         graphics.setVisible(false);
-        graphics.setRadius((int)Consts.GUN_BLAST_RADIUS);
-        referee.graphicEntityModule.commitEntityState(t, graphics);*/
+        fire.setX(graphics.getX()).setY(graphics.getY());
+        fire.setScale(0.1);
+        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, fire);
+        fire.setVisible(true);
+        fire.setScale(5);
+        referee.graphicEntityModule.commitEntityState(t, fire);
+        fire.setVisible(false);
+
+
     }
 
     @Override
     public void graphicsTick(double t){
         graphics.setX(((int)position.x)%1920).setY(((int)position.y)%1080);
-
-        if(fire.getScaleX()==0.1){//detonation,  should bullet be deconstructed after detonation?
-            fire.setScale(2);
-            referee.graphicEntityModule.commitEntityState(0.9, fire);
-        }
-        if (fire.getScaleX()==2){
-            fire.setScale(0);
-            referee.graphicEntityModule.commitEntityState(1, fire);
-        }
 
         System.out.println(graphics.getX() + " " + graphics.getY());
         referee.graphicEntityModule.commitEntityState(t, graphics);
