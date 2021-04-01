@@ -1,6 +1,5 @@
 package com.codingame.game;
 
-
 import com.codingame.gameengine.module.entities.Sprite;
 
 import java.util.Comparator;
@@ -18,7 +17,6 @@ public class Bullet extends Unit{
         super(startPosition, startVelocity, faction, ref);
         health = Consts.BULLET_MAX_HEALTH;
         closestEnemy = Double.POSITIVE_INFINITY;
-
         graphics = ref.graphicEntityModule.createSprite()
                 .setImage(faction==1 ? "Bullet_BLUE.png" : "Bullet_GREEN.png")
                 .setScale(0.2)
@@ -60,12 +58,28 @@ public class Bullet extends Unit{
     }
 
     void Detonate(){
-        // TODO: Damage, graphics
         graphics.setScale(0);//not pretty way to get rid of a bullet
         fire.setX(graphics.getX()).setY(graphics.getY()).setScale(0.1);//graphics, not tested
         referee.graphicEntityModule.commitEntityState(0.1, fire);
 
         health = 0;
+    }
+
+    @Override
+    public void onDeath(double t){
+        for(Unit u : referee.getUnits()){
+            double distance = u.position.distance(position);
+            if(distance <= Consts.GUN_BLAST_RADIUS){
+                u.health -= Consts.GUN_DAMAGE * (Consts.GUN_BLAST_RADIUS - distance) / Consts.GUN_BLAST_RADIUS;
+            }
+        }
+        //TODO: Nicer graphics
+      /*  graphics.setRadius(3);
+        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA/10, graphics);
+
+        graphics.setVisible(false);
+        graphics.setRadius((int)Consts.GUN_BLAST_RADIUS);
+        referee.graphicEntityModule.commitEntityState(t, graphics);*/
     }
 
     @Override
@@ -85,3 +99,7 @@ public class Bullet extends Unit{
         referee.graphicEntityModule.commitEntityState(t, graphics);
     }
 }
+
+
+
+

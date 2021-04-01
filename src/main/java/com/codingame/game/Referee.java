@@ -25,14 +25,13 @@ public class Referee extends AbstractReferee {
 
     private int unitId = 0;
     private List<Unit> unitList;
-    private List<Unit> newUnitList;
 
     public final List<Unit> getUnits(){
         return unitList;
     }
 
     public void addUnit(Unit u){
-        newUnitList.add(u);
+        unitList.add(u);
     }
 
     public int getId(){
@@ -60,37 +59,40 @@ public class Referee extends AbstractReferee {
         }
     }
 
-    void updateUnits(){
-        //purge dead units
+    void updateUnits(double t){
+        List<Unit> dead = unitList.stream().filter(x -> x.health <= 0).collect(Collectors.toList());
         unitList = unitList.stream().filter(x -> x.health > 0).collect(Collectors.toList());
-        //add new units
-        unitList.addAll(newUnitList);
-        newUnitList = new ArrayList<>();
+        while(!dead.isEmpty()){
+            for(Unit u:dead){
+                u.onDeath(t);
+            }
+            dead = unitList.stream().filter(x -> x.health <= 0).collect(Collectors.toList());
+            unitList = unitList.stream().filter(x -> x.health > 0).collect(Collectors.toList());
+        }
     }
 
     void doTurn(){
         double t = 0;
-        while(t < 1){
+        graphicEntityModule.commitWorldState(0);
+        while(t < 1 - 0.000001){
+            t += Consts.TIME_DELTA;
+            for (Unit u : unitList){
+                u.move();
+            }
             for (Unit u : unitList){
                 u.graphicsTick(t);
             }
             for (Unit u : unitList){
                 u.tick();
             }
-            // TODO: damage application
-            updateUnits();
-            for (Unit u : unitList){
-                u.move();
-            }
+            updateUnits(t);
 
-            t += 0.1;
         }
     }
 
     @Override
     public void init() {
         unitList = new ArrayList<>();
-        newUnitList = new ArrayList<>();
 
         gameManager.setFrameDuration(300);
         
@@ -104,7 +106,6 @@ public class Referee extends AbstractReferee {
             p.ship = s;
             p.expectedOutputLines += 1;
         }
-        updateUnits();
     }
 
     @Override
