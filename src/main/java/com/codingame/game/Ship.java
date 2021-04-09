@@ -50,6 +50,11 @@ public class Ship extends Unit {
 
     @Override
     public void graphicsTick(double t){
+        graphics.setVisible(true);
+        if((position.x<=50 && graphics.getX()>1850) || (position.x>=1850 && graphics.getX()<50) || (position.y>=1000 && graphics.getY()<50) || (position.y<=50 && graphics.getY()>1000) ){
+            graphics.setVisible(false);
+            referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
+        }
         referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
         graphics.setRotation(Math.acos((position.x-graphics.getX())/(position.distance(new Vector2d(graphics.getX(), graphics.getY())))))
                 .setX(((int)position.x))

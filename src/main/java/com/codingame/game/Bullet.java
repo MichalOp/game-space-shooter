@@ -59,10 +59,6 @@ public class Bullet extends Unit{
     }
 
     void Detonate(){
-        graphics.setScale(0);//not pretty way to get rid of a bullet
-        fire.setX(graphics.getX()).setY(graphics.getY()).setScale(0.1);//graphics, not tested
-        referee.graphicEntityModule.commitEntityState(0.1, fire);
-
         health = 0;
     }
 
@@ -90,10 +86,19 @@ public class Bullet extends Unit{
 
     @Override
     public void graphicsTick(double t){
+
+        graphics.setVisible(true);
+        if((position.x<=50 && graphics.getX()>1850) || (position.x>=1850 && graphics.getX()<50) || (position.y>=1000 && graphics.getY()<50) || (position.y<=50 && graphics.getY()>1000) ){
+            graphics.setVisible(false);
+            referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
+
+        }
         graphics.setX(((int)position.x)%1920).setY(((int)position.y)%1080);
+
 
         System.out.println(graphics.getX() + " " + graphics.getY());
         referee.graphicEntityModule.commitEntityState(t, graphics);
+
     }
 }
 
