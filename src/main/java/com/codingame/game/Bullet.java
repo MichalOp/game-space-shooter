@@ -88,7 +88,7 @@ public class Bullet extends Unit{
     public void graphicsTick(double t){
 
         graphics.setVisible(true);
-        if((position.x<=50 && graphics.getX()>1850) || (position.x>=1850 && graphics.getX()<50) || (position.y>=1000 && graphics.getY()<50) || (position.y<=50 && graphics.getY()>1000) ){
+        if((position.x<=50 && graphics.getX()>Consts.MAP_X-50) || (position.x>=Consts.MAP_X-50 && graphics.getX()<50) || (position.y>=Consts.MAP_Y-50 && graphics.getY()<50) || (position.y<=50 && graphics.getY()>Consts.MAP_Y-50) ){
             graphics.setVisible(false);
             referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
 
