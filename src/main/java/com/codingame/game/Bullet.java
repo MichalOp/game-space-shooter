@@ -1,6 +1,6 @@
 package com.codingame.game;
 
-import com.codingame.gameengine.module.entities.Circle;
+import com.codingame.gameengine.module.entities.Sprite;
 
 import java.util.Comparator;
 import java.util.List;
@@ -10,17 +10,28 @@ public class Bullet extends Unit{
 
     private double closestEnemy;
 
-    Circle graphics;
+    Sprite graphics;
+    Sprite fire;
 
     public Bullet(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref){
         super(startPosition, startVelocity, faction, ref);
         health = Consts.BULLET_MAX_HEALTH;
         closestEnemy = Double.POSITIVE_INFINITY;
-        graphics = ref.graphicEntityModule.createCircle()
-                .setRadius(3)
-                .setFillColor(faction==1 ? Consts.COLOR_1 : Consts.COLOR_0)
+        graphics = ref.graphicEntityModule.createSprite()
+                .setImage(faction==1 ? "Bullet_BLUE.png" : "Bullet_GREEN.png")
+                .setScale(0.2)
+                .setAnchor(0.5)
                 .setX((int)position.x)
-                .setY((int)position.y);
+                .setY((int)position.y)
+                .setRotation(Math.acos(startVelocity.x/startVelocity.length()));
+
+        fire = ref.graphicEntityModule.createSprite()
+                .setImage("FireBullet.png")
+                .setScale(0)
+                .setAnchor(0.5)
+                .setX(graphics.getX())
+                .setY(graphics.getY());
+        ref.graphicEntityModule.commitEntityState(0, fire);
     }
 
     @Override
@@ -59,19 +70,38 @@ public class Bullet extends Unit{
                 u.health -= Consts.GUN_DAMAGE * (Consts.GUN_BLAST_RADIUS - distance) / Consts.GUN_BLAST_RADIUS;
             }
         }
-        //TODO: Nicer graphics
-        graphics.setRadius(3);
-        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA/10, graphics);
+
 
         graphics.setVisible(false);
-        graphics.setRadius((int)Consts.GUN_BLAST_RADIUS);
-        referee.graphicEntityModule.commitEntityState(t, graphics);
+        fire.setX(graphics.getX()).setY(graphics.getY());
+        fire.setScale(0.1);
+        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, fire);
+        fire.setVisible(true);
+        fire.setScale(5);
+        referee.graphicEntityModule.commitEntityState(t, fire);
+        fire.setVisible(false);
+
+
     }
 
     @Override
     public void graphicsTick(double t){
+
+        graphics.setVisible(true);
+        if((position.x<=50 && graphics.getX()>Consts.MAP_X-50) || (position.x>=Consts.MAP_X-50 && graphics.getX()<50) || (position.y>=Consts.MAP_Y-50 && graphics.getY()<50) || (position.y<=50 && graphics.getY()>Consts.MAP_Y-50) ){
+            graphics.setVisible(false);
+            referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
+
+        }
         graphics.setX(((int)position.x)%1920).setY(((int)position.y)%1080);
+
+
         System.out.println(graphics.getX() + " " + graphics.getY());
         referee.graphicEntityModule.commitEntityState(t, graphics);
+
     }
 }
+
+
+
+

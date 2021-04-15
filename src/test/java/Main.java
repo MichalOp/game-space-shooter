@@ -9,7 +9,7 @@ public class Main {
         
         MultiplayerGameRunner gameRunner = new MultiplayerGameRunner();
         gameRunner.setGameParameters(properties);
-        
+
         gameRunner.addAgent(Agent1.class);
         gameRunner.addAgent(Agent2.class);
 

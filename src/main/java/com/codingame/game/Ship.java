@@ -1,12 +1,12 @@
 package com.codingame.game;
 
-import com.codingame.gameengine.module.entities.Circle;
+import com.codingame.gameengine.module.entities.Sprite;
 
 public class Ship extends Unit {
 
     Vector2d acceleration;
     double gunCooldown;
-    Circle graphics;
+    Sprite graphics;
 
     public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref){
         super(startPosition, startVelocity, faction, ref);
@@ -14,11 +14,13 @@ public class Ship extends Unit {
         health = Consts.SHIP_MAX_HEALTH;
         gunCooldown = Consts.GUN_COOLDOWN;
         acceleration = Vector2d.zero;
-        graphics = ref.graphicEntityModule.createCircle()
-                .setRadius(10)
-                .setFillColor(faction==1 ? Consts.COLOR_1 : Consts.COLOR_0)
+        graphics = ref.graphicEntityModule.createSprite()
+                .setImage(faction==1 ? "Spaceship_BLUE.png" : "Spaceship_GREEN.png")
+                .setScale(0.2)
+                .setAnchor(0.5)
                 .setX((int)position.x)
-                .setY((int)position.y);
+                .setY((int)position.y)
+                .setRotation(Math.acos(startVelocity.x/startVelocity.length()));
     }
 
     @Override
@@ -48,7 +50,15 @@ public class Ship extends Unit {
 
     @Override
     public void graphicsTick(double t){
-        graphics.setX(((int)position.x)).setY(((int)position.y));
+        graphics.setVisible(true); //TODO transition instead of invisible
+        if((position.x<=50 && graphics.getX()>Consts.MAP_X-50) || (position.x>=Consts.MAP_X-50 && graphics.getX()<50) || (position.y>=Consts.MAP_Y-50 && graphics.getY()<50) || (position.y<=50 && graphics.getY()>Consts.MAP_Y-50) ){
+            graphics.setVisible(false);
+            referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
+        }
+        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
+        graphics.setRotation(Math.acos((position.x-graphics.getX())/(position.distance(new Vector2d(graphics.getX(), graphics.getY())))))
+                .setX(((int)position.x))
+                .setY(((int)position.y));
         System.out.println(graphics.getX() + " " + graphics.getY());
         referee.graphicEntityModule.commitEntityState(t, graphics);
     }
