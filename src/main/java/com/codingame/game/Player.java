@@ -32,6 +32,10 @@ public class Player extends AbstractMultiplayerPlayer {
                 }
             }
 
+            if (action.type == Action.ActionType.Detonate) {
+                return (correct instanceof Missile);
+            }
+
             return true;
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
@@ -58,35 +62,45 @@ public class Player extends AbstractMultiplayerPlayer {
                 scanner = new Scanner(order);
                 Action action = new Action();
                 action.unitId = unitId;
-                switch (scanner.next()) {
-                    case "M":
-                        // it's a move (for a ship or a player-controlled missile)
-                        action.type = Action.ActionType.Move;
-                        action.direction.x = getActionDirectionValue(scanner);
-                        action.direction.y = getActionDirectionValue(scanner);
-                        break;
-                    case "F":
-                        // fire a weapon in certain direction
-                        action.type = Action.ActionType.Fire;
-                        action.direction.x = getActionDirectionValue(scanner);
-                        action.direction.y = getActionDirectionValue(scanner);
-                        break;
-                    case "D":
-                        // detonate missile
-                        action.type = Action.ActionType.Detonate;
-                        break;
-                    case "W":
-                        // wait - this is a dummy action, but we want to have it
-                        // as we can only set a constant as a number of lines we expect to get from the player
-                        action.type = Action.ActionType.Wait;
-                        break;
-                    default:
-                        throw new NoSuchMethodException(String.format("Bad Action: %s", out));
-                }
-                if (checkValidAction(action, units)) {
-                    moves.add(action);
-                } else {
-                    throw new NoSuchMethodException(String.format("Invalid action: %s", action.toString()));
+                try {
+                    switch (scanner.next()) {
+                        case "A":
+                            // it's a move (for a ship or a player-controlled missile)
+                            action.type = Action.ActionType.Move;
+                            action.direction.x = getActionDirectionValue(scanner);
+                            action.direction.y = getActionDirectionValue(scanner);
+                            break;
+                        case "F":
+                            // fire a weapon in certain direction
+                            action.type = Action.ActionType.Fire;
+                            action.direction.x = getActionDirectionValue(scanner);
+                            action.direction.y = getActionDirectionValue(scanner);
+                            break;
+                        case "M":
+                            // fire a missile
+                            action.type = Action.ActionType.Missile;
+                            action.direction.x = getActionDirectionValue(scanner);
+                            action.direction.y = getActionDirectionValue(scanner);
+                            break;
+                        case "D":
+                            // detonate missile
+                            action.type = Action.ActionType.Detonate;
+                            break;
+                        case "W":
+                            // wait - this is a dummy action, but we want to have it
+                            // as we can only set a constant as a number of lines we expect to get from the player
+                            action.type = Action.ActionType.Wait;
+                            break;
+                        default:
+                            throw new NoSuchMethodException(String.format("Bad Action: %s", out));
+                    }
+                    if (checkValidAction(action, units)) {
+                        moves.add(action);
+                    } else {
+                        throw new NoSuchMethodException(String.format("Invalid action: %s", action.toString()));
+                    }
+                } catch (NoSuchElementException e) {
+                    continue;
                 }
             }
         }

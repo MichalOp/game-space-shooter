@@ -32,7 +32,7 @@ public class Missile extends Unit{
 
     @Override
     public String getUnitType() {
-        return "S";
+        return "M";
     }
 
     public void setBurn(Vector2d direction){
