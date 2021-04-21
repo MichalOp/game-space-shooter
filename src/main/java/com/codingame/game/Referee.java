@@ -11,6 +11,7 @@ import com.codingame.gameengine.core.MultiplayerGameManager;
 import com.codingame.gameengine.core.Tooltip;
 import com.codingame.gameengine.module.entities.Circle;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
+import com.codingame.gameengine.module.tooltip.TooltipModule;
 import com.codingame.view.AnimatedEventModule;
 import com.codingame.view.ViewerEvent;
 import com.google.inject.Inject;
@@ -22,6 +23,8 @@ public class Referee extends AbstractReferee {
     @Inject private MultiplayerGameManager<Player> gameManager;
     @Inject public GraphicEntityModule graphicEntityModule;
     @Inject private AnimatedEventModule animatedEventModule;
+    @Inject public TooltipModule tooltips;
+
 
     private int unitId = 0;
     private List<Unit> unitList;
