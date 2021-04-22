@@ -1,8 +1,9 @@
 package com.codingame.game;
 
 import com.codingame.gameengine.core.AbstractMultiplayerPlayer;
-import com.google.common.collect.Iterables;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,11 @@ public class Player extends AbstractMultiplayerPlayer {
         }
     }
 
+    private double getActionDirectionValue(Scanner scanner) {
+        return new BigDecimal(scanner.nextDouble()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
+
+
     List<Action> getAction(List<Unit> units) throws TimeoutException, NoSuchMethodException, InputMismatchException, NumberFormatException {
         List<Action> moves = new ArrayList<>();
         HashSet<Integer> usedUnits = new HashSet<>();
@@ -56,14 +62,14 @@ public class Player extends AbstractMultiplayerPlayer {
                     case "M":
                         // it's a move (for a ship or a player-controlled missile)
                         action.type = Action.ActionType.Move;
-                        action.direction.x = scanner.nextInt();
-                        action.direction.y = scanner.nextInt();
+                        action.direction.x = getActionDirectionValue(scanner);
+                        action.direction.y = getActionDirectionValue(scanner);
                         break;
                     case "F":
                         // fire a weapon in certain direction
                         action.type = Action.ActionType.Fire;
-                        action.direction.x = scanner.nextInt();
-                        action.direction.y = scanner.nextInt();
+                        action.direction.x = getActionDirectionValue(scanner);
+                        action.direction.y = getActionDirectionValue(scanner);
                         break;
                     case "D":
                         // detonate missile

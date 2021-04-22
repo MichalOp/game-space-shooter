@@ -10,6 +10,7 @@ public class Bullet extends Unit{
 
     private double closestEnemy;
 
+    double lifetime;
     Sprite graphics;
     Sprite fire;
 
@@ -17,6 +18,8 @@ public class Bullet extends Unit{
         super(startPosition, startVelocity, faction, ref);
         health = Consts.BULLET_MAX_HEALTH;
         closestEnemy = Double.POSITIVE_INFINITY;
+        lifetime = Consts.BULLET_LIFETIME;
+
         graphics = ref.graphicEntityModule.createSprite()
                 .setImage(faction==1 ? "Bullet_BLUE.png" : "Bullet_GREEN.png")
                 .setScale(0.2)
@@ -43,6 +46,11 @@ public class Bullet extends Unit{
 
     @Override
     public void tick(){
+        if(lifetime <= 0){
+            detonate();
+        }
+        lifetime -= Consts.TIME_DELTA;
+
         List<Unit> units = referee.getUnits();
         Optional<Unit> closest = units.stream().filter(x -> x.faction != faction).min(
                 Comparator.comparingDouble(x -> position.distance(x.position)));
@@ -55,24 +63,18 @@ public class Bullet extends Unit{
             closestEnemy = dist;
         }else{
             if(closestEnemy < Consts.GUN_BLAST_RADIUS){
-                Detonate();
+                detonate();
             }
         }
     }
 
-    void Detonate(){
+    void detonate(){
         health = 0;
     }
 
     @Override
     public void onDeath(double t){
-        for(Unit u : referee.getUnits()){
-            double distance = u.position.distance(position);
-            if(distance <= Consts.GUN_BLAST_RADIUS){
-                u.health -= Consts.GUN_DAMAGE * (Consts.GUN_BLAST_RADIUS - distance) / Consts.GUN_BLAST_RADIUS;
-            }
-        }
-
+        referee.registerExplosion(position, Consts.GUN_BLAST_RADIUS, Consts.GUN_DAMAGE);
 
         graphics.setVisible(false);
         fire.setX(graphics.getX()).setY(graphics.getY());
@@ -82,8 +84,6 @@ public class Bullet extends Unit{
         fire.setScale(5);
         referee.graphicEntityModule.commitEntityState(t, fire);
         fire.setVisible(false);
-
-
     }
 
     @Override
@@ -97,11 +97,9 @@ public class Bullet extends Unit{
         }
         graphics.setX(((int)position.x)%1920).setY(((int)position.y)%1080);
 
-
         System.out.println(graphics.getX() + " " + graphics.getY());
         referee.graphicEntityModule.commitEntityState(t, graphics);
         referee.tooltips.setTooltipText(graphics, toString());
-
     }
     @Override
     public String toString(){
