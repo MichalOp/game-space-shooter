@@ -2,56 +2,63 @@ package com.codingame.game;
 
 import com.codingame.gameengine.module.entities.Sprite;
 
-public class Ship extends Unit {
+public class Missile extends Unit{
 
     Vector2d acceleration;
-    double gunCooldown;
-    int missilesCount;
     Sprite graphics;
+    Sprite fire;
 
-    public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref){
+    public Missile(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref) {
         super(startPosition, startVelocity, faction, ref);
-        health = Consts.SHIP_MAX_HEALTH;
-        gunCooldown = Consts.GUN_COOLDOWN;
+        health = Consts.MISSILE_MAX_HEALTH;
         acceleration = Vector2d.zero;
-        missilesCount = Consts.MISSILES_COUNT;
         graphics = ref.graphicEntityModule.createSprite()
                 .setImage(faction==1 ? "Spaceship_BLUE.png" : "Spaceship_GREEN.png")
-                .setScale(0.2)
+                .setScale(0.1)
                 .setAnchor(0.5)
                 .setX((int)position.x)
                 .setY((int)position.y)
                 .setRotation(Math.acos(startVelocity.x/startVelocity.length()));
+
+        fire = ref.graphicEntityModule.createSprite()
+                .setImage("FireBullet.png")
+                .setScale(0)
+                .setAnchor(0.5)
+                .setX(graphics.getX())
+                .setY(graphics.getY());
+        ref.graphicEntityModule.commitEntityState(0, fire);
     }
 
     @Override
     public String getUnitType() {
-        return "S";
-    }
-
-    public void launchMissile(){
-        if(missilesCount > 0){
-            missilesCount--;
-            referee.addUnit(new Missile(position, velocity, faction, referee));
-        }
+        return "M";
     }
 
     public void setBurn(Vector2d direction){
-        acceleration = direction.clip(Consts.SHIP_MAX_ACCELERATION);
-    }
-
-    public void fire(Vector2d direction){
-        if(gunCooldown > Consts.GUN_COOLDOWN) {
-            Vector2d bulletVelocity = direction.mul(Consts.BULLET_VELOCITY).add(velocity);
-            referee.addUnit(new Bullet(position, bulletVelocity, faction, referee));
-            gunCooldown = 0;
-        }
+        acceleration = direction.clip(Consts.MISSILE_MAX_ACCELERATION);
     }
 
     @Override
     public void tick(){
         velocity = velocity.add(acceleration.mul(Consts.TIME_DELTA));
-        gunCooldown += Consts.TIME_DELTA;
+    }
+
+    public void detonate(){
+        health = 0;
+    }
+
+    @Override
+    public void onDeath(double t){
+        referee.registerExplosion(position, Consts.MISSILE_BLAST_RADIUS, Consts.MISSILE_DAMAGE);
+
+        graphics.setVisible(false);
+        fire.setX(graphics.getX()).setY(graphics.getY());
+        fire.setScale(0.1);
+        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, fire);
+        fire.setVisible(true);
+        fire.setScale(10);
+        referee.graphicEntityModule.commitEntityState(t, fire);
+        fire.setVisible(false);
     }
 
     @Override

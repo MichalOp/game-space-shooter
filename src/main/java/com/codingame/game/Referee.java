@@ -59,6 +59,15 @@ public class Referee extends AbstractReferee {
         }
     }
 
+    public void registerExplosion(Vector2d position, double radius, double damage){
+        for(Unit u : unitList){
+            double distance = u.position.distance(position);
+            if(distance <= radius){
+                u.health -= damage * (radius - distance) / radius;
+            }
+        }
+    }
+
     void updateUnits(double t){
         List<Unit> dead = unitList.stream().filter(x -> x.health <= 0).collect(Collectors.toList());
         unitList = unitList.stream().filter(x -> x.health > 0).collect(Collectors.toList());
