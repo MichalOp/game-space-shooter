@@ -11,7 +11,6 @@ public class Ship extends Unit {
 
     public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref){
         super(startPosition, startVelocity, faction, ref);
-        System.out.println(position.x);
         health = Consts.SHIP_MAX_HEALTH;
         gunCooldown = Consts.GUN_COOLDOWN;
         acceleration = Vector2d.zero;
