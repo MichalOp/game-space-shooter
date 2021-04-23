@@ -10,8 +10,7 @@ public class Missile extends Unit{
 
     public Missile(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref) {
         super(startPosition, startVelocity, faction, ref);
-        System.out.println(position.x);
-        health = Consts.SHIP_MAX_HEALTH;
+        health = Consts.MISSILE_MAX_HEALTH;
         acceleration = Vector2d.zero;
         graphics = ref.graphicEntityModule.createSprite()
                 .setImage(faction==1 ? "Spaceship_BLUE.png" : "Spaceship_GREEN.png")
