@@ -19,8 +19,6 @@ public class Player extends AbstractMultiplayerPlayer {
     private boolean checkValidAction(Action action, List<Unit> units) {
         try {
             Unit correct = units.stream().filter(x -> x.id == action.unitId).collect(Collectors.toList()).get(0);
-            // for now we don't have any units that can be detonated manually,
-            // but if we have them in the future this is a place for checking validity of detonation
 
             if (action.type == Action.ActionType.Move || action.type == Action.ActionType.Fire) {
                 // for now bullet max acceleration is the same as for ship
