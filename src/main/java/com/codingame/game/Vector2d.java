@@ -42,6 +42,6 @@ public class Vector2d {
 
     @Override
     public String toString(){
-        return "position: ("+x+", "+ y+")";
+        return "position: ("+String.format("%.0f", x)+", "+ String.format("%.0f", y)+")";
     }
 }

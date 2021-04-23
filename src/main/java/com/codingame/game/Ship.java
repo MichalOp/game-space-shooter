@@ -73,6 +73,7 @@ public class Ship extends Unit {
 
     @Override
     public String toString(){
-        return position.toString()+" "+ health;
+        return position.toString()+"\nhealth:"+ String.format("%.1f", health);
+
     }
 }
