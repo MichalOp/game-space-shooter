@@ -79,7 +79,9 @@ public class Missile extends Unit{
 
     @Override
     public String toString(){
-        return position.toString()+"\nhealth:"+ String.format("%.1f", health);
+        return "position: "+position.toString()+
+                "\nacceleration: "+ acceleration.toString()+
+                "\nhealth:"+ String.format("%.1f", health);
 
     }
 }
