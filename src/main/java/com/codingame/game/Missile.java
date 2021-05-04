@@ -81,6 +81,7 @@ public class Missile extends Unit{
     public String toString(){
         return "position: "+position.toString()+
                 "\nacceleration: "+ acceleration.toString()+
+                "\nvelocity: "+velocity.toString()+
                 "\nhealth:"+ String.format("%.1f", health);
 
     }

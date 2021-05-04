@@ -103,7 +103,8 @@ public class Bullet extends Unit{
     }
     @Override
     public String toString(){
-        return position.toString();
+        return "position: "+position.toString()+
+                "\nvelocity: "+velocity.toString();
     }
 }
 
