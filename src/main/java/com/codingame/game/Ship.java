@@ -30,11 +30,12 @@ public class Ship extends Unit {
         return "S";
     }
 
-    public void launchMissile(){
+    public int launchMissile(){
         if(missilesCount > 0){
             missilesCount--;
-            referee.addUnit(new Missile(position, velocity, faction, referee));
+            return referee.addUnit(new Missile(position, velocity, faction, referee));
         }
+        return -1;
     }
 
     public void setBurn(Vector2d direction){
