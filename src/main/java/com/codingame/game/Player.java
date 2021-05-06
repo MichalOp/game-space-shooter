@@ -39,6 +39,10 @@ public class Player extends AbstractMultiplayerPlayer {
                 return (correct instanceof Missile);
             }
 
+            if (action.type == Action.ActionType.Move) {
+                return ((correct instanceof Missile) || (correct instanceof Ship));
+            }
+
             return true;
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
