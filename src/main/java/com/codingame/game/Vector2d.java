@@ -39,4 +39,9 @@ public class Vector2d {
     public double distance(Vector2d v2){
         return (add(v2.mul(-1.0))).length();
     }
+
+    @Override
+    public String toString(){
+        return "("+String.format("%.0f", x)+", "+ String.format("%.0f", y)+")";
+    }
 }

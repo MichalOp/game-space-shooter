@@ -10,8 +10,10 @@ import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.MultiplayerGameManager;
 import com.codingame.gameengine.core.Tooltip;
+import com.codingame.gameengine.module.endscreen.EndScreenModule;
 import com.codingame.gameengine.module.entities.Circle;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
+import com.codingame.gameengine.module.tooltip.TooltipModule;
 import com.codingame.view.AnimatedEventModule;
 import com.codingame.view.ViewerEvent;
 import com.google.inject.Inject;
@@ -23,6 +25,9 @@ public class Referee extends AbstractReferee {
     @Inject private MultiplayerGameManager<Player> gameManager;
     @Inject public GraphicEntityModule graphicEntityModule;
     @Inject private AnimatedEventModule animatedEventModule;
+    @Inject public TooltipModule tooltips;
+    @Inject public EndScreenModule endScreenModule;
+
 
     private int unitId = 0;
     private List<Unit> unitList;
@@ -189,6 +194,8 @@ public class Referee extends AbstractReferee {
 
         for (Player p : gameManager.getActivePlayers()) {
             if(p.ship.health <= 0){
+                p.ship.health=0;
+                tooltips.setTooltipText(p.ship.graphics, p.ship.toString());
                 p.deactivate();
             }
         }
@@ -200,8 +207,13 @@ public class Referee extends AbstractReferee {
 
     @Override
     public void onEnd() {
+        int[] scores = {0, 0};
+        int i=0;
         for (Player p : gameManager.getPlayers()) {
             p.setScore(p.isActive() ? 1 : 0);
+            scores[i++]=p.getScore();
         }
+        endScreenModule.setScores(scores);
+        endScreenModule.setTitleRankingsSprite("logo.png");
     }
 }

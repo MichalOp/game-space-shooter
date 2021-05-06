@@ -13,13 +13,13 @@ public class Missile extends Unit{
         health = Consts.MISSILE_MAX_HEALTH;
         acceleration = Vector2d.zero;
         graphics = ref.graphicEntityModule.createSprite()
-                .setImage(faction==1 ? "Spaceship_BLUE.png" : "Spaceship_GREEN.png")
+                .setImage(faction==1 ? "Missile_BLUE.png" : "Missile_GREEN.png")
                 .setScale(0.1)
                 .setAnchor(0.5)
                 .setX((int)position.x)
                 .setY((int)position.y)
                 .setRotation(Math.acos(startVelocity.x/startVelocity.length()));
-
+        ref.tooltips.setTooltipText(graphics, toString());
         fire = ref.graphicEntityModule.createSprite()
                 .setImage("FireBullet.png")
                 .setScale(0)
@@ -74,5 +74,15 @@ public class Missile extends Unit{
                 .setY(((int)position.y));
         System.out.println(graphics.getX() + " " + graphics.getY());
         referee.graphicEntityModule.commitEntityState(t, graphics);
+        referee.tooltips.setTooltipText(graphics, toString());
+    }
+
+    @Override
+    public String toString(){
+        return "position: "+position.toString()+
+                "\nacceleration: "+ acceleration.toString()+
+                "\nvelocity: "+velocity.toString()+
+                "\nhealth:"+ String.format("%.1f", health);
+
     }
 }
