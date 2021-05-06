@@ -22,6 +22,7 @@ public class Ship extends Unit {
                 .setX((int)position.x)
                 .setY((int)position.y)
                 .setRotation(Math.acos(startVelocity.x/startVelocity.length()));
+        ref.tooltips.setTooltipText(graphics, toString());
     }
 
     @Override
@@ -29,11 +30,12 @@ public class Ship extends Unit {
         return "S";
     }
 
-    public void launchMissile(){
+    public int launchMissile(){
         if(missilesCount > 0){
             missilesCount--;
-            referee.addUnit(new Missile(position, velocity, faction, referee));
+            return referee.addUnit(new Missile(position, velocity, faction, referee));
         }
+        return -1;
     }
 
     public void setBurn(Vector2d direction){
@@ -67,5 +69,15 @@ public class Ship extends Unit {
                 .setY(((int)position.y));
         System.out.println(graphics.getX() + " " + graphics.getY());
         referee.graphicEntityModule.commitEntityState(t, graphics);
+        referee.tooltips.setTooltipText(graphics, toString());
+    }
+
+    @Override
+    public String toString(){
+        return "position: "+position.toString()+
+                "\nacceleration: "+ acceleration.toString()+
+                "\nvelocity: "+velocity.toString()+
+                "\nhealth:"+ String.format("%.1f", health);
+
     }
 }

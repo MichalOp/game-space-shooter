@@ -27,7 +27,12 @@ public class Agent1 {
                 System.err.println(String.format("%d, %s, %d, %.2f, %.2f", id, type, faction, posX, posY));
 
                 if (type.equals("S") && faction == 1) {
-                    System.out.println(String.format("%d | F %d %d | M %d %d", id, 1, 1, 0, 10));
+                    System.out.println(String.format("%d | F %d %d | A %d %d | M %d %d", id, 1, 1, 0, 10, 2, 2));
+                }
+                if (type.equals("M") && faction == 1) {
+                    double r = Math.random();
+//                    System.err.println(String.format("%d | A %d %d | %s", id, 10, 10, r < 0.01 ? "D" : ""));
+                    System.out.println(String.format("%d | A %d %d | %s", id, 10, 10, r < 0.01 ? "D" : ""));
                 }
             }
 

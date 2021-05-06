@@ -1,6 +1,7 @@
 package com.codingame.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,8 +10,10 @@ import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
 import com.codingame.gameengine.core.AbstractReferee;
 import com.codingame.gameengine.core.MultiplayerGameManager;
 import com.codingame.gameengine.core.Tooltip;
+import com.codingame.gameengine.module.endscreen.EndScreenModule;
 import com.codingame.gameengine.module.entities.Circle;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
+import com.codingame.gameengine.module.tooltip.TooltipModule;
 import com.codingame.view.AnimatedEventModule;
 import com.codingame.view.ViewerEvent;
 import com.google.inject.Inject;
@@ -22,6 +25,9 @@ public class Referee extends AbstractReferee {
     @Inject private MultiplayerGameManager<Player> gameManager;
     @Inject public GraphicEntityModule graphicEntityModule;
     @Inject private AnimatedEventModule animatedEventModule;
+    @Inject public TooltipModule tooltips;
+    @Inject public EndScreenModule endScreenModule;
+
 
     private int unitId = 0;
     private List<Unit> unitList;
@@ -30,8 +36,9 @@ public class Referee extends AbstractReferee {
         return unitList;
     }
 
-    public void addUnit(Unit u){
+    public int addUnit(Unit u){
         unitList.add(u);
+        return u.id;
     }
 
     public int getId(){
@@ -72,8 +79,12 @@ public class Referee extends AbstractReferee {
         List<Unit> dead = unitList.stream().filter(x -> x.health <= 0).collect(Collectors.toList());
         unitList = unitList.stream().filter(x -> x.health > 0).collect(Collectors.toList());
         while(!dead.isEmpty()){
-            for(Unit u:dead){
+            for(Unit u : dead){
                 u.onDeath(t);
+                // it probably should be somewhere else
+                if (u instanceof Missile) {
+                    gameManager.getPlayer(u.faction).expectedOutputLines -= 1;
+                }
             }
             dead = unitList.stream().filter(x -> x.health <= 0).collect(Collectors.toList());
             unitList = unitList.stream().filter(x -> x.health > 0).collect(Collectors.toList());
@@ -126,20 +137,51 @@ public class Referee extends AbstractReferee {
         // Update new positions
         for (Player p : gameManager.getActivePlayers()) {
             try {
-                List<Action> actions = p.getAction(unitList.stream()
+                List<Unit> playersUnits = unitList.stream()
                         .filter(x -> x.faction == p.getIndex())
-                        .collect(Collectors.toList()));
-
-                List<Action> shipActions = actions.stream()
-                        .filter(x -> x.unitId == p.ship.id)
                         .collect(Collectors.toList());
 
-                for (Action action : shipActions) {
-                    System.out.println(String.format("%s", action.type.toString()));
+                List<Action> actions = p.getAction(playersUnits);
+                // we need to do them in a specific order, e.g. spawn a missile before moving it
+                Collections.sort(actions);
+
+                for (Action action : actions) {
+                    if (action.type == Action.ActionType.Missile) {
+                        int missileID = p.ship.launchMissile();
+                        // there was an actual missile launch
+                        if (missileID > 0) {
+                            p.expectedOutputLines += 1;
+                            List<Unit> units = unitList.stream()
+                                    .filter(x -> x.id == missileID)
+                                    .collect(Collectors.toList());
+                            Unit unit = units.get(0);
+                            Missile missile = (Missile) unit;
+                            missile.setBurn(action.direction);
+                        }
+                    }
                     if (action.type == Action.ActionType.Move) {
-                        p.ship.setBurn(action.direction);
-                    } else {
+                        List<Unit> units = unitList.stream()
+                                .filter(x -> x.id == action.unitId)
+                                .collect(Collectors.toList());
+                        Unit unit = units.get(0);
+                        if (unit instanceof Ship) {
+                            p.ship.setBurn(action.direction);
+                        }
+                        if (unit instanceof Missile) {
+                            Missile missile = (Missile) unit;
+                            missile.setBurn(action.direction);
+                        }
+                    }
+                    if (action.type == Action.ActionType.Fire) {
                         p.ship.fire(action.direction);
+                    }
+                    if (action.type == Action.ActionType.Detonate) {
+                        List<Unit> units = unitList.stream()
+                                .filter(x -> x.id == action.unitId)
+                                .collect(Collectors.toList());
+                        Unit unit = units.get(0);
+                        Missile missile = (Missile) unit;
+                        missile.detonate();
                     }
                 }
 
@@ -152,6 +194,8 @@ public class Referee extends AbstractReferee {
 
         for (Player p : gameManager.getActivePlayers()) {
             if(p.ship.health <= 0){
+                p.ship.health=0;
+                tooltips.setTooltipText(p.ship.graphics, p.ship.toString());
                 p.deactivate();
             }
         }
@@ -163,8 +207,13 @@ public class Referee extends AbstractReferee {
 
     @Override
     public void onEnd() {
+        int[] scores = {0, 0};
+        int i=0;
         for (Player p : gameManager.getPlayers()) {
             p.setScore(p.isActive() ? 1 : 0);
+            scores[i++]=p.getScore();
         }
+        endScreenModule.setScores(scores);
+        endScreenModule.setTitleRankingsSprite("logo.png");
     }
 }
