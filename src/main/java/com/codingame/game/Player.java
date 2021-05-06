@@ -20,14 +20,19 @@ public class Player extends AbstractMultiplayerPlayer {
         try {
             Unit correct = units.stream().filter(x -> x.id == action.unitId).collect(Collectors.toList()).get(0);
 
-            if (action.type == Action.ActionType.Move || action.type == Action.ActionType.Fire) {
-                // for now bullet max acceleration is the same as for ship
-                if (abs(action.direction.x) > Consts.SHIP_MAX_ACCELERATION) {
+            if (action.type == Action.ActionType.Move ||
+                    action.type == Action.ActionType.Fire ||
+                    action.type == Action.ActionType.Missile) {
+                if (Double.isNaN(action.direction.x) || Double.isNaN(action.direction.y)) {
                     return false;
                 }
-                if (abs(action.direction.y) > Consts.SHIP_MAX_ACCELERATION) {
+                if (Double.isInfinite(action.direction.x) || Double.isInfinite(action.direction.y)) {
                     return false;
                 }
+            }
+
+            if (action.type == Action.ActionType.Fire) {
+                return (correct instanceof Ship);
             }
 
             if (action.type == Action.ActionType.Detonate) {
