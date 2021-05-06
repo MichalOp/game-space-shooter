@@ -18,9 +18,12 @@ public abstract class Unit {
     }
 
     public void move(){
-        position = position.add(velocity.mul(Consts.TIME_DELTA));
-        position.x = (position.x + Math.ceil(1 + Math.abs(position.x / Consts.MAP_X))*Consts.MAP_X) % Consts.MAP_X;
-        position.y = (position.y + Math.ceil(1 + Math.abs(position.y / Consts.MAP_Y))*Consts.MAP_Y) % Consts.MAP_Y;
+        Vector2d new_position = position.add(velocity.mul(Consts.TIME_DELTA));
+        if (new_position.x < 0 || new_position.x > Consts.MAP_X || new_position.y < 0 || new_position.y > Consts.MAP_Y) {
+            health = 0;
+        } else {
+            position = new_position;
+        }
     }
 
     public void onDeath(double t){};
