@@ -39,7 +39,7 @@ public class Ship extends Unit {
     }
 
     public void setBurn(Vector2d direction){
-        acceleration = direction.clip(Consts.SHIP_MAX_ACCELERATION);
+        acceleration = direction.clip(1).mul(Consts.SHIP_MAX_ACCELERATION);
     }
 
     public void fire(Vector2d direction){
