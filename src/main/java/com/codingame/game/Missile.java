@@ -67,7 +67,8 @@ public class Missile extends Unit{
         if((position.x<=50 && graphics.getX()>Consts.MAP_X-50) || (position.x>=Consts.MAP_X-50 && graphics.getX()<50) || (position.y>=Consts.MAP_Y-50 && graphics.getY()<50) || (position.y<=50 && graphics.getY()>Consts.MAP_Y-50) ){
             graphics.setVisible(false);
             referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
-        }
+        }//TODO are these lines still useful? (missile, bullet, ship)
+
         referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
         graphics.setRotation(Math.acos((position.x-graphics.getX())/(position.distance(new Vector2d(graphics.getX(), graphics.getY())))))
                 .setX(((int)position.x))

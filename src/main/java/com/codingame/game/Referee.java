@@ -111,6 +111,7 @@ public class Referee extends AbstractReferee {
         gameManager.setFrameDuration(300);
         
         graphicEntityModule.createSprite().setImage("Background.jpg").setAnchor(0);
+        //TODO life bars
 
         for (Player p : gameManager.getPlayers()) {
             int faction = p.getIndex();

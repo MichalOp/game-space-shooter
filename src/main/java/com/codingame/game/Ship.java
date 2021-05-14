@@ -1,5 +1,6 @@
 package com.codingame.game;
 
+import com.codingame.gameengine.module.entities.Rectangle;
 import com.codingame.gameengine.module.entities.Sprite;
 
 public class Ship extends Unit {
@@ -8,6 +9,7 @@ public class Ship extends Unit {
     double gunCooldown;
     int missilesCount;
     Sprite graphics;
+    Rectangle lifeBar;
 
     public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref){
         super(startPosition, startVelocity, faction, ref);
@@ -19,10 +21,19 @@ public class Ship extends Unit {
                 .setImage(faction==1 ? "Spaceship_BLUE.png" : "Spaceship_GREEN.png")
                 .setScale(0.2)
                 .setAnchor(0.5)
+                .setZIndex(1)
                 .setX((int)position.x)
                 .setY((int)position.y)
                 .setRotation(Math.acos(startVelocity.x/startVelocity.length()));
         ref.tooltips.setTooltipText(graphics, toString());
+        lifeBar= ref.graphicEntityModule.createRectangle()
+                .setFillColor(faction==1 ? Consts.COLOR_1 : Consts.COLOR_0)
+                .setY(graphics.getY())
+                .setX(graphics.getX()-Consts.LIFE_BAR_WIDTH/2)
+                .setZIndex(2)
+                .setHeight(3)
+                .setWidth(Consts.LIFE_BAR_WIDTH)
+                .setScaleX(1);
     }
 
     @Override
@@ -57,7 +68,7 @@ public class Ship extends Unit {
 
     @Override
     public void graphicsTick(double t){
-        graphics.setVisible(true); //TODO transition instead of invisible
+        graphics.setVisible(true);
         if((position.x<=50 && graphics.getX()>Consts.MAP_X-50) || (position.x>=Consts.MAP_X-50 && graphics.getX()<50) || (position.y>=Consts.MAP_Y-50 && graphics.getY()<50) || (position.y<=50 && graphics.getY()>Consts.MAP_Y-50) ){
             graphics.setVisible(false);
             referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
@@ -67,7 +78,11 @@ public class Ship extends Unit {
                 .setX(((int)position.x))
                 .setY(((int)position.y));
         System.out.println(graphics.getX() + " " + graphics.getY());
+        lifeBar.setScaleX(health/Consts.SHIP_MAX_HEALTH)
+                .setX(graphics.getX()-Consts.LIFE_BAR_WIDTH/2)
+                .setY(graphics.getY());
         referee.graphicEntityModule.commitEntityState(t, graphics);
+        referee.graphicEntityModule.commitEntityState(t, lifeBar);
         referee.tooltips.setTooltipText(graphics, toString());
     }
 
