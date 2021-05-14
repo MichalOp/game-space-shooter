@@ -99,6 +99,7 @@ public class Player extends AbstractMultiplayerPlayer {
                             action.type = Action.ActionType.Wait;
                             break;
                         default:
+                            // if we wanted to print debug messages given by players this is the place for it
                             throw new NoSuchMethodException(String.format("Bad Action: %s", out));
                     }
                     if (checkValidAction(action, units)) {

@@ -186,7 +186,17 @@ public class Referee extends AbstractReferee {
                 }
 
             } catch (TimeoutException | NoSuchMethodException | InputMismatchException | NumberFormatException e) {
-                p.deactivate(String.format("%s eliminated! Reason: %s", p.getNicknameToken(), e));
+                String message = String.format("%s eliminated! Reason: ", p.getNicknameToken());
+                if (e instanceof TimeoutException) {
+                    message += String.format("Timeout! (%d lines expected)", p.getExpectedOutputLines());
+                }
+                else if (e instanceof NoSuchMethodException) {
+                    message += e.getMessage();
+                }
+                else {
+                    message += "Bad input!";
+                }
+                p.deactivate(message);
             }
         }
 
