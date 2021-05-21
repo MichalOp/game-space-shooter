@@ -1,22 +1,22 @@
 gameloop
 read units:int
-loop units read unitId:int faction:int type:word(32) health:float posX:float posY:float velX:float velY:float
+loop units read unitId:int faction:int type:word(32) health:float positionX:float positionY:float velocityX:float velocityY:float
 write join("0", "|", "W")
 
 INPUT
 units: number of units on the map
 unitId: unit's unique ID
 faction: 1 if the unit belongs to the player, -1 if to opponent
-type: 'S' for ship, 'B' for bullet
+type: 'S' for ship, 'B' for bullet, 'M' for missile
 health: remaining unit's health points
-posX: X coordinate of the unit's position
-posY: Y coordinate of the unit's position
-velX: X coordinate of the unit's velocity
-velY: Y coordinate of the unit's velocity
+positionX: X coordinate of the unit's position
+positionY: Y coordinate of the unit's position
+velocityX: X coordinate of the unit's velocity
+velocityY: Y coordinate of the unit's velocity
 
 STATEMENT
 Move your ship, fire, win!
 
 OUTPUT
 One line for each of the (actively) controlled unit with at least one action specified
-unitId [| M x y] [| F x y] [| W]
+unitId [| A x y] [| F x y] [| M x y] [| W]
