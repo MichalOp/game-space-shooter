@@ -20,5 +20,4 @@ Clone this project & download the Maven dependencies.
 
 Launch `src/test/java/Main.java` to launch a local game with `Agent1.java` vs `Agent2.java`
 
-The rules of Space Shooter are explained in `config/statement_en.html`
-(not yet).
+The rules of Space Shooter are explained in `config/statement_en.html`.
