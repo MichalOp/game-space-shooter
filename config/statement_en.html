@@ -47,7 +47,7 @@
     <div class="blk">
       <div class="title">Input for one game turn</div>
       <div class="text"><span class="statement-lineno">Line 1:</span> 1 integer <var>units</var> for the number of units on the board. <br>
-        <span class="statement-lineno">Next <var>units</var> lines:</span> 2 integers <var>unit_id</var>, <var>faction</var>, being the unit's unique ID and faction (1 for the player, -1 for the opponent), 1 char <var>type</var> being <const>S</const>hip, <const>B</const>ullet or <const>M</const>issile, 5 floats <var>health</var>, <var>position_x</var>, <var>position_y</var>, <var>velocity_x</var>, <var>velocity_y</var> for the unit's health points left, its position on each axis and velocity on each axis.
+        <span class="statement-lineno">Next <var>units</var> lines:</span> 2 integers <var>unit_id</var>, <var>faction</var>, being the unit's unique ID and faction (<const>1</const> for the player, <const>-1</const> for the opponent), 1 char <var>type</var> being <const>S</const>hip, <const>B</const>ullet or <const>M</const>issile, 6 floats <var>health</var>, <var>position_x</var>, <var>position_y</var>, <var>velocity_x</var>, <var>velocity_y</var>, <var>gun_cooldown</var> for the unit's health points left, its position on each axis and velocity on each axis, followed by gun cooldown, which indicates the number of rounds till the next bullet can be shot, if this unit is a ship, and is set to <const>-1</const> otherwise.
         <br>
       </div>
     </div>
@@ -58,20 +58,20 @@
       <div class="text"><span class="statement-lineno"><const>(Exactly!) n</const> lines, where <const>n</const> is the number of ships and missiles actively controlled by the player:</span> Command for unit with unit_id in the form: <var> unit_id | A x y | F x y </var>, having one or more commands for <const>unit_id</const> separated by <const>|</const>.</div>
       <br>
       Available commands:
-      <ul> 
-      <li> For a ship:
-        <ul>
-        <li> <var> A x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
-        <li> <var> F x y </var> -- fire bullet with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis
-        <li> <var> M x y </var> -- fire a missile with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis (this missile will be receiving orders starting from the next turn)
-        <li> <var> W </var> -- do nothing
-        </ul> 
-      <li> For a missile:
-        <ul>
-          <li> <var> A x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
-          <li> <var> D </var> -- detonate
-          <li> <var> W </var> -- do nothing
-        </ul>
+      <ul>
+        <li> For a ship:
+          <ul>
+            <li> <var> A x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
+            <li> <var> F x y </var> -- fire bullet with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis
+            <li> <var> M x y </var> -- fire a missile with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis (this missile will be receiving orders starting from the next turn)
+            <li> <var> W </var> -- do nothing
+          </ul>
+        <li> For a missile:
+          <ul>
+            <li> <var> A x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
+            <li> <var> D </var> -- detonate
+            <li> <var> W </var> -- do nothing
+          </ul>
       </ul>
     </div>
 
