@@ -60,7 +60,17 @@ public class Player extends AbstractMultiplayerPlayer {
         for (String out : this.getOutputs()) {
             String[] orders = out.split("\\|");
             Scanner scanner = new Scanner(orders[0]);
-            int unitId = scanner.nextInt();
+            int unitId = -1;
+            try {
+                unitId = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                String o = orders[0].replace(" ", "");
+                if (o.charAt(0) == 'S') {
+                    unitId = ship.id;
+                } else {
+                    throw new InputMismatchException("");
+                }
+            }
             if (usedUnits.contains(unitId)) {
                 throw new NoSuchMethodException("At least two orders for the same unit provided");
             }
