@@ -1,7 +1,7 @@
 gameloop
 read units:int
 loop units read unitId:int faction:int type:word(32) health:float positionX:float positionY:float velocityX:float velocityY:float gunCooldown:float
-write join("0", "|", "W")
+write join("S", "|", "W")
 
 INPUT
 units: number of units on the map
