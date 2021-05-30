@@ -65,7 +65,7 @@ public class Player extends AbstractMultiplayerPlayer {
                 unitId = scanner.nextInt();
             } catch (InputMismatchException e) {
                 String o = orders[0].replace(" ", "");
-                if (o.charAt(0) == 'S') {
+                if (o.charAt(0) == 'S' && o.length() == 1) {
                     unitId = ship.id;
                 } else {
                     throw new InputMismatchException("");
