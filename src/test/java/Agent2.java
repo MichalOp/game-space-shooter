@@ -20,6 +20,7 @@ public class Agent2 {
                 double posY = scanner.nextDouble();
                 double velX = scanner.nextDouble();
                 double velY = scanner.nextDouble();
+                double cooldown = scanner.nextDouble();
 
                 Vector2d pos = new Vector2d(posX, posY);
                 Vector2d vel = new Vector2d(velX, velY);
