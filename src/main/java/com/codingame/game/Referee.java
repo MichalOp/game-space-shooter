@@ -18,6 +18,8 @@ import com.codingame.view.AnimatedEventModule;
 import com.codingame.view.ViewerEvent;
 import com.google.inject.Inject;
 
+import static java.lang.Math.max;
+
 public class Referee extends AbstractReferee {
     private static int WIDTH = 1920;
     private static int HEIGHT = 1080;
@@ -46,21 +48,28 @@ public class Referee extends AbstractReferee {
     }
 
     private int clamp(int val, int min, int max) {
-        return Math.max(min, Math.min(max, val));
+        return max(min, Math.min(max, val));
     }
 
     private void sendPlayerInputs() {
 
         // input for players:
         // number of lines
-        // unitId, faction, type, health, posX, posY, velX, velY (ints for id & faction, rest as doubles with precision 2)
-        // at least for now
+        // unitId, faction, type, health, posX, posY, velX, velY, gunCooldown (ints for id & faction, rest as doubles with precision 2)
+        // gunCooldown is from 0 to maxCooldown for ship, else -1
 
         for (Player p : gameManager.getActivePlayers()) {
             p.sendInputLine(String.valueOf(getUnits().size()));
             for (Unit u : getUnits()) {
-                p.sendInputLine(String.format("%d %d %s %.2f %.2f %.2f %.2f %.2f",
-                        u.id, u.faction == p.getIndex() ? 1 : -1, u.getUnitType(), u.health, u.position.x, u.position.y, u.velocity.x, u.velocity.y));
+                double gunCooldown = -1;
+                if (u instanceof Ship){
+                    Ship ship = (Ship)u;
+                    gunCooldown = max(0.0, Consts.GUN_COOLDOWN - ship.gunCooldown);
+                }
+                p.sendInputLine(String.format("%d %d %s %.2f %.2f %.2f %.2f %.2f %.2f",
+                        u.id, u.faction == p.getIndex() ? 1 : -1, u.getUnitType(),
+                        u.health, u.position.x, u.position.y, u.velocity.x, u.velocity.y,
+                        gunCooldown));
             }
             p.execute();
         }
@@ -187,7 +196,17 @@ public class Referee extends AbstractReferee {
                 }
 
             } catch (TimeoutException | NoSuchMethodException | InputMismatchException | NumberFormatException e) {
-                p.deactivate(String.format("%s eliminated! Reason: %s", p.getNicknameToken(), e));
+                String message = String.format("%s eliminated! Reason: ", p.getNicknameToken());
+                if (e instanceof TimeoutException) {
+                    message += String.format("Timeout! (%d lines expected)", p.getExpectedOutputLines());
+                }
+                else if (e instanceof NoSuchMethodException) {
+                    message += e.getMessage();
+                }
+                else {
+                    message += "Bad input!";
+                }
+                p.deactivate(message);
             }
         }
 

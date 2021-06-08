@@ -50,12 +50,12 @@ public class Ship extends Unit {
     }
 
     public void setBurn(Vector2d direction){
-        acceleration = direction.clip(Consts.SHIP_MAX_ACCELERATION);
+        acceleration = direction.clip(1).mul(Consts.SHIP_MAX_ACCELERATION);
     }
 
     public void fire(Vector2d direction){
         if(gunCooldown > Consts.GUN_COOLDOWN) {
-            Vector2d bulletVelocity = direction.mul(Consts.BULLET_VELOCITY).add(velocity);
+            Vector2d bulletVelocity = direction.clip(1).mul(Consts.BULLET_VELOCITY).add(velocity);
             referee.addUnit(new Bullet(position, bulletVelocity, faction, referee));
             gunCooldown = 0;
         }

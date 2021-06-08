@@ -20,14 +20,15 @@ public class Agent1 {
                 double posY = scanner.nextDouble();
                 double velX = scanner.nextDouble();
                 double velY = scanner.nextDouble();
+                double cooldown = scanner.nextDouble();
 
                 Vector2d pos = new Vector2d(posX, posY);
                 Vector2d vel = new Vector2d(velX, velY);
 
-                System.err.println(String.format("%d, %s, %d, %.2f, %.2f", id, type, faction, posX, posY));
+                System.err.println(String.format("%d, %s, %d, %.2f, %.2f, %.2f", id, type, faction, posX, posY, cooldown));
 
                 if (type.equals("S") && faction == 1) {
-                    System.out.println(String.format("%d | F %d %d | A %d %d | M %d %d", id, 1, 1, 0, 10, 2, 2));
+                    System.out.println(String.format(" S | F %d %d | A %d %d | M %d %d", 1, 1, 0, 10, 2, 2));
                 }
                 if (type.equals("M") && faction == 1) {
                     double r = Math.random();

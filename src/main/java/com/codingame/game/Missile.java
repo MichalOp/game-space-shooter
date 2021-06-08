@@ -35,7 +35,7 @@ public class Missile extends Unit{
     }
 
     public void setBurn(Vector2d direction){
-        acceleration = direction.clip(Consts.MISSILE_MAX_ACCELERATION);
+        acceleration = direction.clip(1).mul(Consts.MISSILE_MAX_ACCELERATION);
     }
 
     @Override
