@@ -14,6 +14,7 @@ import com.codingame.gameengine.module.endscreen.EndScreenModule;
 import com.codingame.gameengine.module.entities.Circle;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.codingame.gameengine.module.tooltip.TooltipModule;
+import com.codingame.gameengine.module.toggle.ToggleModule;
 import com.codingame.view.AnimatedEventModule;
 import com.codingame.view.ViewerEvent;
 import com.google.inject.Inject;
@@ -29,6 +30,7 @@ public class Referee extends AbstractReferee {
     @Inject private AnimatedEventModule animatedEventModule;
     @Inject public TooltipModule tooltips;
     @Inject public EndScreenModule endScreenModule;
+    @Inject ToggleModule toggleModule;
 
 
     private int unitId = 0;
@@ -111,6 +113,7 @@ public class Referee extends AbstractReferee {
             for (Unit u : unitList){
                 u.graphicsTick(t);
             }
+            graphicEntityModule.commitWorldState(t);
             for (Unit u : unitList){
                 u.tick();
             }

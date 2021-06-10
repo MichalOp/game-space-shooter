@@ -23,6 +23,8 @@ public class Ship extends Unit {
                 .setY((int)position.y)
                 .setRotation(Math.acos(startVelocity.x/startVelocity.length()));
         ref.tooltips.setTooltipText(graphics, toString());
+        debug_graphics.setRadius(15);
+        referee.toggleModule.displayOnToggleState(graphics, "debugToggle", false);
     }
 
     @Override
@@ -58,17 +60,18 @@ public class Ship extends Unit {
 
     @Override
     public void graphicsTick(double t){
+        super.graphicsTick(t);
         graphics.setVisible(true); //TODO transition instead of invisible
         if((position.x<=50 && graphics.getX()>Consts.MAP_X-50) || (position.x>=Consts.MAP_X-50 && graphics.getX()<50) || (position.y>=Consts.MAP_Y-50 && graphics.getY()<50) || (position.y<=50 && graphics.getY()>Consts.MAP_Y-50) ){
             graphics.setVisible(false);
             referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
         }
-        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
+        // referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
         graphics.setRotation(Math.acos((position.x-graphics.getX())/(position.distance(new Vector2d(graphics.getX(), graphics.getY())))))
                 .setX(((int)position.x))
                 .setY(((int)position.y));
         System.out.println(graphics.getX() + " " + graphics.getY());
-        referee.graphicEntityModule.commitEntityState(t, graphics);
+        // referee.graphicEntityModule.commitEntityState(t, graphics);
         referee.tooltips.setTooltipText(graphics, toString());
     }
 

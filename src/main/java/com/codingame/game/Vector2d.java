@@ -40,6 +40,10 @@ public class Vector2d {
         return (add(v2.mul(-1.0))).length();
     }
 
+    public double angle(){
+        return Math.atan2(x, -y);
+    }
+
     @Override
     public String toString(){
         return "("+String.format("%.0f", x)+", "+ String.format("%.0f", y)+")";
