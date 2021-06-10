@@ -69,6 +69,7 @@ public abstract class Unit {
         velocity_arrow.setX((int)position.x).setY((int)position.y).setRotation(velocity.angle()-Math.PI/2).setScaleX(velocity.length()/5000);
         debug_graphics.setX((int)position.x).setY((int)position.y);
         debug_id.setX((int)position.x).setY((int)position.y);
+        referee.tooltips.setTooltipText(debug_graphics, toString());
     }
 
     public void tick(){}
