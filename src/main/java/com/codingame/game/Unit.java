@@ -1,6 +1,7 @@
 package com.codingame.game;
 import com.codingame.gameengine.module.entities.Circle;
 import com.codingame.gameengine.module.entities.Sprite;
+import com.codingame.gameengine.module.entities.Text;
 
 import java.awt.*;
 
@@ -15,6 +16,7 @@ public abstract class Unit {
     Sprite velocity_arrow;
     protected Circle debug_graphics;
     protected Circle debug_blast;
+    protected Text debug_id;
 
     public Unit(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref){
         referee = ref;
@@ -33,6 +35,14 @@ public abstract class Unit {
         debug_blast.setAlpha(0.4);
         debug_blast.setVisible(false);
 
+        debug_id = ref.graphicEntityModule.createText()
+                .setX((int)startPosition.x)
+                .setY((int)startPosition.y)
+                .setText("" + id)
+                .setFillColor(0xffffff);
+
+        referee.toggleModule.displayOnToggleState(debug_id, "debugToggle", true);
+
         referee.toggleModule.displayOnToggleState(debug_blast, "debugToggle", true);
         referee.toggleModule.displayOnToggleState(velocity_arrow, "debugToggle", true);
         referee.toggleModule.displayOnToggleState(debug_graphics, "debugToggle", true);
@@ -48,6 +58,7 @@ public abstract class Unit {
     }
 
     public void onDeath(double t){
+        debug_id.setVisible(false);
         debug_graphics.setVisible(false);
         velocity_arrow.setVisible(false);
     }
@@ -57,6 +68,7 @@ public abstract class Unit {
     public void graphicsTick(double t){
         velocity_arrow.setX((int)position.x).setY((int)position.y).setRotation(velocity.angle()-Math.PI/2).setScaleX(velocity.length()/5000);
         debug_graphics.setX((int)position.x).setY((int)position.y);
+        debug_id.setX((int)position.x).setY((int)position.y);
     }
 
     public void tick(){}
