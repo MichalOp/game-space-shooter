@@ -10,6 +10,7 @@
       <p>Shoot at your enemy with bullets and missiles, watch out for their weapons.
         Be careful - the forcefield, which was used to trap your enemy, seems to also be keeping you inside.
         Keep away from the edge - crash with the forcefield will destroy your ship!
+
       </p>
     </div>
   </div>
@@ -28,15 +29,19 @@
       <p>The ship has an infinite number of bullets, but only <const>8 missiles.</const></p>
 
       <p>The bullet can be shot each other round, it detonates automatically at the closest point to the first enemy's unit that was in its damage radius. Hitting the edge of the board or ending it's lifetime (after <const>7</const> turns) also detonates the bullet.
-        This radius is of size <const>100</const>, the damage caused at the bullet's position is <const>10</const> and decreases linearly with the distance to it, reaching <const>0</const> at damage radius. The bullet is shot with the given velocities along each axis (in realtion to the ship), with the resultant velocity being clipped to be at most <const>100</const>.</p>
+        This radius is of size <const>100</const>, the damage caused at the bullet's position is <const>10</const> and decreases linearly with the distance to it, reaching <const>0</const> at damage radius. The bullet is shot with the given velocities along each axis (in relation to the ship), with the resultant velocity being clipped to be at most <const>100</const>.</p>
       <p>Missiles can be shot each round, as long as you have one. Their damage radius is <const>200</const>, and the damage done is <const>20</const> in the center of explosion, decreasing in the same manner as bullet's.
         They have their own engines, so they can be moved around just as the spaceship. They are detonated with a command.</p>
       <p>
-        Both missiles and bullets have their own health points (<const>10</const> per unit). When it gets to 0, the unit detonates.
+        Both missiles and bullets have their own health points (<const>7</const> for missile, <const>10</const> for bullet). When it gets to 0, the unit detonates.
       </p>
-      <p>The ships start at symetrical positions, close to the center of the board.</p>
+      <p>The ships start at symmetrical positions, close to the center of the board.</p>
       <p> Both ships and missiles move with the given acceleration along each axis, with the resultant acceleration being clipped to be at most <const>10</const>.</p>
-      <p> Hitting the edge of the board immidiatety sets the unit's health to 0, causing it to die/detonate.
+      <p> Hitting the edge of the board immediately sets the unit's health to 0, causing it to die/detonate.
+    </div>
+    <br>
+    <div>
+      The player whose ship reaches 0 health points first loses.
     </div>
   </div>
 
@@ -53,6 +58,7 @@
         <span class="statement-lineno">Next <var>units</var> lines:</span> 2 integers <var>unit_id</var>, <var>faction</var>, being the unit's unique ID and faction (<const>1</const> for the player, <const>-1</const> for the opponent), 1 char <var>type</var> being <const>S</const>hip, <const>B</const>ullet or <const>M</const>issile, 6 floats <var>health</var>, <var>position_x</var>, <var>position_y</var>, <var>velocity_x</var>, <var>velocity_y</var>, <var>gun_cooldown</var> for the unit's health points left, its position on each axis and velocity on each axis, followed by gun cooldown, which indicates the number of rounds till the next bullet can be shot, if this unit is a ship, and is set to <const>-1</const> otherwise.
         <br>
       </div>
+
     </div>
 
     <!-- Protocol block -->
