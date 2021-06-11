@@ -33,6 +33,10 @@ public class Ship extends Unit {
                 .setY((int) position.y)
                 .setRotation(Math.acos(startVelocity.x / startVelocity.length()));
         ref.tooltips.setTooltipText(graphics, toString());
+
+        debug_graphics.setRadius(15);
+        referee.toggleModule.displayOnToggleState(graphics, "debugToggle", false);
+
         referee.graphicEntityModule.createText("PLAYER " + faction)
                 .setStrokeThickness(5) // Adding an outline
                 .setStrokeColor(0xffffff) // a white outline
@@ -116,23 +120,19 @@ public class Ship extends Unit {
 
     @Override
     public void graphicsTick(double t){
-        /*graphics.setVisible(true);
-        if((position.x<=50 && graphics.getX()>Consts.MAP_X-50) || (position.x>=Consts.MAP_X-50 && graphics.getX()<50) || (position.y>=Consts.MAP_Y-50 && graphics.getY()<50) || (position.y<=50 && graphics.getY()>Consts.MAP_Y-50) ){
-            graphics.setVisible(false);
-            referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
-        }
-        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);*/
+        super.graphicsTick(t);
+
         graphics.setRotation(Math.atan2(graphics.getX()-position.x, position.y-graphics.getY())+Math.PI/2)
                 .setX(((int)position.x))
                 .setY(((int)position.y));
         System.out.println(graphics.getX() + " " + graphics.getY());
 
         drawSideBar();
-        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthBar);
-        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthText);
-        referee.graphicEntityModule.commitEntityState(t, missilesLeft);
-        referee.graphicEntityModule.commitEntityState(t, positionText);
-        referee.graphicEntityModule.commitEntityState(t, graphics);
+//        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthBar);
+//        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthText);
+//        referee.graphicEntityModule.commitEntityState(t, missilesLeft);
+//        referee.graphicEntityModule.commitEntityState(t, positionText);
+//        referee.graphicEntityModule.commitEntityState(t, graphics);
         referee.tooltips.setTooltipText(graphics, toString());
     }
 

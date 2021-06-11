@@ -15,6 +15,7 @@ import com.codingame.gameengine.module.entities.Circle;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.codingame.gameengine.module.entities.Sprite;
 import com.codingame.gameengine.module.tooltip.TooltipModule;
+import com.codingame.gameengine.module.toggle.ToggleModule;
 import com.codingame.view.AnimatedEventModule;
 import com.codingame.view.ViewerEvent;
 import com.google.inject.Inject;
@@ -26,18 +27,13 @@ public class Referee extends AbstractReferee {
     private static int WIDTH = 1700;
     private static int HEIGHT = 1080;
 
-    @Inject
-    private MultiplayerGameManager<Player> gameManager;
-    @Inject
-    public GraphicEntityModule graphicEntityModule;
-    @Inject
-    private AnimatedEventModule animatedEventModule;
-    @Inject
-    public TooltipModule tooltips;
-    @Inject
-    public EndScreenModule endScreenModule;
-
-
+    @Inject private MultiplayerGameManager<Player> gameManager;
+    @Inject public GraphicEntityModule graphicEntityModule;
+    @Inject private AnimatedEventModule animatedEventModule;
+    @Inject public TooltipModule tooltips;
+    @Inject public EndScreenModule endScreenModule;
+    @Inject ToggleModule toggleModule;
+    
     private int unitId = 0;
     private List<Unit> unitList;
 
@@ -121,7 +117,8 @@ public class Referee extends AbstractReferee {
             for (Unit u : unitList) {
                 u.graphicsTick(t);
             }
-            for (Unit u : unitList) {
+            graphicEntityModule.commitWorldState(t);
+            for (Unit u : unitList){
                 u.tick();
             }
             updateUnits(t);

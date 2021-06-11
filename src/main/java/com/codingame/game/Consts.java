@@ -6,7 +6,7 @@ public final class Consts {
     public static final double BULLET_VELOCITY = 100;
     public static final double SHIP_MAX_HEALTH = 10;
     public static final int MISSILES_COUNT = 8;
-    public static final double MISSILE_MAX_HEALTH = 10;
+    public static final double MISSILE_MAX_HEALTH = 7;
     public static final double BULLET_MAX_HEALTH = 10;
     public static final double TIME_DELTA = 0.1;
     public static final double GUN_COOLDOWN = 2.0;
@@ -14,7 +14,7 @@ public final class Consts {
     public static final double GUN_DAMAGE = 10;
     public static final double BULLET_LIFETIME = 7;
     public static final double MISSILE_BLAST_RADIUS = 200;
-    public static final double MISSILE_DAMAGE = 200;
+    public static final double MISSILE_DAMAGE = 15;
     public static final int MAP_X = 1700;
     public static final int MAP_Y = 1080;
     public static final int SIDE_BAR_LEFT = MAP_X;

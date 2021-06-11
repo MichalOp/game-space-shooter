@@ -31,6 +31,10 @@ public class Missile extends Unit{
                 .setX(graphics.getX())
                 .setY(graphics.getY());
         ref.graphicEntityModule.commitEntityState(0, fire);
+        debug_graphics.setRadius(8);
+        debug_blast.setRadius((int)Consts.MISSILE_BLAST_RADIUS);
+        referee.toggleModule.displayOnToggleState(fire, "debugToggle", false);
+        referee.toggleModule.displayOnToggleState(graphics, "debugToggle", false);
         text = referee.graphicEntityModule.createText("Missile id: "+id)
                 .setStrokeThickness(5) // Adding an outline
                 .setStrokeColor(0xffffff) // a white outline
@@ -61,6 +65,7 @@ public class Missile extends Unit{
 
     @Override
     public void onDeath(double t){
+        super.onDeath(t);
         referee.registerExplosion(position, Consts.MISSILE_BLAST_RADIUS, Consts.MISSILE_DAMAGE);
         text.setVisible(false);
         referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, text);
@@ -72,16 +77,23 @@ public class Missile extends Unit{
         fire.setScale(10);
         referee.graphicEntityModule.commitEntityState(t, fire);
         fire.setVisible(false);
+
+        debug_blast.setX(graphics.getX()).setY(graphics.getY());
+        debug_blast.setVisible(true);
+        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA/2, debug_blast);
+        debug_blast.setVisible(false);
     }
 
     @Override
     public void graphicsTick(double t){
+        super.graphicsTick(t);
+
         graphics.setRotation(Math.atan2(graphics.getX()-position.x, position.y-graphics.getY())+ Math.PI/2)
                 .setX(((int)position.x))
                 .setY(((int)position.y));
-        System.out.println(graphics.getX() + " " + graphics.getY());
-        referee.graphicEntityModule.commitEntityState(t, text);
-        referee.graphicEntityModule.commitEntityState(t, graphics);
+//        System.out.println(graphics.getX() + " " + graphics.getY());
+//        referee.graphicEntityModule.commitEntityState(t, text);
+//        referee.graphicEntityModule.commitEntityState(t, graphics);
         referee.tooltips.setTooltipText(graphics, toString());
     }
 
