@@ -80,6 +80,7 @@ public class Ship extends Unit {
         healthText.setText("Health: "+String.format("%.1f", health)+"/10");
         healthBar.setScaleX(health/10);
         missilesLeft.setText(missilesCount+" missiles left");
+        positionText.setText("position (x, y): "+position.toString());
     }
 
     @Override
