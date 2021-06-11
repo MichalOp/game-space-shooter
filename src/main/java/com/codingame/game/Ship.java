@@ -121,7 +121,7 @@ public class Ship extends Unit {
             referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
         }
         referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);*/
-        graphics.setRotation(Math.acos((position.x-graphics.getX())/(position.distance(new Vector2d(graphics.getX(), graphics.getY())))))
+        graphics.setRotation(Math.atan2(graphics.getX()-position.x, position.y-graphics.getY())+Math.PI/2)
                 .setX(((int)position.x))
                 .setY(((int)position.y));
         System.out.println(graphics.getX() + " " + graphics.getY());
@@ -130,6 +130,7 @@ public class Ship extends Unit {
         referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthBar);
         referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthText);
         referee.graphicEntityModule.commitEntityState(t, missilesLeft);
+        referee.graphicEntityModule.commitEntityState(t, positionText);
         referee.graphicEntityModule.commitEntityState(t, graphics);
         referee.tooltips.setTooltipText(graphics, toString());
     }

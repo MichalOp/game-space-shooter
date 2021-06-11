@@ -76,7 +76,7 @@ public class Missile extends Unit{
 
     @Override
     public void graphicsTick(double t){
-        graphics.setRotation(Math.acos((position.x-graphics.getX())/(position.distance(new Vector2d(graphics.getX(), graphics.getY())))))
+        graphics.setRotation(Math.atan2(graphics.getX()-position.x, position.y-graphics.getY())+ Math.PI/2)
                 .setX(((int)position.x))
                 .setY(((int)position.y));
         System.out.println(graphics.getX() + " " + graphics.getY());
