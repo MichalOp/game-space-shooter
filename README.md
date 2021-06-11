@@ -1,17 +1,23 @@
-# Pong CodinGame Example
+# Space Shooter
+## A multiplayer game for Codingame
 
-## Purpose
+---
+### Purpose
 
-This project is an example game for the [CodinGame SDK](https://www.codingame.com/playgrounds/25775).
+This project is based on an example [game skeleton](https://github.com/CodinGame/game-skeleton) for the [CodinGame SDK](https://www.codingame.com/playgrounds/25775).
 
-It contains a simple 2 player game where both players perform actions simultaneously. It also contains an example of a custom module, which is optional to run the game.
+It contains a 2 player bot game where both players perform actions simultaneously.
 
-## Build
+The goal of the game is to navigate a spaceship to avoid being shot by the opponent while sucessfully using the guns against him.
+
+The game is currently under development.
+
+### Build
 
 Clone this project & download the Maven dependencies.
 
-## Run
+### Run
 
 Launch `src/test/java/Main.java` to launch a local game with `Agent1.java` vs `Agent2.java`
 
-The rules of Pong are explained in `config/statement_en.html`
+The rules of Space Shooter are explained in `config/statement_en.html`.

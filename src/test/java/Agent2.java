@@ -7,7 +7,10 @@ public class Agent2 {
         Scanner scanner = new Scanner(System.in);
 
         // unitId, faction, type, health, posX, posY, velX, velY (ints for id & faction, type as Char, rest as doubles with precision 2)
-
+        int cnt = 3;
+        int a=0;
+        int[] x={0, 1, 1, 1, 0, -1, -1, -1};
+        int[] y={1, 1, 0, -1, -1, -1, 0, 1};
         while (true) {
             int units = scanner.nextInt();
             System.err.printf("%d%n", units);
@@ -27,8 +30,19 @@ public class Agent2 {
 
                 System.err.printf("%d, %s, %d, %.2f, %.2f%n", id, type, faction, posX, posY);
 
+
                 if (type.equals("S") && faction == 1) {
-                    System.out.println(String.format("%d | F %.2f %.2f | A %.2f %.2f", id, 1.15, 1.15, 0.0, 10.0));
+                    if(a<8)System.out.println(String.format(" S | F %d %d | A %d %d  | M  %d %d", 3, 0, cnt >0 ? 1 :0, cnt > 0 ? 1 :0, x[a], y[a]));
+                    else{
+                        System.out.println(String.format(" S | F %d %d | A %d %d  ", 3, 0, cnt >0 ? 1 :0, 0));
+                    }
+                    cnt--;
+                    a++;
+                }
+                if (type.equals("M") && faction == 1) {
+                    double r = Math.random();
+//                    System.err.println(String.format("%d | A %d %d | %s", id, 10, 10, r < 0.01 ? "D" : ""));
+                    System.out.println(String.format("%d | A %d %d | %s", id,-1, -1, ""));
                 }
             }
 
