@@ -44,7 +44,7 @@ public class Player extends AbstractMultiplayerPlayer {
             }
 
             return true;
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             return false;
         }
     }
@@ -115,7 +115,7 @@ public class Player extends AbstractMultiplayerPlayer {
                     if (checkValidAction(action, units)) {
                         moves.add(action);
                     } else {
-                        throw new NoSuchMethodException(String.format("Invalid action: %s", action.toString()));
+                        throw new NoSuchMethodException(String.format("Invalid action: %s", out));
                     }
                 } catch (NoSuchElementException e) {
                     continue;
