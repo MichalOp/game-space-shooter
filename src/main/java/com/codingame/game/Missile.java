@@ -1,5 +1,6 @@
 package com.codingame.game;
 
+import com.codingame.gameengine.module.entities.Rectangle;
 import com.codingame.gameengine.module.entities.Sprite;
 import com.codingame.gameengine.module.entities.Text;
 
@@ -90,6 +91,7 @@ public class Missile extends Unit{
         return "position: "+position.toString()+
                 "\nacceleration: "+ acceleration.toString()+
                 "\nvelocity: "+velocity.toString()+
+                "\nhealth: "+health+
                 "\nid"+this.id;
 
     }

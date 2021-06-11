@@ -104,7 +104,8 @@ public class Bullet extends Unit{
     @Override
     public String toString(){
         return "position: "+position.toString()+
-                "\nvelocity: "+velocity.toString();
+                "\nvelocity: "+velocity.toString()+
+                "\nlifetime: "+String.format("%.1f", lifetime);
     }
 }
 

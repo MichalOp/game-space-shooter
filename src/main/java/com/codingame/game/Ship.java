@@ -17,7 +17,7 @@ public class Ship extends Unit {
     Text positionText;
 
 
-    public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref) {
+    public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref, String nickName) {
         super(startPosition, startVelocity, faction, ref);
         verticalLayout = faction == 0 ? 0 : Consts.MAP_Y / 2;
         health = Consts.SHIP_MAX_HEALTH;
@@ -33,7 +33,7 @@ public class Ship extends Unit {
                 .setY((int) position.y)
                 .setRotation(Math.acos(startVelocity.x / startVelocity.length()));
         ref.tooltips.setTooltipText(graphics, toString());
-        referee.graphicEntityModule.createText("PLAYER " + faction)
+        referee.graphicEntityModule.createText(nickName)
                 .setStrokeThickness(5) // Adding an outline
                 .setStrokeColor(0xffffff) // a white outline
                 .setFontSize(25)
@@ -113,6 +113,7 @@ public class Ship extends Unit {
         velocity = velocity.add(acceleration.mul(Consts.TIME_DELTA));
         gunCooldown += Consts.TIME_DELTA;
     }
+
 
     @Override
     public void graphicsTick(double t){
