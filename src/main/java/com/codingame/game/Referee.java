@@ -13,37 +13,46 @@ import com.codingame.gameengine.core.Tooltip;
 import com.codingame.gameengine.module.endscreen.EndScreenModule;
 import com.codingame.gameengine.module.entities.Circle;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
+import com.codingame.gameengine.module.entities.Sprite;
 import com.codingame.gameengine.module.tooltip.TooltipModule;
 import com.codingame.view.AnimatedEventModule;
 import com.codingame.view.ViewerEvent;
 import com.google.inject.Inject;
 
 import static java.lang.Math.max;
+import static java.lang.Thread.sleep;
 
 public class Referee extends AbstractReferee {
-    private static int WIDTH = 1920;
+    private static int WIDTH = 1700;
     private static int HEIGHT = 1080;
 
-    @Inject private MultiplayerGameManager<Player> gameManager;
-    @Inject public GraphicEntityModule graphicEntityModule;
-    @Inject private AnimatedEventModule animatedEventModule;
-    @Inject public TooltipModule tooltips;
-    @Inject public EndScreenModule endScreenModule;
+    @Inject
+    private MultiplayerGameManager<Player> gameManager;
+    @Inject
+    public GraphicEntityModule graphicEntityModule;
+    @Inject
+    private AnimatedEventModule animatedEventModule;
+    @Inject
+    public TooltipModule tooltips;
+    @Inject
+    public EndScreenModule endScreenModule;
 
 
     private int unitId = 0;
     private List<Unit> unitList;
 
-    public final List<Unit> getUnits(){
+    public final List<Unit> getUnits() {
         return unitList;
     }
 
-    public int addUnit(Unit u){
+    public Sprite sidebar;
+
+    public int addUnit(Unit u) {
         unitList.add(u);
         return u.id;
     }
 
-    public int getId(){
+    public int getId() {
         return unitId++;
     }
 
@@ -62,8 +71,8 @@ public class Referee extends AbstractReferee {
             p.sendInputLine(String.valueOf(getUnits().size()));
             for (Unit u : getUnits()) {
                 double gunCooldown = -1;
-                if (u instanceof Ship){
-                    Ship ship = (Ship)u;
+                if (u instanceof Ship) {
+                    Ship ship = (Ship) u;
                     gunCooldown = max(0.0, Consts.GUN_COOLDOWN - ship.gunCooldown);
                 }
                 p.sendInputLine(String.format("%d %d %s %.2f %.2f %.2f %.2f %.2f %.2f",
@@ -75,20 +84,21 @@ public class Referee extends AbstractReferee {
         }
     }
 
-    public void registerExplosion(Vector2d position, double radius, double damage){
-        for(Unit u : unitList){
+    public void registerExplosion(Vector2d position, double radius, double damage) {
+        for (Unit u : unitList) {
             double distance = u.position.distance(position);
-            if(distance <= radius){
+            if (distance <= radius) {
                 u.health -= damage * (radius - distance) / radius;
+
             }
         }
     }
 
-    void updateUnits(double t){
+    void updateUnits(double t) {
         List<Unit> dead = unitList.stream().filter(x -> x.health <= 0).collect(Collectors.toList());
         unitList = unitList.stream().filter(x -> x.health > 0).collect(Collectors.toList());
-        while(!dead.isEmpty()){
-            for(Unit u : dead){
+        while (!dead.isEmpty()) {
+            for (Unit u : dead) {
                 u.onDeath(t);
                 // it probably should be somewhere else
                 if (u instanceof Missile) {
@@ -100,18 +110,18 @@ public class Referee extends AbstractReferee {
         }
     }
 
-    void doTurn(){
+    void doTurn() {
         double t = 0;
         graphicEntityModule.commitWorldState(0);
-        while(t < 1 - 0.000001){
+        while (t < 1 - 0.000001) {
             t += Consts.TIME_DELTA;
-            for (Unit u : unitList){
+            for (Unit u : unitList) {
                 u.move();
             }
-            for (Unit u : unitList){
+            for (Unit u : unitList) {
                 u.graphicsTick(t);
             }
-            for (Unit u : unitList){
+            for (Unit u : unitList) {
                 u.tick();
             }
             updateUnits(t);
@@ -119,17 +129,22 @@ public class Referee extends AbstractReferee {
         }
     }
 
+
+
+
     @Override
     public void init() {
         unitList = new ArrayList<>();
 
         gameManager.setFrameDuration(300);
-        
+
         graphicEntityModule.createSprite().setImage("Background.jpg").setAnchor(0);
+
+        sidebar = graphicEntityModule.createSprite().setImage("sidebar.png").setX(Consts.MAP_X);
 
         for (Player p : gameManager.getPlayers()) {
             int faction = p.getIndex();
-            Ship s = new Ship(new Vector2d(faction == 0 ? WIDTH/4 : WIDTH/4*3,HEIGHT/2), Vector2d.zero, faction, this);
+            Ship s = new Ship(new Vector2d(faction == 0 ? WIDTH / 4 : WIDTH / 4 * 3, HEIGHT / 2), Vector2d.zero, faction, this);
 
             addUnit(s);
             p.ship = s;
@@ -198,11 +213,9 @@ public class Referee extends AbstractReferee {
                 String message = String.format("%s eliminated! Reason: ", p.getNicknameToken());
                 if (e instanceof TimeoutException) {
                     message += String.format("Timeout! (%d lines expected)", p.getExpectedOutputLines());
-                }
-                else if (e instanceof NoSuchMethodException) {
+                } else if (e instanceof NoSuchMethodException) {
                     message += e.getMessage();
-                }
-                else {
+                } else {
                     message += "Bad input!";
                 }
                 p.deactivate(message);
@@ -212,8 +225,8 @@ public class Referee extends AbstractReferee {
         doTurn();
 
         for (Player p : gameManager.getActivePlayers()) {
-            if(p.ship.health <= 0){
-                p.ship.health=0;
+            if (p.ship.health <= 0) {
+                p.ship.health = 0;
                 tooltips.setTooltipText(p.ship.graphics, p.ship.toString());
                 p.deactivate();
             }
@@ -226,11 +239,14 @@ public class Referee extends AbstractReferee {
 
     @Override
     public void onEnd() {
+        for (Unit u : unitList) {
+            u.graphicsTick(1);
+        }
         int[] scores = {0, 0};
-        int i=0;
+        int i = 0;
         for (Player p : gameManager.getPlayers()) {
             p.setScore(p.isActive() ? 1 : 0);
-            scores[i++]=p.getScore();
+            scores[i++] = p.getScore();
         }
         endScreenModule.setScores(scores);
         endScreenModule.setTitleRankingsSprite("logo.png");
