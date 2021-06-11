@@ -140,12 +140,19 @@ public class Referee extends AbstractReferee {
         sidebar = graphicEntityModule.createSprite().setImage("sidebar.png").setX(Consts.MAP_X);
 
         for (Player p : gameManager.getPlayers()) {
+            p.setMessage(this, true);
             int faction = p.getIndex();
             Ship s = new Ship(new Vector2d(faction == 0 ? WIDTH / 4 : WIDTH / 4 * 3, HEIGHT / 2), Vector2d.zero, faction, this);
 
             addUnit(s);
             p.ship = s;
             p.expectedOutputLines += 1;
+        }
+    }
+
+    public void printMessages() {
+        for (Player p : gameManager.getActivePlayers()) {
+            p.setMessage(this, false);
         }
     }
 
@@ -218,6 +225,8 @@ public class Referee extends AbstractReferee {
                 p.deactivate(message);
             }
         }
+
+        printMessages();
 
         doTurn();
 

@@ -1,6 +1,7 @@
 package com.codingame.game;
 
 import com.codingame.gameengine.core.AbstractMultiplayerPlayer;
+import com.codingame.gameengine.module.entities.Text;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -13,8 +14,8 @@ public class Player extends AbstractMultiplayerPlayer {
     public Ship ship;
     public int expectedOutputLines = 0; // if we had manually detonated missiles, this should be updated accordingly
     boolean lost;
-    // rest of the units is controlled by referee,
-    // probably at some point we would like more of the stuff to be stored here (non-autonomous missiles?)
+    private String message_text = "";
+    Text message;
 
     private boolean checkValidAction(Action action, List<Unit> units) {
         try {
@@ -55,6 +56,7 @@ public class Player extends AbstractMultiplayerPlayer {
 
 
     List<Action> getAction(List<Unit> units) throws TimeoutException, NoSuchMethodException, InputMismatchException, NumberFormatException {
+        message_text = "";
         List<Action> moves = new ArrayList<>();
         HashSet<Integer> usedUnits = new HashSet<>();
         for (String out : this.getOutputs()) {
@@ -108,6 +110,10 @@ public class Player extends AbstractMultiplayerPlayer {
                             // as we can only set a constant as a number of lines we expect to get from the player
                             action.type = Action.ActionType.Wait;
                             break;
+                        case "S":
+                            // say - get a message to print
+                            message_text = scanner.nextLine();
+                            break;
                         default:
                             // if we wanted to print debug messages given by players this is the place for it
                             throw new NoSuchMethodException(String.format("Bad Action: %s", out));
@@ -131,4 +137,33 @@ public class Player extends AbstractMultiplayerPlayer {
     public int getExpectedOutputLines() {
         return expectedOutputLines;
     }
+
+    public void setMessage(Referee ref, boolean init) {
+        String arr[] = message_text.split("\\\\n", 6);
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i].length() > 20) {
+                arr[i] = arr[i].substring(0, 18) + "...";
+            }
+        }
+
+        message_text = String.join("\n", arr);
+//        message_text = message_text.replace("\\n", "\n");
+
+        if (init) {
+            message = ref.graphicEntityModule.createText(message_text)
+                    .setStrokeThickness(5) // Adding an outline
+                    .setStrokeColor(0xffffff) // a white outline
+                    .setFontSize(20)
+                    .setFillColor(0x000000) // Setting the text color to black
+                    .setX((Consts.SIDE_BAR_LEFT + Consts.SIDE_BAR_RIGHT) / 2)
+                    .setY((this.getIndex() == 0 ? 0 : Consts.MAP_Y / 2) + 130 + 30 * 8)
+                    .setAnchorX(0.5);
+        } else {
+            message.setText(message_text);
+        }
+    }
+
+
+
 }
