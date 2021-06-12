@@ -21,7 +21,7 @@ public class Bullet extends Unit{
         lifetime = Consts.BULLET_LIFETIME;
 
         graphics = ref.graphicEntityModule.createSprite()
-                .setImage(faction==1 ? "Bullet_BLUE.png" : "Bullet_GREEN.png")
+                .setImage(faction==1 ? "Bullet_RED.png" : "Bullet_GREEN.png")
                 .setScale(0.2)
                 .setAnchor(0.5)
                 .setX((int)position.x)
