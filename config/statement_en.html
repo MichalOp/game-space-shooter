@@ -70,16 +70,17 @@
       <ul>
         <li> For a ship:
           <ul>
-            <li> <var> A x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
-            <li> <var> F x y </var> -- fire bullet with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis
-            <li> <var> M x y </var> -- fire a missile with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis (this missile will be receiving orders starting from the next turn)
-            <li> <var> W </var> -- do nothing
+            <li> <var> [A | Accelerate] x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
+            <li> <var> [F | Fire] x y </var> -- fire bullet with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis
+            <li> <var> [M | Missile] x y </var> -- fire a missile with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis (this missile will be receiving orders starting from the next turn)
+            <li> <var> [P | Print] message </var> -- print a message - it can also be a multiline one, with lines split with an escaped newline ("\\n")
+            <li> <var> [W | Wait] </var> -- do nothing
           </ul>
         <li> For a missile:
           <ul>
-            <li> <var> A x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
-            <li> <var> D </var> -- detonate
-            <li> <var> W </var> -- do nothing
+            <li> <var> [A | Accelerate] x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
+            <li> <var> [D | Detonate] </var> -- detonate
+            <li> <var> [W | Wait ] </var> -- do nothing
           </ul>
       </ul>
     </div>
