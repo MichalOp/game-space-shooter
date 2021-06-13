@@ -106,7 +106,7 @@ public class Bullet extends Unit{
         }
         graphics.setX(((int)position.x)%1920).setY(((int)position.y)%1080);
 
-        System.out.println(graphics.getX() + " " + graphics.getY());
+//        System.out.println(graphics.getX() + " " + graphics.getY());
         // referee.graphicEntityModule.commitEntityState(t, graphics);
         referee.tooltips.setTooltipText(graphics, toString());
     }

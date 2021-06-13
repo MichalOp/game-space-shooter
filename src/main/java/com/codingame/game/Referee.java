@@ -160,7 +160,7 @@ public class Referee extends AbstractReferee {
     public void gameTurn(int turn) {
         // Send new inputs with the updated positions
         sendPlayerInputs();
-        System.out.println(String.format("here -- turn number: %d", turn));
+
 
         // Update new positions
         for (Player p : gameManager.getActivePlayers()) {
