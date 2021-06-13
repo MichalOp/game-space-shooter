@@ -82,10 +82,7 @@ public class Player extends AbstractMultiplayerPlayer {
                 Action action = new Action();
                 action.unitId = unitId;
                 try {
-                    String whatever = scanner.next();
-                    System.out.println(String.format("here -- turn number: %s", whatever));
-
-                    switch (whatever) {
+                    switch (scanner.next()) {
                         case "A":
                         case "ACCELERATE":
                             // it's a move (for a ship or a player-controlled missile)
