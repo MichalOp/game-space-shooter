@@ -82,41 +82,44 @@ public class Player extends AbstractMultiplayerPlayer {
                 Action action = new Action();
                 action.unitId = unitId;
                 try {
-                    switch (scanner.next()) {
+                    String whatever = scanner.next();
+                    System.out.println(String.format("here -- turn number: %s", whatever));
+
+                    switch (whatever) {
                         case "A":
-                        case "Accelerate":
+                        case "ACCELERATE":
                             // it's a move (for a ship or a player-controlled missile)
                             action.type = Action.ActionType.Move;
                             action.direction.x = getActionDirectionValue(scanner);
                             action.direction.y = getActionDirectionValue(scanner);
                             break;
                         case "F":
-                        case "Fire":
+                        case "FIRE":
                             // fire a weapon in certain direction
                             action.type = Action.ActionType.Fire;
                             action.direction.x = getActionDirectionValue(scanner);
                             action.direction.y = getActionDirectionValue(scanner);
                             break;
                         case "M":
-                        case "Missile":
+                        case "MISSILE":
                             // fire a missile
                             action.type = Action.ActionType.Missile;
                             action.direction.x = getActionDirectionValue(scanner);
                             action.direction.y = getActionDirectionValue(scanner);
                             break;
                         case "D":
-                        case "Detonate":
+                        case "DETONATE":
                             // detonate missile
                             action.type = Action.ActionType.Detonate;
                             break;
                         case "W":
-                        case "Wait":
+                        case "WAIT":
                             // wait - this is a dummy action, but we want to have it
                             // as we can only set a constant as a number of lines we expect to get from the player
                             action.type = Action.ActionType.Wait;
                             break;
                         case "P":
-                        case "Print":
+                        case "PRINT":
                             // say - get a message to print
                             message_text = scanner.nextLine();
                             break;
