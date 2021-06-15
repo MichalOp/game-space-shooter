@@ -5,28 +5,44 @@
     <h2>
       <span class="icon icon-goal">&nbsp;</span> <span>The Goal</span>
     </h2>
-    <div class="statement-goal-content">Send the ball behind the your opponent's paddle.</div>
+    <div class="statement-goal-content">
+      <p>Win. Don't die.</p>
+      <p>Shoot at your enemy with bullets and missiles, watch out for their weapons.
+        Be careful - the forcefield, which was used to trap your enemy, seems to also be keeping you inside.
+        Keep away from the edge - crash with the forcefield will destroy your ship!
+
+      </p>
+    </div>
   </div>
 
   <!-- RULES -->
   <div class="statement-section statement-rules">
-      <h1>
-          <span class="icon icon-rules">&nbsp;</span>
-          <span>Rules</span>
-      </h1>
-      <div class="statement-rules-content">
-          <p>The game is played on a map <const>1920</const> units wide and <const>1080</const> units high.</p>
+    <h1>
+      <span class="icon icon-rules">&nbsp;</span>
+      <span>Rules</span>
+    </h1>
+    <div class="statement-rules-content">
+      <p>The game is played on a map <const>1700</const> units wide and <const>1080</const> units high.</p>
 
-          <p>The ball has a radius of <const>20</const> units.</p>
+      <p>You and your opponent each own one starship, which has <const>10</const> health points.</p>
 
-          <p>The paddles are <const>15</const> units wide and <const>150</const> units high.</p>
+      <p>The ship has an infinite number of bullets, but only <const>8 missiles.</const></p>
 
-          <p>The paddles can move up to <const>120</const> units per turn, vertically.</p>
-          
-          <p>The ball's starting position is <const>x=960</const>, <const>y=540</const>.</p>
-
-          <p>The ball's starting velocity is <const>vx=148</const>, <const>vy=132</const>.</p>
-      </div>
+      <p>The bullet can be shot each other round, it detonates automatically at the closest point to the first enemy's unit that was in its damage radius. Hitting the edge of the board or ending it's lifetime (after <const>7</const> turns) also detonates the bullet.
+        This radius is of size <const>100</const>, the damage caused at the bullet's position is <const>10</const> and decreases linearly with the distance to it, reaching <const>0</const> at damage radius. The bullet is shot with the given velocities along each axis (in relation to the ship), with the resultant velocity being clipped to be at most <const>100</const>.</p>
+      <p>Missiles can be shot each round, as long as you have one. Their damage radius is <const>200</const>, and the damage done is <const>15</const> in the center of explosion, decreasing in the same manner as bullet's.
+        They have their own engines, so they can be moved around just as the spaceship. They are detonated with a command.</p>
+      <p>
+        Both missiles and bullets have their own health points (<const>7</const> for missile, <const>10</const> for bullet). When it gets to 0, the unit detonates.
+      </p>
+      <p>The ships start at symmetrical positions, close to the center of the board.</p>
+      <p> Both ships and missiles move with the given acceleration along each axis, with the resultant acceleration being clipped to be at most <const>10</const> for the ship, <const>30</const> for a missile.</p>
+      <p> Hitting the edge of the board immediately sets the unit's health to 0, causing it to die/detonate.
+    </div>
+    <br>
+    <div>
+      The player whose ship reaches 0 health points first loses.
+    </div>
   </div>
 
   <!-- PROTOCOL -->
@@ -38,24 +54,35 @@
     <!-- Protocol block -->
     <div class="blk">
       <div class="title">Input for one game turn</div>
-      <div class="text"><span class="statement-lineno">Line 1:</span> 1 integer <var>y</var> for the current vertical position of your paddle. <br>
-        <span class="statement-lineno">Line 2:</span> 1 integer <var>oppY</var> for the current vertical position of your opponent's paddle.
-        <br>
-        <span class="statement-lineno">Line 3:</span> 1 integer <var>ballX</var> for the current x coordinate of the ball.
-        <br>
-        <span class="statement-lineno">Line 4:</span> 1 integer <var>ballY</var> for the current y coordinate of the ball.
-        <br>
-        <span class="statement-lineno">Line 5:</span> 1 integer <var>speedX</var> for the current vx speed of the ball.
-        <br>
-        <span class="statement-lineno">Line 6:</span> 1 integer <var>speedY</var> for the current vy speed of the ball.
+      <div class="text"><span class="statement-lineno">Line 1:</span> 1 integer <var>units</var> for the number of units on the board. <br>
+        <span class="statement-lineno">Next <var>units</var> lines:</span> 2 integers <var>unit_id</var>, <var>faction</var>, being the unit's unique ID and faction (<const>1</const> for the player, <const>-1</const> for the opponent), 1 char <var>type</var> being <const>S</const>hip, <const>B</const>ullet or <const>M</const>issile, 6 floats <var>health</var>, <var>position_x</var>, <var>position_y</var>, <var>velocity_x</var>, <var>velocity_y</var>, <var>gun_cooldown</var> for the unit's health points left, its position on each axis and velocity on each axis, followed by gun cooldown, which indicates the number of rounds till the next bullet can be shot, if this unit is a ship, and is set to <const>-1</const> otherwise.
         <br>
       </div>
+
     </div>
 
     <!-- Protocol block -->
     <div class="blk">
       <div class="title">Output for one game turn</div>
-      <div class="text"><span class="statement-lineno">Line 1:</span> 1 integer for the destination <var>y</var> position of your paddle.</div>
+      <div class="text"><span class="statement-lineno"><const>(Exactly!) n</const> lines, where <const>n</const> is the number of ships and missiles actively controlled by the player:</span> Command for unit with unit_id in the form: <var> unit_id | A x y | F x y </var>, having one or more commands for <const>unit_id</const> separated by <const>|</const>. For a ship <const>S</const> can be used instead of <const>unit_id</const>.</div>
+      <br>
+      Available commands:
+      <ul>
+        <li> For a ship:
+          <ul>
+            <li> <var> [A | ACCELERATE] x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
+            <li> <var> [F | FIRE] x y </var> -- fire bullet with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis
+            <li> <var> [M | MISSILE] x y </var> -- fire a missile with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis (this missile will be receiving orders starting from the next turn)
+            <li> <var> [P | PRINT] message </var> -- print a message - it can also be a multiline one, with lines split with an escaped newline ("\\n")
+            <li> <var> [W | WAIT] </var> -- do nothing
+          </ul>
+        <li> For a missile:
+          <ul>
+            <li> <var> [A | ACCELERATE] x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
+            <li> <var> [D | DETONATE] </var> -- detonate
+            <li> <var> [W | WAIT] </var> -- do nothing
+          </ul>
+      </ul>
     </div>
 
     <!-- Protocol block -->

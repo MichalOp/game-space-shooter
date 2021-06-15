@@ -15,6 +15,7 @@ import com.codingame.gameengine.module.entities.Circle;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
 import com.codingame.gameengine.module.entities.Sprite;
 import com.codingame.gameengine.module.tooltip.TooltipModule;
+import com.codingame.gameengine.module.toggle.ToggleModule;
 import com.codingame.view.AnimatedEventModule;
 import com.codingame.view.ViewerEvent;
 import com.google.inject.Inject;
@@ -26,18 +27,13 @@ public class Referee extends AbstractReferee {
     private static int WIDTH = 1700;
     private static int HEIGHT = 1080;
 
-    @Inject
-    private MultiplayerGameManager<Player> gameManager;
-    @Inject
-    public GraphicEntityModule graphicEntityModule;
-    @Inject
-    private AnimatedEventModule animatedEventModule;
-    @Inject
-    public TooltipModule tooltips;
-    @Inject
-    public EndScreenModule endScreenModule;
-
-
+    @Inject private MultiplayerGameManager<Player> gameManager;
+    @Inject public GraphicEntityModule graphicEntityModule;
+    @Inject private AnimatedEventModule animatedEventModule;
+    @Inject public TooltipModule tooltips;
+    @Inject public EndScreenModule endScreenModule;
+    @Inject ToggleModule toggleModule;
+    
     private int unitId = 0;
     private List<Unit> unitList;
 
@@ -121,7 +117,8 @@ public class Referee extends AbstractReferee {
             for (Unit u : unitList) {
                 u.graphicsTick(t);
             }
-            for (Unit u : unitList) {
+            graphicEntityModule.commitWorldState(t);
+            for (Unit u : unitList){
                 u.tick();
             }
             updateUnits(t);
@@ -143,6 +140,7 @@ public class Referee extends AbstractReferee {
         sidebar = graphicEntityModule.createSprite().setImage("sidebar.png").setX(Consts.MAP_X);
 
         for (Player p : gameManager.getPlayers()) {
+            p.setMessage(this, true);
             int faction = p.getIndex();
             Ship s = new Ship(new Vector2d(faction == 0 ? WIDTH / 4 : WIDTH / 4 * 3, HEIGHT / 2), Vector2d.zero, faction, this, p.getNicknameToken());
 
@@ -152,11 +150,17 @@ public class Referee extends AbstractReferee {
         }
     }
 
+    public void printMessages() {
+        for (Player p : gameManager.getActivePlayers()) {
+            p.setMessage(this, false);
+        }
+    }
+
     @Override
     public void gameTurn(int turn) {
         // Send new inputs with the updated positions
         sendPlayerInputs();
-        System.out.println(String.format("here -- turn number: %d", turn));
+
 
         // Update new positions
         for (Player p : gameManager.getActivePlayers()) {
@@ -221,6 +225,8 @@ public class Referee extends AbstractReferee {
                 p.deactivate(message);
             }
         }
+
+        printMessages();
 
         doTurn();
 

@@ -33,7 +33,11 @@ public class Ship extends Unit {
                 .setY((int) position.y)
                 .setRotation(Math.acos(startVelocity.x / startVelocity.length()));
         ref.tooltips.setTooltipText(graphics, toString());
-        referee.graphicEntityModule.createText(nickName)
+
+        debug_graphics.setRadius(15);
+        referee.toggleModule.displayOnToggleState(graphics, "debugToggle", false);
+
+        referee.graphicEntityModule.createText("PLAYER " + faction)
                 .setStrokeThickness(5) // Adding an outline
                 .setStrokeColor(0xffffff) // a white outline
                 .setFontSize(25)
@@ -117,17 +121,19 @@ public class Ship extends Unit {
 
     @Override
     public void graphicsTick(double t){
-        graphics.setRotation(Math.atan2(velocity.x, velocity.y))
+        super.graphicsTick(t);
+
+        graphics.setRotation(Math.atan2(graphics.getX()-position.x, position.y-graphics.getY())+Math.PI/2)
                 .setX(((int)position.x))
                 .setY(((int)position.y));
-        System.out.println(graphics.getX() + " " + graphics.getY());
+//        System.out.println(graphics.getX() + " " + graphics.getY());
 
         drawSideBar();
-        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthBar);
-        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthText);
-        referee.graphicEntityModule.commitEntityState(t, missilesLeft);
-        referee.graphicEntityModule.commitEntityState(t, positionText);
-        referee.graphicEntityModule.commitEntityState(t, graphics);
+//        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthBar);
+//        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthText);
+//        referee.graphicEntityModule.commitEntityState(t, missilesLeft);
+//        referee.graphicEntityModule.commitEntityState(t, positionText);
+//        referee.graphicEntityModule.commitEntityState(t, graphics);
         referee.tooltips.setTooltipText(graphics, toString());
     }
 

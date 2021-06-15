@@ -37,6 +37,10 @@ public class Bullet extends Unit{
                 .setX(graphics.getX())
                 .setY(graphics.getY());
         ref.graphicEntityModule.commitEntityState(0, fire);
+        debug_graphics.setRadius(4);
+        debug_blast.setRadius((int)Consts.GUN_BLAST_RADIUS);
+        referee.toggleModule.displayOnToggleState(fire, "debugToggle", false);
+        referee.toggleModule.displayOnToggleState(graphics, "debugToggle", false);
     }
 
     @Override
@@ -74,6 +78,7 @@ public class Bullet extends Unit{
 
     @Override
     public void onDeath(double t){
+        super.onDeath(t);
         referee.registerExplosion(position, Consts.GUN_BLAST_RADIUS, Consts.GUN_DAMAGE);
 
         graphics.setVisible(false);
@@ -84,21 +89,25 @@ public class Bullet extends Unit{
         fire.setScale(5);
         referee.graphicEntityModule.commitEntityState(t, fire);
         fire.setVisible(false);
+
+        debug_blast.setX(graphics.getX()).setY(graphics.getY());
+        debug_blast.setVisible(true);
+        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, debug_blast);
+        debug_blast.setVisible(false);
     }
 
     @Override
     public void graphicsTick(double t){
-
+        super.graphicsTick(t);
         graphics.setVisible(true);
         if((position.x<=50 && graphics.getX()>Consts.MAP_X-50) || (position.x>=Consts.MAP_X-50 && graphics.getX()<50) || (position.y>=Consts.MAP_Y-50 && graphics.getY()<50) || (position.y<=50 && graphics.getY()>Consts.MAP_Y-50) ){
             graphics.setVisible(false);
             referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
-
         }
         graphics.setX(((int)position.x)%1920).setY(((int)position.y)%1080);
 
-        System.out.println(graphics.getX() + " " + graphics.getY());
-        referee.graphicEntityModule.commitEntityState(t, graphics);
+//        System.out.println(graphics.getX() + " " + graphics.getY());
+        // referee.graphicEntityModule.commitEntityState(t, graphics);
         referee.tooltips.setTooltipText(graphics, toString());
     }
     @Override
