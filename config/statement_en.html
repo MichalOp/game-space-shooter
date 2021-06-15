@@ -36,7 +36,7 @@
         Both missiles and bullets have their own health points (<const>7</const> for missile, <const>10</const> for bullet). When it gets to 0, the unit detonates.
       </p>
       <p>The ships start at symmetrical positions, close to the center of the board.</p>
-      <p> Both ships and missiles move with the given acceleration along each axis, with the resultant acceleration being clipped to be at most <const>10</const>.</p>
+      <p> Both ships and missiles move with the given acceleration along each axis, with the resultant acceleration being clipped to be at most <const>10</const> for the ship, <const>30</const> for a missile.</p>
       <p> Hitting the edge of the board immediately sets the unit's health to 0, causing it to die/detonate.
     </div>
     <br>
@@ -70,16 +70,17 @@
       <ul>
         <li> For a ship:
           <ul>
-            <li> <var> A x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
-            <li> <var> F x y </var> -- fire bullet with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis
-            <li> <var> M x y </var> -- fire a missile with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis (this missile will be receiving orders starting from the next turn)
-            <li> <var> W </var> -- do nothing
+            <li> <var> [A | ACCELERATE] x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
+            <li> <var> [F | FIRE] x y </var> -- fire bullet with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis
+            <li> <var> [M | MISSILE] x y </var> -- fire a missile with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis (this missile will be receiving orders starting from the next turn)
+            <li> <var> [P | PRINT] message </var> -- print a message - it can also be a multiline one, with lines split with an escaped newline ("\\n")
+            <li> <var> [W | WAIT] </var> -- do nothing
           </ul>
         <li> For a missile:
           <ul>
-            <li> <var> A x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
-            <li> <var> D </var> -- detonate
-            <li> <var> W </var> -- do nothing
+            <li> <var> [A | ACCELERATE] x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
+            <li> <var> [D | DETONATE] </var> -- detonate
+            <li> <var> [W | WAIT] </var> -- do nothing
           </ul>
       </ul>
     </div>
