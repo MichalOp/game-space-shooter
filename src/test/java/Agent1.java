@@ -33,7 +33,7 @@ public class Agent1 {
                 if (type.equals("S") && faction == 1) {
                     if(a<8)System.out.println(String.format(" S | F %d %d | A %d %d  | M  %d %d", 3, 0, cnt >0 ? 1 :0, 0, x[a], y[a]));
                     else{
-                        System.out.println(String.format(" S | F %d %d | A %d %d  ", 3, 0, cnt >0 ? 1 :0, 0));
+                        System.out.println(String.format(" S | FIRE %d %d | A %d %d  | P sieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeema\\n 1 \\n 2 \\n 3 \\n 4 \\n 5 \\n 6 \\n 7", 3, 0, cnt >0 ? 1 :0, 0));
                     }cnt--;
                     a++;
 
