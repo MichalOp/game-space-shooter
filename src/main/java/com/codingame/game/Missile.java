@@ -89,7 +89,7 @@ public class Missile extends Unit{
     public void graphicsTick(double t){
         super.graphicsTick(t);
 
-        graphics.setRotation(Math.atan2(graphics.getX()-position.x, position.y-graphics.getY())+ Math.PI/2)
+        graphics.setRotation(Math.atan2(velocity.x, -velocity.y)- Math.PI/2)
                 .setX(((int)position.x))
                 .setY(((int)position.y));
 //        System.out.println(graphics.getX() + " " + graphics.getY());
