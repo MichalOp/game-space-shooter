@@ -23,7 +23,7 @@ public class Missile extends Unit{
                 .setAnchor(0.5)
                 .setX((int)position.x)
                 .setY((int)position.y)
-                .setRotation(Math.acos(startVelocity.x/startVelocity.length()));
+                .setRotation(Math.atan2(startVelocity.x, startVelocity.y));
         ref.tooltips.setTooltipText(graphics, toString());
         fire = ref.graphicEntityModule.createSprite()
                 .setImage("FireBullet.png")
@@ -77,7 +77,7 @@ public class Missile extends Unit{
 
     @Override
     public void graphicsTick(double t){
-        graphics.setRotation(Math.atan2(graphics.getX()-position.x, position.y-graphics.getY())+ Math.PI/2)
+        graphics.setRotation(Math.atan2(velocity.x, velocity.y))
                 .setX(((int)position.x))
                 .setY(((int)position.y));
         System.out.println(graphics.getX() + " " + graphics.getY());

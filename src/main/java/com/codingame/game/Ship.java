@@ -117,13 +117,7 @@ public class Ship extends Unit {
 
     @Override
     public void graphicsTick(double t){
-        /*graphics.setVisible(true);
-        if((position.x<=50 && graphics.getX()>Consts.MAP_X-50) || (position.x>=Consts.MAP_X-50 && graphics.getX()<50) || (position.y>=Consts.MAP_Y-50 && graphics.getY()<50) || (position.y<=50 && graphics.getY()>Consts.MAP_Y-50) ){
-            graphics.setVisible(false);
-            referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
-        }
-        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);*/
-        graphics.setRotation(Math.atan2(graphics.getX()-position.x, position.y-graphics.getY())+Math.PI/2)
+        graphics.setRotation(Math.atan2(velocity.x, velocity.y))
                 .setX(((int)position.x))
                 .setY(((int)position.y));
         System.out.println(graphics.getX() + " " + graphics.getY());
