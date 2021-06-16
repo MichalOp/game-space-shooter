@@ -36,7 +36,7 @@
         Both missiles and bullets have their own health points (<const>7</const> for missile, <const>10</const> for bullet). When it gets to 0, the unit detonates.
       </p>
       <p>The ships start at symmetrical positions, close to the center of the board.</p>
-      <p> Both ships and missiles move with the given acceleration along each axis, with the resultant acceleration being clipped to be at most <const>10</const> for the ship, <const>30</const> for a missile.</p>
+      <p> Both ships and missiles move with the given fraction (0 <= x <= 1) of maximal acceleration along each axis, with the maximal acceleration being <const>10</const> for the ship, <const>30</const> for a missile.</p>
       <p> Hitting the edge of the board immediately sets the unit's health to 0, causing it to die/detonate.
     </div>
     <br>
@@ -64,23 +64,23 @@
     <!-- Protocol block -->
     <div class="blk">
       <div class="title">Output for one game turn</div>
-      <div class="text"><span class="statement-lineno"><const>(Exactly!) n</const> lines, where <const>n</const> is the number of ships and missiles actively controlled by the player:</span> Command for unit with unit_id in the form: <var> unit_id | A x y | F x y </var>, having one or more commands for <const>unit_id</const> separated by <const>|</const>. For a ship <const>S</const> can be used instead of <const>unit_id</const>.</div>
+      <div class="text"><span class="statement-lineno"><const>(Exactly!) n</const> lines, where <const>n</const> is the number of ships and missiles actively controlled by the player:</span> Command for unit with unit_id in the form: <var> unit_id | A x y | F x y </var>, having one or more commands for <const>unit_id</const> separated by <const>|</const>. For a ship <const>S</const> can be used instead of <const>unit_id</const>. <const>x,y </const> are both dot-separated doubles.</div>
       <br>
       Available commands:
       <ul>
         <li> For a ship:
           <ul>
-            <li> <var> [A | ACCELERATE] x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
-            <li> <var> [F | FIRE] x y </var> -- fire bullet with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis
-            <li> <var> [M | MISSILE] x y </var> -- fire a missile with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis (this missile will be receiving orders starting from the next turn)
-            <li> <var> [P | PRINT] message </var> -- print a message - it can also be a multiline one, with lines split with an escaped newline ("\\n")
-            <li> <var> [W | WAIT] </var> -- do nothing
+            <li> <var> [A | Accelerate] x y </var> -- put acceleration <const>10*x</const> on x-axis, <const>10*y</const>  on y-axis (with instant effect)
+            <li> <var> [F | Fire] x y </var> -- fire bullet with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis
+            <li> <var> [M | Missile] x y </var> -- fire a missile with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis (this missile will be receiving orders starting from the next turn)
+            <li> <var> [P | Print] message </var> -- print a message - it can also be a multiline one, with lines split with an escaped newline ("\\n")
+            <li> <var> [W | Wait] </var> -- do nothing
           </ul>
         <li> For a missile:
           <ul>
-            <li> <var> [A | ACCELERATE] x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
-            <li> <var> [D | DETONATE] </var> -- detonate
-            <li> <var> [W | WAIT] </var> -- do nothing
+            <li> <var> [A | Accelerate] x y </var> -- put acceleration <const>30*x</const> on x-axis, <const>30*y</const>  on y-axis (with instant effect)
+            <li> <var> [D | Detonate] </var> -- detonate
+            <li> <var> [W | Wait ] </var> -- do nothing
           </ul>
       </ul>
     </div>
