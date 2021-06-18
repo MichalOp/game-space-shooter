@@ -124,11 +124,6 @@ public class Ship extends Unit {
     @Override
     public void graphicsTick(double t){
         super.graphicsTick(t);
-//        if(velocity.x!=0 || velocity.y !=0)        graphics.setRotation(Math.atan2(velocity.x, -velocity.y)- Math.PI/2);
-//        graphics.setX(((int)position.x))
-//                .setY(((int)position.y));
-////        System.out.println(graphics.getX() + " " + graphics.getY());
-
         drawSideBar();
         referee.tooltips.setTooltipText(graphics, toString());
     }
