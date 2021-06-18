@@ -108,7 +108,7 @@ public class Ship extends Unit {
 
     public void fire(Vector2d direction){
         if(gunCooldown > Consts.GUN_COOLDOWN-0.001) {
-            Vector2d bulletVelocity = direction.clip(1).mul(Consts.BULLET_VELOCITY).add(velocity);
+            Vector2d bulletVelocity = direction.clip(Consts.BULLET_VELOCITY).add(velocity);
             referee.addUnit(new Bullet(position, bulletVelocity, faction, referee));
             gunCooldown = 0;
         }
