@@ -92,9 +92,6 @@ public class Missile extends Unit{
         if(velocity.x!=0 || velocity.y !=0)  graphics.setRotation(Math.atan2(velocity.x, -velocity.y)- Math.PI/2);
         graphics.setX(((int)position.x))
                 .setY(((int)position.y));
-//        System.out.println(graphics.getX() + " " + graphics.getY());
-//        referee.graphicEntityModule.commitEntityState(t, text);
-//        referee.graphicEntityModule.commitEntityState(t, graphics);
         referee.tooltips.setTooltipText(graphics, toString());
     }
 

@@ -128,11 +128,6 @@ public class Ship extends Unit {
 //        System.out.println(graphics.getX() + " " + graphics.getY());
 
         drawSideBar();
-//        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthBar);
-//        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthText);
-//        referee.graphicEntityModule.commitEntityState(t, missilesLeft);
-//        referee.graphicEntityModule.commitEntityState(t, positionText);
-//        referee.graphicEntityModule.commitEntityState(t, graphics);
         referee.tooltips.setTooltipText(graphics, toString());
     }
 

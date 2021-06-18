@@ -13,8 +13,6 @@ public class Main {
         gameRunner.addAgent(Agent1.class);
         gameRunner.addAgent(Agent2.class);
 
-        //gameRunner.addAgent("python3 /home/aga/studia/PGP/game-space-shooter/config/Boss.py");
-        //gameRunner.addAgent("python3 /home/aga/studia/PGP/game-space-shooter/config/Boss.py");
 
         gameRunner.start();
     }
