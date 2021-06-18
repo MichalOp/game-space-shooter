@@ -29,9 +29,11 @@ public class Ship extends Unit {
                 .setScale(0.2)
                 .setAnchor(0.5)
                 .setZIndex(1)
-                .setX((int) position.x)
-                .setY((int) position.y)
-                .setRotation(Math.acos(startVelocity.x / startVelocity.length()));
+                .setX(0)
+                .setY(0)
+                .setRotation(0);
+
+        graphics_group.add(graphics);
         ref.tooltips.setTooltipText(graphics, toString());
 
         debug_graphics.setRadius(15);
@@ -101,11 +103,11 @@ public class Ship extends Unit {
     }
 
     public void setBurn(Vector2d direction){
-        acceleration = direction.clip(1).mul(Consts.SHIP_MAX_ACCELERATION);
+        acceleration = direction.clip(Consts.SHIP_MAX_ACCELERATION);
     }
 
     public void fire(Vector2d direction){
-        if(gunCooldown > Consts.GUN_COOLDOWN) {
+        if(gunCooldown > Consts.GUN_COOLDOWN-0.001) {
             Vector2d bulletVelocity = direction.clip(1).mul(Consts.BULLET_VELOCITY).add(velocity);
             referee.addUnit(new Bullet(position, bulletVelocity, faction, referee));
             gunCooldown = 0;
@@ -122,10 +124,10 @@ public class Ship extends Unit {
     @Override
     public void graphicsTick(double t){
         super.graphicsTick(t);
-        if(velocity.x!=0 || velocity.y !=0)        graphics.setRotation(Math.atan2(velocity.x, -velocity.y)- Math.PI/2);
-        graphics.setX(((int)position.x))
-                .setY(((int)position.y));
-//        System.out.println(graphics.getX() + " " + graphics.getY());
+//        if(velocity.x!=0 || velocity.y !=0)        graphics.setRotation(Math.atan2(velocity.x, -velocity.y)- Math.PI/2);
+//        graphics.setX(((int)position.x))
+//                .setY(((int)position.y));
+////        System.out.println(graphics.getX() + " " + graphics.getY());
 
         drawSideBar();
         referee.tooltips.setTooltipText(graphics, toString());
@@ -133,7 +135,7 @@ public class Ship extends Unit {
 
     @Override
     public String toString(){
-        return  "\nacceleration: "+ acceleration.toString()+
+        return  "acceleration: "+ acceleration.toString()+
                 "\nvelocity: "+velocity.toString();
 
     }

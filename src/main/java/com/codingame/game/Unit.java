@@ -1,5 +1,6 @@
 package com.codingame.game;
 import com.codingame.gameengine.module.entities.Circle;
+import com.codingame.gameengine.module.entities.Group;
 import com.codingame.gameengine.module.entities.Sprite;
 import com.codingame.gameengine.module.entities.Text;
 
@@ -17,6 +18,8 @@ public abstract class Unit {
     protected Circle debug_graphics;
     protected Circle debug_blast;
     protected Text debug_id;
+    protected Group move_group;
+    protected Group graphics_group;
 
     public Unit(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref){
         referee = ref;
@@ -26,9 +29,9 @@ public abstract class Unit {
         this.id = ref.getId();
         velocity_arrow = ref.graphicEntityModule.createSprite().setImage("arrow.png")
                 .setScale(0.01)
-                .setAnchorY(0.5).setX((int)startPosition.x).setY((int)startPosition.y);
+                .setAnchorY(0.5).setX(0).setY(0);
 
-        debug_graphics = ref.graphicEntityModule.createCircle().setX((int)startPosition.x).setY((int)startPosition.y);
+        debug_graphics = ref.graphicEntityModule.createCircle().setX(0).setY(0);
         debug_graphics.setFillColor( faction == 1 ? 0xff0000 : 0x00ff00);
 
         debug_blast = ref.graphicEntityModule.createCircle().setX((int)startPosition.x).setY((int)startPosition.y);
@@ -36,8 +39,8 @@ public abstract class Unit {
         debug_blast.setVisible(false);
 
         debug_id = ref.graphicEntityModule.createText()
-                .setX((int)startPosition.x)
-                .setY((int)startPosition.y)
+                .setX(0)
+                .setY(0)
                 .setText("" + id)
                 .setFillColor(0xffffff);
 
@@ -46,6 +49,14 @@ public abstract class Unit {
         referee.toggleModule.displayOnToggleState(debug_blast, "debugToggle", true);
         referee.toggleModule.displayOnToggleState(velocity_arrow, "debugToggle", true);
         referee.toggleModule.displayOnToggleState(debug_graphics, "debugToggle", true);
+
+        graphics_group = ref.graphicEntityModule.createGroup(debug_graphics, velocity_arrow)
+                .setX(0)
+                .setY(0);
+
+        move_group = ref.graphicEntityModule.createGroup(graphics_group, debug_id)
+                .setX((int)position.x)
+                .setY((int)position.y);
     }
 
     public void move(){
@@ -58,17 +69,17 @@ public abstract class Unit {
     }
 
     public void onDeath(double t){
-        debug_id.setVisible(false);
-        debug_graphics.setVisible(false);
-        velocity_arrow.setVisible(false);
+        move_group.setVisible(false);
     }
 
     public abstract String getUnitType();
 
     public void graphicsTick(double t){
-        velocity_arrow.setX((int)position.x).setY((int)position.y).setRotation(velocity.angle()-Math.PI/2).setScaleX(velocity.length()/5000);
-        debug_graphics.setX((int)position.x).setY((int)position.y);
-        debug_id.setX((int)position.x).setY((int)position.y);
+        move_group.setX((int)position.x).setY((int)position.y);
+        if(velocity.x!=0 || velocity.y !=0) {
+            graphics_group.setRotation(velocity.angle()-Math.PI/2);
+        }
+        velocity_arrow.setScaleX(velocity.length()/5000);
         referee.tooltips.setTooltipText(debug_graphics, toString());
     }
 
