@@ -13,8 +13,7 @@ public class Main {
         gameRunner.addAgent(Agent1.class);
         gameRunner.addAgent(Agent2.class);
 
-        // gameRunner.addAgent("python3 /home/user/player.py");
-        
+
         gameRunner.start();
     }
 }

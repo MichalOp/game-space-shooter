@@ -17,7 +17,7 @@ public class Ship extends Unit {
     Text positionText;
 
 
-    public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref) {
+    public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref, String nickName) {
         super(startPosition, startVelocity, faction, ref);
         verticalLayout = faction == 0 ? 0 : Consts.MAP_Y / 2;
         health = Consts.SHIP_MAX_HEALTH;
@@ -118,21 +118,16 @@ public class Ship extends Unit {
         gunCooldown += Consts.TIME_DELTA;
     }
 
+
     @Override
     public void graphicsTick(double t){
         super.graphicsTick(t);
-
-        graphics.setRotation(Math.atan2(graphics.getX()-position.x, position.y-graphics.getY())+Math.PI/2)
-                .setX(((int)position.x))
+        if(velocity.x!=0 || velocity.y !=0)        graphics.setRotation(Math.atan2(velocity.x, -velocity.y)- Math.PI/2);
+        graphics.setX(((int)position.x))
                 .setY(((int)position.y));
 //        System.out.println(graphics.getX() + " " + graphics.getY());
 
         drawSideBar();
-//        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthBar);
-//        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthText);
-//        referee.graphicEntityModule.commitEntityState(t, missilesLeft);
-//        referee.graphicEntityModule.commitEntityState(t, positionText);
-//        referee.graphicEntityModule.commitEntityState(t, graphics);
         referee.tooltips.setTooltipText(graphics, toString());
     }
 
