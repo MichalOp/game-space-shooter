@@ -1,5 +1,6 @@
 package com.codingame.game;
 
+import com.codingame.gameengine.module.entities.Rectangle;
 import com.codingame.gameengine.module.entities.Sprite;
 import com.codingame.gameengine.module.entities.Text;
 
@@ -22,7 +23,7 @@ public class Missile extends Unit{
                 .setAnchor(0.5)
                 .setX((int)position.x)
                 .setY((int)position.y)
-                .setRotation(Math.acos(startVelocity.x/startVelocity.length()));
+                .setRotation(Math.atan2(startVelocity.x, startVelocity.y));
         ref.tooltips.setTooltipText(graphics, toString());
         fire = ref.graphicEntityModule.createSprite()
                 .setImage("FireBullet.png")
@@ -88,12 +89,9 @@ public class Missile extends Unit{
     public void graphicsTick(double t){
         super.graphicsTick(t);
 
-        graphics.setRotation(Math.atan2(graphics.getX()-position.x, position.y-graphics.getY())+ Math.PI/2)
-                .setX(((int)position.x))
+        if(velocity.x!=0 || velocity.y !=0)  graphics.setRotation(Math.atan2(velocity.x, -velocity.y)- Math.PI/2);
+        graphics.setX(((int)position.x))
                 .setY(((int)position.y));
-//        System.out.println(graphics.getX() + " " + graphics.getY());
-//        referee.graphicEntityModule.commitEntityState(t, text);
-//        referee.graphicEntityModule.commitEntityState(t, graphics);
         referee.tooltips.setTooltipText(graphics, toString());
     }
 
@@ -102,6 +100,7 @@ public class Missile extends Unit{
         return "position: "+position.toString()+
                 "\nacceleration: "+ acceleration.toString()+
                 "\nvelocity: "+velocity.toString()+
+                "\nhealth: "+health+
                 "\nid"+this.id;
 
     }
