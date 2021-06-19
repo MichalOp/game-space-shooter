@@ -28,7 +28,7 @@
 
             <p>The ship has an infinite number of bullets, but only <const>8 missiles.</const></p>
 
-            <p>The bullet can be shot each other round. It detonates automatically in the first turn, when its distance to the closest enemy unit, that was in its damage radius, starts to increase. Hitting the edge of the board or ending it's lifetime (after <const>7</const> turns) also detonates the bullet.
+            <p>The bullet can be shot each other round. It detonates automatically in the first tick, when its distance to the closest enemy unit, that was in its damage radius, starts to increase. Hitting the edge of the board or ending it's lifetime (after <const>7</const> turns) also detonates the bullet.
                 Bullet's damage radius is <const>120</const>, the damage caused at the bullet's position is <const>10</const> and decreases linearly with the distance to it, reaching <const>0</const> at damage radius. The bullet is shot with the given velocities along each axis (in relation to the ship), with the resultant velocity being clipped to be at most <const>100</const>.</p>
             <p>Missiles can be shot each round, as long as you have one. Their damage radius is <const>200</const>, and the damage done is <const>15</const> in the center of explosion, decreasing in the same manner as bullet's.
                 They have their own engines, so they can be moved around just as the spaceship. They are detonated with a command.</p>
