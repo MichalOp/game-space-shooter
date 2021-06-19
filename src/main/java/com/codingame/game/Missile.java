@@ -21,9 +21,11 @@ public class Missile extends Unit{
                 .setImage(faction==1 ? "Missile_RED.png" : "Missile_GREEN.png")
                 .setScale(0.1)
                 .setAnchor(0.5)
-                .setX((int)position.x)
-                .setY((int)position.y)
-                .setRotation(Math.atan2(startVelocity.x, startVelocity.y));
+                .setX(0)
+                .setY(0)
+                .setRotation(0);
+
+        graphics_group.add(graphics);
         ref.tooltips.setTooltipText(graphics, toString());
         fire = ref.graphicEntityModule.createSprite()
                 .setImage("FireBullet.png")
@@ -52,7 +54,7 @@ public class Missile extends Unit{
     }
 
     public void setBurn(Vector2d direction){
-        acceleration = direction.clip(1).mul(Consts.MISSILE_MAX_ACCELERATION);
+        acceleration = direction.clip(Consts.MISSILE_MAX_ACCELERATION);
     }
 
     @Override
@@ -71,7 +73,7 @@ public class Missile extends Unit{
         text.setVisible(false);
         referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, text);
         graphics.setVisible(false);
-        fire.setX(graphics.getX()).setY(graphics.getY());
+        fire.setX(move_group.getX()).setY(move_group.getY());
         fire.setScale(0.1);
         referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, fire);
         fire.setVisible(true);
@@ -79,7 +81,7 @@ public class Missile extends Unit{
         referee.graphicEntityModule.commitEntityState(t, fire);
         fire.setVisible(false);
 
-        debug_blast.setX(graphics.getX()).setY(graphics.getY());
+        debug_blast.setX(move_group.getX()).setY(move_group.getY());
         debug_blast.setVisible(true);
         referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA/2, debug_blast);
         debug_blast.setVisible(false);
@@ -88,20 +90,16 @@ public class Missile extends Unit{
     @Override
     public void graphicsTick(double t){
         super.graphicsTick(t);
-
-        if(velocity.x!=0 || velocity.y !=0)  graphics.setRotation(Math.atan2(velocity.x, -velocity.y)- Math.PI/2);
-        graphics.setX(((int)position.x))
-                .setY(((int)position.y));
         referee.tooltips.setTooltipText(graphics, toString());
     }
 
     @Override
     public String toString(){
-        return "position: "+position.toString()+
-                "\nacceleration: "+ acceleration.toString()+
+        return "Missile, id "+this.id+
+                "\nposition: "+position.toString()+
                 "\nvelocity: "+velocity.toString()+
-                "\nhealth: "+health+
-                "\nid"+this.id;
+                "\nacceleration: "+ acceleration.toString()+
+                "\nhealth: "+health;
 
     }
 }

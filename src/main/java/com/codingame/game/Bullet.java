@@ -24,10 +24,11 @@ public class Bullet extends Unit{
                 .setImage(faction==1 ? "Bullet_RED.png" : "Bullet_GREEN.png")
                 .setScale(0.2)
                 .setAnchor(0.5)
-                .setX((int)position.x)
-                .setY((int)position.y)
-                .setRotation(Math.acos(startVelocity.x/startVelocity.length()));
+                .setX(0)
+                .setY(0)
+                .setRotation(0);
 
+        graphics_group.add(graphics);
         ref.tooltips.setTooltipText(graphics, toString());
 
         fire = ref.graphicEntityModule.createSprite()
@@ -82,7 +83,7 @@ public class Bullet extends Unit{
         referee.registerExplosion(position, Consts.GUN_BLAST_RADIUS, Consts.GUN_DAMAGE);
 
         graphics.setVisible(false);
-        fire.setX(graphics.getX()).setY(graphics.getY());
+        fire.setX(move_group.getX()).setY(move_group.getY());
         fire.setScale(0.1);
         referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, fire);
         fire.setVisible(true);
@@ -90,7 +91,7 @@ public class Bullet extends Unit{
         referee.graphicEntityModule.commitEntityState(t, fire);
         fire.setVisible(false);
 
-        debug_blast.setX(graphics.getX()).setY(graphics.getY());
+        debug_blast.setX(move_group.getX()).setY(move_group.getY());
         debug_blast.setVisible(true);
         referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, debug_blast);
         debug_blast.setVisible(false);
@@ -99,20 +100,12 @@ public class Bullet extends Unit{
     @Override
     public void graphicsTick(double t){
         super.graphicsTick(t);
-        graphics.setVisible(true);
-        if((position.x<=50 && graphics.getX()>Consts.MAP_X-50) || (position.x>=Consts.MAP_X-50 && graphics.getX()<50) || (position.y>=Consts.MAP_Y-50 && graphics.getY()<50) || (position.y<=50 && graphics.getY()>Consts.MAP_Y-50) ){
-            graphics.setVisible(false);
-            referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, graphics);
-        }
-        graphics.setX(((int)position.x)%1920).setY(((int)position.y)%1080);
-
-//        System.out.println(graphics.getX() + " " + graphics.getY());
-        // referee.graphicEntityModule.commitEntityState(t, graphics);
         referee.tooltips.setTooltipText(graphics, toString());
     }
     @Override
     public String toString(){
-        return "position: "+position.toString()+
+        return "Bullet, id "+this.id+
+                "\nposition: "+position.toString()+
                 "\nvelocity: "+velocity.toString()+
                 "\nlifetime: "+String.format("%.1f", lifetime);
     }
