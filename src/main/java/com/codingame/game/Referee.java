@@ -126,14 +126,14 @@ public class Referee extends AbstractReferee {
         }
     }
 
-
-
-
     @Override
     public void init() {
         unitList = new ArrayList<>();
 
         gameManager.setFrameDuration(300);
+        gameManager.setMaxTurns(100);
+        gameManager.setFirstTurnMaxTime(1000);
+        gameManager.setTurnMaxTime(100);
 
         graphicEntityModule.createSprite().setImage("Background.jpg").setAnchor(0);
 

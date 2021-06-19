@@ -8,9 +8,9 @@ public final class Consts {
     public static final int MISSILES_COUNT = 8;
     public static final double MISSILE_MAX_HEALTH = 7;
     public static final double BULLET_MAX_HEALTH = 10;
-    public static final double TIME_DELTA = 0.1;
+    public static final double TIME_DELTA = 0.2;
     public static final double GUN_COOLDOWN = 2.0;
-    public static final double GUN_BLAST_RADIUS = 100;
+    public static final double GUN_BLAST_RADIUS = 120;
     public static final double GUN_DAMAGE = 10;
     public static final double BULLET_LIFETIME = 7;
     public static final double MISSILE_BLAST_RADIUS = 200;
