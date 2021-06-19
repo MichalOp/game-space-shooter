@@ -95,11 +95,11 @@ public class Missile extends Unit{
 
     @Override
     public String toString(){
-        return "position: "+position.toString()+
-                "\nacceleration: "+ acceleration.toString()+
+        return "Missile, id "+this.id+
+                "\nposition: "+position.toString()+
                 "\nvelocity: "+velocity.toString()+
-                "\nhealth: "+health+
-                "\nid"+this.id;
+                "\nacceleration: "+ acceleration.toString()+
+                "\nhealth: "+health;
 
     }
 }

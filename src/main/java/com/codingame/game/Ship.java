@@ -130,8 +130,10 @@ public class Ship extends Unit {
 
     @Override
     public String toString(){
-        return  "acceleration: "+ acceleration.toString()+
-                "\nvelocity: "+velocity.toString();
+        return  "Ship, id "+this.id+
+                "\nposition: "+position.toString()+
+                "\nvelocity: "+velocity.toString()+
+                "\nacceleration: "+ acceleration.toString();
 
     }
 }
