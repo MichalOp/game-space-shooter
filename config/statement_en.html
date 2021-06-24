@@ -28,10 +28,10 @@
 
             <p>The ship has an infinite number of bullets, but only <const>8 missiles.</const></p>
 
-            <p>The bullet can be shot each other round. It detonates automatically in the first tick, when its distance to the closest enemy unit, that was in its damage radius, starts to increase. Hitting the edge of the board or ending it's lifetime (after <const>7</const> turns) also detonates the bullet.
+            <p>The bullet can be shot every two rounds. It detonates automatically in the first tick, when its distance to the closest enemy unit, that was in its damage radius, starts to increase. Hitting the edge of the board or ending it's lifetime (after <const>7</const> turns) also detonates the bullet.
                 Bullet's damage radius is <const>120</const>, the damage caused at the bullet's position is <const>10</const> and decreases linearly with the distance to it, reaching <const>0</const> at damage radius. The bullet is shot with the given velocities along each axis (in relation to the ship), with the resultant velocity being clipped to be at most <const>100</const>.</p>
             <p>Missiles can be shot each round, as long as you have one. Their damage radius is <const>200</const>, and the damage done is <const>15</const> in the center of explosion, decreasing in the same manner as bullet's.
-                They have their own engines, so they can be moved around just as the spaceship. They are detonated with a command.</p>
+                They have their own engines, so they can be moved around just as the spaceship. They are detonated with a command (or when they hit the edge of the board).</p>
             <p>
                 Both missiles and bullets have their own health points (<const>7</const> for missile, <const>10</const> for bullet). When it gets to 0, the unit detonates.
             </p>
@@ -43,7 +43,7 @@
         <div>Each game turn consists of <const>5</const> ticks, so that the units' positions are updated 5 times a turn.</div>
         <br>
         <div>
-            The player whose ship reaches <const>0</const> health points first loses.
+            The player whose ship reaches <const>0</const> health points first - loses.
         </div>
     </div>
 
@@ -56,8 +56,8 @@
         <!-- Protocol block -->
         <div class="blk">
             <div class="title">Input for one game turn</div>
-            <div class="text"><span class="statement-lineno">Line 1:</span> 1 integer <var>units</var> for the number of units on the board. <br>
-                <span class="statement-lineno">Next <var>units</var> lines:</span> 2 integers <var>unit_id</var>, <var>faction</var>, being the unit's unique ID and faction (<const>1</const> for the player, <const>-1</const> for the opponent), 1 char <var>type</var> being <const>S</const>hip, <const>B</const>ullet or <const>M</const>issile, 6 floats <var>health</var>, <var>position_x</var>, <var>position_y</var>, <var>velocity_x</var>, <var>velocity_y</var>, <var>gun_cooldown</var> for the unit's health points left, its position on each axis and velocity on each axis, followed by gun cooldown, which indicates the number of rounds till the next bullet can be shot, if this unit is a ship, and is set to <const>-1</const> otherwise.
+            <div class="text"><span class="statement-lineno">Line 1:</span> One integer <var>units</var> for the number of units on the board. <br>
+                <span class="statement-lineno">Next <var>units</var> lines:</span> Two integers <var>unit_id</var>, <var>faction</var>, being the unit's unique ID and faction (<const>1</const> for the player, <const>-1</const> for the opponent), one char <var>type</var> being <const>S</const>hip, <const>B</const>ullet or <const>M</const>issile, six floats <var>health</var>, <var>position_x</var>, <var>position_y</var>, <var>velocity_x</var>, <var>velocity_y</var>, <var>gun_cooldown</var> for the unit's health points left, its position on each axis and velocity on each axis, followed by gun cooldown, which indicates the number of rounds till the next bullet can be shot if this unit is a ship, <const>-1</const> otherwise.
                 <br>
             </div>
 
@@ -66,23 +66,24 @@
         <!-- Protocol block -->
         <div class="blk">
             <div class="title">Output for one game turn</div>
-            <div class="text"><span class="statement-lineno"><const>(Exactly!) n</const> lines, where <const>n</const> is the number of ships and missiles actively controlled by the player:</span> Command for unit with unit_id in the form: <var> unit_id | A x y | F x y </var>, having one or more commands for <const>unit_id</const> separated by <const>|</const>. For a ship <const>S</const> can be used instead of <const>unit_id</const>. <const>x,y </const> are both dot-separated doubles.</div>
+            <div class="text">
+                <span class="statement-lineno"><const>n</const> lines, where <const>n</const> is the number of ships and missiles actively controlled by the player, with each line being a command for unit with unit_id in the form: <var> unit_id | A x y | F x y </var>, having one or more commands for <const>unit_id</const> separated by <const>|</const>. For a ship <const>S</const> can be used instead of <const>unit_id</const>. <const>x,y </const> are both dot-separated doubles.</span></div>
             <br>
             Available commands:
             <ul>
                 <li> For a ship:
                     <ul>
-                        <li> <var> [A | ACCELERATE] x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
-                        <li> <var> [F | FIRE] x y </var> -- fire bullet with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis
-                        <li> <var> [M | MISSILE] x y </var> -- fire a missile with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis (this missile will be receiving orders starting from the next turn)
-                        <li> <var> [P | PRINT] message </var> -- print a message - it can also be a multiline one, with lines split with an escaped newline ("\\n")
-                        <li> <var> [W | WAIT] </var> -- do nothing
+                        <li> <var> [A | ACCELERATE] x y </var> - put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
+                        <li> <var> [F | FIRE] x y </var> - fire a bullet with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis (relative to ship's velocity)
+                        <li> <var> [M | MISSILE] x y </var> - fire a missile with acceleration <const>x</const>  on x-axis, <const>y</const> on y-axis, with velocity equal to the current ship's velocity  (this missile will be receiving orders starting from the next turn)
+                        <li> <var> [P | PRINT] message </var> - print a message - it can also be a multiline one, with lines split with an escaped newline symbol ("\\n")
+                        <li> <var> [W | WAIT] </var> - do nothing
                     </ul>
                 <li> For a missile:
                     <ul>
-                        <li> <var> [A | ACCELERATE] x y </var> -- put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
-                        <li> <var> [D | DETONATE] </var> -- detonate
-                        <li> <var> [W | WAIT] </var> -- do nothing
+                        <li> <var> [A | ACCELERATE] x y </var> - put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
+                        <li> <var> [D | DETONATE] </var> - detonate
+                        <li> <var> [W | WAIT] </var> - do nothing
                     </ul>
             </ul>
         </div>
