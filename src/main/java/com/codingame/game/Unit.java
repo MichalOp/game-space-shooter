@@ -33,14 +33,15 @@ public abstract class Unit {
 
         debug_graphics = ref.graphicEntityModule.createCircle().setX(0).setY(0);
         debug_graphics.setFillColor( faction == 1 ? 0xff0000 : 0x00ff00);
+        debug_graphics.setZIndex(velocity_arrow.getZIndex() - 1);
 
         debug_blast = ref.graphicEntityModule.createCircle().setX((int)startPosition.x).setY((int)startPosition.y);
         debug_blast.setAlpha(0.4);
         debug_blast.setVisible(false);
 
         debug_id = ref.graphicEntityModule.createText()
-                .setX(0)
-                .setY(0)
+                .setX(9)
+                .setY(9)
                 .setText("" + id)
                 .setFillColor(0xffffff);
 
@@ -78,6 +79,9 @@ public abstract class Unit {
         move_group.setX((int)position.x).setY((int)position.y);
         if(velocity.x!=0 || velocity.y !=0) {
             graphics_group.setRotation(velocity.angle()-Math.PI/2);
+        }
+        if (t < 0) { // before the game starts
+            graphics_group.setRotation(faction == 1 ? Math.PI : 0);
         }
         velocity_arrow.setScaleX(velocity.length()/5000);
         referee.tooltips.setTooltipText(debug_graphics, toString());
