@@ -111,6 +111,10 @@ public class Referee extends AbstractReferee {
         graphicEntityModule.commitWorldState(0);
         while (t < 1 - 0.000001) {
             t += Consts.TIME_DELTA;
+            for (Unit u : unitList){
+                u.tick();
+            }
+            updateUnits(t);
             for (Unit u : unitList) {
                 u.move();
             }
@@ -118,11 +122,6 @@ public class Referee extends AbstractReferee {
                 u.graphicsTick(t);
             }
             graphicEntityModule.commitWorldState(t);
-            for (Unit u : unitList){
-                u.tick();
-            }
-            updateUnits(t);
-
         }
     }
 

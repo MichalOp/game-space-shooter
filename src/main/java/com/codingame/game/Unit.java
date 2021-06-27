@@ -33,14 +33,15 @@ public abstract class Unit {
 
         debug_graphics = ref.graphicEntityModule.createCircle().setX(0).setY(0);
         debug_graphics.setFillColor( faction == 1 ? 0xff0000 : 0x00ff00);
+        debug_graphics.setZIndex(velocity_arrow.getZIndex() - 1);
 
         debug_blast = ref.graphicEntityModule.createCircle().setX((int)startPosition.x).setY((int)startPosition.y);
         debug_blast.setAlpha(0.4);
         debug_blast.setVisible(false);
 
         debug_id = ref.graphicEntityModule.createText()
-                .setX(0)
-                .setY(0)
+                .setX(9)
+                .setY(9)
                 .setText("" + id)
                 .setFillColor(0xffffff);
 

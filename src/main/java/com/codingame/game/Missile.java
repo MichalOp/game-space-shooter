@@ -35,6 +35,7 @@ public class Missile extends Unit{
                 .setY(graphics.getY());
         ref.graphicEntityModule.commitEntityState(0, fire);
         debug_graphics.setRadius(8);
+        debug_graphics.setLineWidth(1.5).setLineColor(0x0000ff);
         debug_blast.setRadius((int)Consts.MISSILE_BLAST_RADIUS);
         referee.toggleModule.displayOnToggleState(fire, "debugToggle", false);
         referee.toggleModule.displayOnToggleState(graphics, "debugToggle", false);
