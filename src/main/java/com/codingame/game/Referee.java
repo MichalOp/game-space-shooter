@@ -136,6 +136,12 @@ public class Referee extends AbstractReferee {
         gameManager.setTurnMaxTime(100);
 
         graphicEntityModule.createSprite().setImage("Background.jpg").setAnchor(0);
+        graphicEntityModule.createLine().setLineColor(0xADD8E6 ).setX(0).setX2(0).setLineWidth(5).setY(0).setY2(Consts.MAP_Y);
+        graphicEntityModule.createLine().setLineColor(0xADD8E6 ).setX(Consts.MAP_X-2).setX2(Consts.MAP_X-2).setLineWidth(5).setY(0).setY2(Consts.MAP_Y);
+        graphicEntityModule.createLine().setLineColor(0xADD8E6 ).setX(0).setX2(Consts.MAP_X).setLineWidth(5).setY(Consts.MAP_Y-2).setY2(Consts.MAP_Y-2);
+        graphicEntityModule.createLine().setLineColor(0xADD8E6 ).setX(0).setX2(Consts.MAP_X).setLineWidth(5).setY(0).setY2(0);
+
+
 
         sidebar = graphicEntityModule.createSprite().setImage("sidebar.png").setX(Consts.MAP_X);
 
