@@ -24,4 +24,7 @@ public final class Consts {
     public static final int COLOR_0 = 0xff0000;
     public static final int LIFE_BAR_WIDTH  = 200;
 
+    public static final double[] START_POSITION_0 = {1.0/3, 1.0/2, 2.0/3};
+    public static final double[] START_POSITION_1 = {2.0/3, 1.0/2, 1.0/3};
+
 }
