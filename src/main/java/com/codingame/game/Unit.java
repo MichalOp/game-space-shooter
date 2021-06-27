@@ -80,6 +80,9 @@ public abstract class Unit {
         if(velocity.x!=0 || velocity.y !=0) {
             graphics_group.setRotation(velocity.angle()-Math.PI/2);
         }
+        if (t < 0) { // before the game starts
+            graphics_group.setRotation(faction == 1 ? Math.PI : 0);
+        }
         velocity_arrow.setScaleX(velocity.length()/5000);
         referee.tooltips.setTooltipText(debug_graphics, toString());
     }

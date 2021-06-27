@@ -146,7 +146,7 @@ public class Referee extends AbstractReferee {
             addUnit(s);
             p.ship = s;
             p.expectedOutputLines += 1;
-            s.graphicsTick(0);
+            s.graphicsTick(-1);
         }
     }
 
