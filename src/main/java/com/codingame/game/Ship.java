@@ -37,6 +37,7 @@ public class Ship extends Unit {
         ref.tooltips.setTooltipText(graphics, toString());
 
         debug_graphics.setRadius(15);
+        debug_graphics.setLineWidth(1.5).setLineColor(0xffcc33);
         referee.toggleModule.displayOnToggleState(graphics, "debugToggle", false);
 
         referee.graphicEntityModule.createText(nickName)
