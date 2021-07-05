@@ -47,7 +47,7 @@ public class Ship extends Unit {
                 .setBaseWidth(50)
                 .setBaseHeight(50);
 
-        referee.graphicEntityModule.createText("a very long teeeeeeext")
+        referee.graphicEntityModule.createText(nickName)
                 .setStrokeThickness(5) // Adding an outline
                 .setStrokeColor(0xffffff) // a white outline
                 .setFontSize(25)
