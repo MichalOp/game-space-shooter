@@ -148,7 +148,8 @@ public class Referee extends AbstractReferee {
         for (Player p : gameManager.getPlayers()) {
             p.setMessage(this, true);
             int faction = p.getIndex();
-            Ship s = new Ship(new Vector2d(faction == 0 ? WIDTH / 4 : WIDTH / 4 * 3, HEIGHT / 2), Vector2d.zero, faction, this, p.getNicknameToken());
+            Ship s = new Ship(new Vector2d(faction == 0 ? WIDTH / 4 : WIDTH / 4 * 3, HEIGHT / 2),
+                                Vector2d.zero, faction, this, p.getNicknameToken(), p.getAvatarToken());
 
             addUnit(s);
             p.ship = s;

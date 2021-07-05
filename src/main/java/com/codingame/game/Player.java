@@ -8,7 +8,6 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.lang.Math.abs;
 
 public class Player extends AbstractMultiplayerPlayer {
     public Ship ship;
