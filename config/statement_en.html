@@ -22,22 +22,23 @@
             <span>Rules</span>
         </h1>
         <div class="statement-rules-content">
-            <p>The game is played on a map <const>1700</const> units wide and <const>1080</const> units high.</p>
+            <p>The game is played on a map <const>1700</const> units wide and <const>1080</const> units high.</p><br>
 
-            <p>You and your opponent each own one starship, which has <const>10</const> health points.</p>
+            <p>You and your opponent each own one starship, which has <const>10</const> health points.</p><br>
 
-            <p>The ship has an infinite number of bullets, but only <const>8 missiles.</const></p>
+            <p>The ship has an <const>infinite number of bullets</const>, but only <const>8 missiles.</const></p><br>
 
-            <p>The bullet can be shot every two rounds. It detonates automatically in the first tick, when its distance to the closest enemy unit, that was in its damage radius, starts to increase. Hitting the edge of the board or ending it's lifetime (after <const>7</const> turns) also detonates the bullet.
-                Bullet's damage radius is <const>120</const>, the damage caused at the bullet's position is <const>10</const> and decreases linearly with the distance to it, reaching <const>0</const> at damage radius. The bullet is shot with the given velocities along each axis (in relation to the ship), with the resultant velocity being clipped to be at most <const>100</const>.</p>
-            <p>Missiles can be shot each round, as long as you have one. Their damage radius is <const>200</const>, and the damage done is <const>15</const> in the center of explosion, decreasing in the same manner as bullet's.
-                They have their own engines, so they can be moved around just as the spaceship. They are detonated with a command (or when they hit the edge of the board).</p>
+            <p>The bullet can be shot every two rounds. It detonates automatically in the first tick, when its distance to the closest enemy unit, that was in its damage radius, starts to increase. Ending it's lifetime (after <const>7</const> turns), or going out of health points (a bullet has it's own <const>10</const> health points) also detonates the bullet.</p>
             <p>
-                Both missiles and bullets have their own health points (<const>7</const> for missile, <const>10</const> for bullet). When it gets to 0, the unit detonates.
-            </p>
+                Bullet's damage radius is <const>120</const>, the damage caused at the bullet's position is <const>10</const> and decreases linearly with the distance to it, reaching <const>0</const> at damage radius. The bullet is shot with the given velocities along each axis (in relation to the ship), with the resultant velocity being clipped to be at most <const>100</const>.</p><br>
+            <p>Missiles can be shot each round, as long as you have one. They are detonated with a command or when they lose all their health points (they start having <const>7</const> of them). </p>
+            <p>Their damage radius is <const>200</const>, and the damage done is <const>15</const> in the center of explosion, decreasing in the same manner as bullet's.
+                They have their own engines, so they can be moved around just as the spaceship. </p>
+            <br>
             <p>The ships start at symmetrical positions, close to the center of the board.</p>
-            <p> Both ships and missiles move with the given maximal acceleration along each axis, with the resultant acceleration (interpreted as a vector) being clipped to length <const>10</const> for the ship, <const>30</const> for a missile.</p>
-            <p> Hitting the edge of the board immediately sets the unit's health to 0, causing it to die/detonate.
+            <p> Both ships and missiles move with the given acceleration along each axis, with the resultant acceleration (interpreted as a vector) being clipped to length <const>10</const> for the ship, <const>30</const> for a missile.</p>
+            <br>
+            <p> Hitting the edge of the board immediately sets the unit's (bullet's, missile's or ship's) health to <const>0</const>, causing it to die/detonate.
         </div>
         <br>
         <div>Each game turn consists of <const>5</const> ticks, so that the units' positions are updated 5 times a turn.</div>
@@ -82,15 +83,17 @@
             <ul>
                 <li> For a ship:
                     <ul>
-                        <li> <var> [A | ACCELERATE] ax ay </var> - put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
-                        <li> <var> [F | FIRE] vx vy </var> - fire a bullet with velocity <const>x</const>  on x-axis, <const>y</const>  on y-axis (relative to ship)
-                        <li> <var> [M | MISSILE] ax ay </var> - fire a missile with acceleration <const>x</const>  on x-axis, <const>y</const> on y-axis, with velocity equal to the current ship's velocity  (this missile will be receiving orders starting from the next turn)
+
+                        <li> <var> [A | ACCELERATE] ax ay </var> - put acceleration <const>ax</const> on x-axis, <const>ay</const>  on y-axis (with instant effect)
+                        <li> <var> [F | FIRE] vx vy </var> - fire a bullet with velocity <const>vx</const>  on x-axis, <const>vy</const>  on y-axis (relative to ship)
+                        <li> <var> [M | MISSILE] ax ay </var> - fire a missile with acceleration <const>ax</const>  on x-axis, <const>ay</const> on y-axis, with velocity equal to the current ship's velocity  (this missile will be receiving orders starting from the next turn)
                         <li> <var> [P | PRINT] message </var> - print a message - it can also be a multiline one, with lines split with an escaped newline symbol ("\\n")
                         <li> <var> [W | WAIT] </var> - do nothing
                     </ul>
                 <li> For a missile:
                     <ul>
-                        <li> <var> [A | ACCELERATE] ax ay </var> - put acceleration <const>x</const> on x-axis, <const>y</const>  on y-axis (with instant effect)
+                        <li> <var> [A | ACCELERATE] ax ay </var> - put acceleration <const>ax</const> on x-axis, <const>ay</const>  on y-axis (with instant effect)
+
                         <li> <var> [D | DETONATE] </var> - detonate
                         <li> <var> [W | WAIT] </var> - do nothing
                     </ul>

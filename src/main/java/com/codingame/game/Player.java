@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class Player extends AbstractMultiplayerPlayer {
     public Ship ship;
-    public int expectedOutputLines = 0; // if we had manually detonated missiles, this should be updated accordingly
+    public int expectedOutputLines = 0;
     boolean lost;
     private String message_text = "";
     Text message;
@@ -153,7 +153,6 @@ public class Player extends AbstractMultiplayerPlayer {
         }
 
         message_text = String.join("\n", arr);
-//        message_text = message_text.replace("\\n", "\n");
 
         if (init) {
             message = ref.graphicEntityModule.createText(message_text)
