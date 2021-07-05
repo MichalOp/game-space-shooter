@@ -46,6 +46,10 @@
         <div>
             The player whose ship reaches <const>0</const> health points first - loses.
         </div>
+        <br>
+        <div>
+            The game lasts up to 100 rounds. If both players survive that long, it's a draw.
+        </div>
     </div>
 
     <div style="color: #7cc576;
@@ -77,7 +81,7 @@
         <div class="blk">
             <div class="title">Output for one game turn</div>
             <div class="text">
-                <span class="statement-lineno"><const>n</const> lines, where <const>n</const> is the number of ships and missiles actively controlled by the player, with each line being a command for unit with unit_id in the form: <var> unit_id | A x y | F x y </var>, having one or more commands for <const>unit_id</const> separated by <const>|</const>. For a ship <const>S</const> can be used instead of <const>unit_id</const>. <const>x,y </const> are both dot-formatted doubles.</span></div>
+                <span class="statement-lineno"><const>n</const> lines, where <const>n</const> is the number of ships and missiles actively controlled by the player, with each line being a command for unit with unit_id in the form: <var> unit_id | A x y | F x y </var>, having one or more commands for <const>unit_id</const> separated by <const>|</const>. For a ship <const>S</const> can be used instead of <const>unit_id</const>. <const>x,y </const> are both dot-formatted doubles - if given with more precision than 2 decimal places, then rounded up to at most 2 decimal places.</span></div>
             <br>
             Available commands:
             <ul>
