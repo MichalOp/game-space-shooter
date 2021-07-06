@@ -222,10 +222,8 @@ public class Referee extends AbstractReferee {
                 String message = String.format("%s eliminated! Reason: ", p.getNicknameToken());
                 if (e instanceof TimeoutException) {
                     message += String.format("Timeout! (%d lines expected)", p.getExpectedOutputLines());
-                } else if (e instanceof NoSuchMethodException) {
-                    message += e.getMessage();
                 } else {
-                    message += "Bad input!";
+                    message += e.getMessage();
                 }
                 p.deactivate(message);
             }
