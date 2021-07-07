@@ -94,7 +94,8 @@ public class Player extends AbstractMultiplayerPlayer {
             }
             usedUnits.add(unitId);
             List<String> ordersList = Arrays.stream(orders).collect(Collectors.toList());
-            if (ordersList.size() < 1) {
+            System.err.println(ordersList.size());
+            if (ordersList.size() < 2) {
                 throw new NoSuchMethodException(String.format("No orders for unit (id %d) provided (%s)", unitId, out));
             }
             for (String order : ordersList.subList(1, orders.length)) {
