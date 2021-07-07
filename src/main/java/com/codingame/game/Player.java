@@ -93,7 +93,11 @@ public class Player extends AbstractMultiplayerPlayer {
                 throw new NoSuchMethodException(String.format("At least two orders for the same unit (id %d) provided (%s)", unitId, out));
             }
             usedUnits.add(unitId);
-            for (String order : Arrays.stream(orders).collect(Collectors.toList()).subList(1, orders.length)) {
+            List<String> ordersList = Arrays.stream(orders).collect(Collectors.toList());
+            if (ordersList.size() < 1) {
+                throw new NoSuchMethodException(String.format("No orders for unit (id %d) provided (%s)", unitId, out));
+            }
+            for (String order : ordersList.subList(1, orders.length)) {
                 if (order.replaceAll("\\s+", "").length() < 1) {
                     continue;
                 }
