@@ -218,7 +218,7 @@ public class Referee extends AbstractReferee {
                     }
                 }
 
-            } catch (TimeoutException | NoSuchMethodException | InputMismatchException | NumberFormatException e) {
+            } catch (TimeoutException | NoSuchMethodException | InputMismatchException | IllegalArgumentException e) {
                 String message = String.format("%s eliminated! Reason: ", p.getNicknameToken());
                 if (e instanceof TimeoutException) {
                     message += String.format("Timeout! (%d lines expected)", p.getExpectedOutputLines());

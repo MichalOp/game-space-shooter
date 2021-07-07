@@ -71,30 +71,34 @@ public class Player extends AbstractMultiplayerPlayer {
     }
 
 
-    List<Action> getAction(List<Unit> units) throws TimeoutException, NoSuchMethodException, InputMismatchException, NumberFormatException {
+    List<Action> getAction(List<Unit> units) throws TimeoutException, NoSuchMethodException,
+            InputMismatchException, IllegalArgumentException {
         message_text = "";
         List<Action> moves = new ArrayList<>();
         HashSet<Integer> usedUnits = new HashSet<>();
         for (String out : this.getOutputs()) {
             String[] orders = out.split("\\|");
-            Scanner scanner = new Scanner(orders[0]);
+            String firstPart = orders[0];
+            Scanner scanner = new Scanner(firstPart);
             int unitId = -1;
             try {
                 unitId = scanner.nextInt();
             } catch (NoSuchElementException e) {
-                String o = orders[0].replace(" ", "");
-                if (o.length() == 1 && o.charAt(0) == 'S') {
+                String maybeShip = scanner.next();
+                if (maybeShip.length() == 1 && maybeShip.charAt(0) == 'S') {
                     unitId = ship.id;
                 } else {
-                    throw new InputMismatchException("\"" + o + "\"" + " is not a correct unit identifier (" + out + ")");
+                    throw new InputMismatchException("\"" + maybeShip + "\"" + " is not a correct unit identifier (" + out + ")");
                 }
             }
+            if (scanner.hasNext()) {
+                throw new InputMismatchException(String.format("Some chars after unit id found (missing |?) (%s)", out));
+            }
             if (usedUnits.contains(unitId)) {
-                throw new NoSuchMethodException(String.format("At least two orders for the same unit (id %d) provided (%s)", unitId, out));
+                throw new NoSuchMethodException(String.format("Two orders for the same unit (id %d) provided (%s)", unitId, out));
             }
             usedUnits.add(unitId);
             List<String> ordersList = Arrays.stream(orders).collect(Collectors.toList());
-            System.err.println(ordersList.size());
             if (ordersList.size() < 2) {
                 throw new NoSuchMethodException(String.format("No orders for unit (id %d) provided (%s)", unitId, out));
             }
@@ -114,6 +118,9 @@ public class Player extends AbstractMultiplayerPlayer {
                             action.type = Action.ActionType.Move;
                             action.direction.x = getActionDirectionValue(scanner);
                             action.direction.y = getActionDirectionValue(scanner);
+                            if (scanner.hasNext()) {
+                                throw new IllegalArgumentException(String.format("Some redundant chars found (missing |?) (%s)", out));
+                            }
                             break;
                         case "F":
                         case "FIRE":
@@ -121,6 +128,9 @@ public class Player extends AbstractMultiplayerPlayer {
                             action.type = Action.ActionType.Fire;
                             action.direction.x = getActionDirectionValue(scanner);
                             action.direction.y = getActionDirectionValue(scanner);
+                            if (scanner.hasNext()) {
+                                throw new IllegalArgumentException(String.format("Some redundant chars found (missing |?) (%s)", out));
+                            }
                             break;
                         case "M":
                         case "MISSILE":
@@ -128,17 +138,26 @@ public class Player extends AbstractMultiplayerPlayer {
                             action.type = Action.ActionType.Missile;
                             action.direction.x = getActionDirectionValue(scanner);
                             action.direction.y = getActionDirectionValue(scanner);
+                            if (scanner.hasNext()) {
+                                throw new IllegalArgumentException(String.format("Some redundant chars found (missing |?) (%s)", out));
+                            }
                             break;
                         case "D":
                         case "DETONATE":
                             // detonate missile
                             action.type = Action.ActionType.Detonate;
+                            if (scanner.hasNext()) {
+                                throw new IllegalArgumentException(String.format("Some redundant chars found (missing |?) (%s)", out));
+                            }
                             break;
                         case "W":
                         case "WAIT":
                             // wait - this is a dummy action, but we want to have it
                             // as we can only set exact number of lines we expect to get from the player
                             action.type = Action.ActionType.Wait;
+                            if (scanner.hasNext()) {
+                                throw new IllegalArgumentException(String.format("Some redundant chars found (missing |?) (%s)", out));
+                            }
                             break;
                         case "P":
                         case "PRINT":
