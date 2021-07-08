@@ -42,7 +42,7 @@ public class Ship extends Unit {
 
         referee.graphicEntityModule.createSprite().setImage(avatar)
                 .setX((Consts.SIDE_BAR_LEFT * 6 + Consts.SIDE_BAR_RIGHT) / 7)
-                .setY(verticalLayout)
+                .setY(verticalLayout + 4)
                 .setAnchorX(0.5)
                 .setBaseWidth(50)
                 .setBaseHeight(50);
