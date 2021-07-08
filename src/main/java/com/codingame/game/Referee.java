@@ -136,12 +136,11 @@ public class Referee extends AbstractReferee {
         gameManager.setTurnMaxTime(100);
 
         graphicEntityModule.createSprite().setImage("Background.jpg").setAnchor(0);
-        graphicEntityModule.createLine().setLineColor(0xADD8E6 ).setX(0).setX2(0).setLineWidth(5).setY(0).setY2(Consts.MAP_Y);
-        graphicEntityModule.createLine().setLineColor(0xADD8E6 ).setX(Consts.MAP_X-2).setX2(Consts.MAP_X-2).setLineWidth(5).setY(0).setY2(Consts.MAP_Y);
-        graphicEntityModule.createLine().setLineColor(0xADD8E6 ).setX(0).setX2(Consts.MAP_X).setLineWidth(5).setY(Consts.MAP_Y-2).setY2(Consts.MAP_Y-2);
-        graphicEntityModule.createLine().setLineColor(0xADD8E6 ).setX(0).setX2(Consts.MAP_X).setLineWidth(5).setY(0).setY2(0);
-
-
+        double thickness = 0.03;
+        graphicEntityModule.createSprite().setImage("grad.png").setScaleY(Consts.MAP_Y/400.0).setScaleX(thickness);
+        graphicEntityModule.createSprite().setImage("grad.png").setScaleY(Consts.MAP_X/400.0).setScaleX(thickness).setRotation(Math.PI/2).setX(Consts.MAP_X);
+        graphicEntityModule.createSprite().setImage("grad.png").setScaleY(Consts.MAP_X/400.0).setScaleX(thickness).setRotation(-Math.PI/2).setY(Consts.MAP_Y);
+        graphicEntityModule.createSprite().setImage("grad.png").setScaleY(Consts.MAP_Y/400.0).setScaleX(thickness).setRotation(Math.PI).setX(Consts.MAP_X).setY(Consts.MAP_Y);
 
         sidebar = graphicEntityModule.createSprite().setImage("sidebar.png").setX(Consts.MAP_X);
 
