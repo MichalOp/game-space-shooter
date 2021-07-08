@@ -16,6 +16,7 @@ public class Player extends AbstractMultiplayerPlayer {
     boolean lost;
     private String message_text = "";
     Text message;
+    private String checkValidActionErrorMessage = "";
 
     private boolean checkValidAction(Action action, List<Unit> units) {
         try {
@@ -25,27 +26,42 @@ public class Player extends AbstractMultiplayerPlayer {
                     action.type == Action.ActionType.Fire ||
                     action.type == Action.ActionType.Missile) {
                 if (Double.isNaN(action.direction.x) || Double.isNaN(action.direction.y)) {
+                    checkValidActionErrorMessage = "Action direction is NaN";
                     return false;
                 }
                 if (Double.isInfinite(action.direction.x) || Double.isInfinite(action.direction.y)) {
+                    checkValidActionErrorMessage = "Action direction is infinite";
                     return false;
                 }
             }
 
             if (action.type == Action.ActionType.Fire) {
-                return (correct instanceof Ship);
+                boolean instance = (correct instanceof Ship);
+                if (!instance) {
+                    checkValidActionErrorMessage = "Only a ship can fire bullets";
+                }
+                return instance;
             }
 
             if (action.type == Action.ActionType.Detonate) {
-                return (correct instanceof Missile);
+                boolean instance = (correct instanceof Missile);
+                if (!instance) {
+                    checkValidActionErrorMessage = "Only a missile can be detonated";
+                }
+                return instance;
             }
 
             if (action.type == Action.ActionType.Move) {
-                return ((correct instanceof Missile) || (correct instanceof Ship));
+                boolean instance = ((correct instanceof Missile) || (correct instanceof Ship));
+                if (!instance) {
+                    checkValidActionErrorMessage = "Bullets can't be accelerated";
+                }
+                return instance;
             }
 
             return true;
         } catch (IndexOutOfBoundsException e) {
+            checkValidActionErrorMessage = "Received order for not-owned unit with id " + action.unitId;
             return false;
         }
     }
@@ -55,40 +71,56 @@ public class Player extends AbstractMultiplayerPlayer {
     }
 
 
-    List<Action> getAction(List<Unit> units) throws TimeoutException, NoSuchMethodException, InputMismatchException, NumberFormatException {
+    List<Action> getAction(List<Unit> units) throws TimeoutException, NoSuchMethodException,
+            InputMismatchException, IllegalArgumentException {
         message_text = "";
         List<Action> moves = new ArrayList<>();
         HashSet<Integer> usedUnits = new HashSet<>();
         for (String out : this.getOutputs()) {
             String[] orders = out.split("\\|");
-            Scanner scanner = new Scanner(orders[0]);
+            String firstPart = orders[0];
+            Scanner scanner = new Scanner(firstPart);
             int unitId = -1;
             try {
                 unitId = scanner.nextInt();
-            } catch (InputMismatchException e) {
-                String o = orders[0].replace(" ", "");
-                if (o.charAt(0) == 'S' && o.length() == 1) {
+            } catch (NoSuchElementException e) {
+                String maybeShip = scanner.next();
+                if (maybeShip.length() == 1 && maybeShip.charAt(0) == 'S') {
                     unitId = ship.id;
                 } else {
-                    throw new InputMismatchException("");
+                    throw new InputMismatchException("\"" + maybeShip + "\"" + " is not a correct unit identifier (" + out + ")");
                 }
             }
+            if (scanner.hasNext()) {
+                throw new InputMismatchException(String.format("Some chars after unit id found (missing |?) (%s)", out));
+            }
             if (usedUnits.contains(unitId)) {
-                throw new NoSuchMethodException("At least two orders for the same unit provided");
+                throw new NoSuchMethodException(String.format("Two orders for the same unit (id %d) provided (%s)", unitId, out));
             }
             usedUnits.add(unitId);
-            for (String order : Arrays.stream(orders).collect(Collectors.toList()).subList(1, orders.length)) {
+            List<String> ordersList = Arrays.stream(orders).collect(Collectors.toList());
+            if (ordersList.size() < 2) {
+                throw new NoSuchMethodException(String.format("No orders for unit (id %d) provided (%s)", unitId, out));
+            }
+            for (String order : ordersList.subList(1, orders.length)) {
+                if (order.replaceAll("\\s+", "").length() < 1) {
+                    continue;
+                }
                 scanner = new Scanner(order);
                 Action action = new Action();
                 action.unitId = unitId;
                 try {
-                    switch (scanner.next()) {
+                    String actionName = scanner.next();
+                    switch (actionName) {
                         case "A":
                         case "ACCELERATE":
                             // it's a move (for a ship or a player-controlled missile)
                             action.type = Action.ActionType.Move;
                             action.direction.x = getActionDirectionValue(scanner);
                             action.direction.y = getActionDirectionValue(scanner);
+                            if (scanner.hasNext()) {
+                                throw new IllegalArgumentException(String.format("Some redundant chars found (missing |?) (%s)", out));
+                            }
                             break;
                         case "F":
                         case "FIRE":
@@ -96,6 +128,9 @@ public class Player extends AbstractMultiplayerPlayer {
                             action.type = Action.ActionType.Fire;
                             action.direction.x = getActionDirectionValue(scanner);
                             action.direction.y = getActionDirectionValue(scanner);
+                            if (scanner.hasNext()) {
+                                throw new IllegalArgumentException(String.format("Some redundant chars found (missing |?) (%s)", out));
+                            }
                             break;
                         case "M":
                         case "MISSILE":
@@ -103,34 +138,48 @@ public class Player extends AbstractMultiplayerPlayer {
                             action.type = Action.ActionType.Missile;
                             action.direction.x = getActionDirectionValue(scanner);
                             action.direction.y = getActionDirectionValue(scanner);
+                            if (scanner.hasNext()) {
+                                throw new IllegalArgumentException(String.format("Some redundant chars found (missing |?) (%s)", out));
+                            }
                             break;
                         case "D":
                         case "DETONATE":
                             // detonate missile
                             action.type = Action.ActionType.Detonate;
+                            if (scanner.hasNext()) {
+                                throw new IllegalArgumentException(String.format("Some redundant chars found (missing |?) (%s)", out));
+                            }
                             break;
                         case "W":
                         case "WAIT":
                             // wait - this is a dummy action, but we want to have it
-                            // as we can only set a constant as a number of lines we expect to get from the player
+                            // as we can only set exact number of lines we expect to get from the player
                             action.type = Action.ActionType.Wait;
+                            if (scanner.hasNext()) {
+                                throw new IllegalArgumentException(String.format("Some redundant chars found (missing |?) (%s)", out));
+                            }
                             break;
                         case "P":
                         case "PRINT":
-                            // say - get a message to print
+                            // print - get a message to print
                             message_text = scanner.nextLine();
                             break;
                         default:
                             // if we wanted to print debug messages given by players this is the place for it
-                            throw new NoSuchMethodException(String.format("Bad Action: %s", out));
+                            throw new NoSuchMethodException(String.format("Not recognized action %s (%s)", actionName, out));
                     }
+                    checkValidActionErrorMessage = "";
                     if (checkValidAction(action, units)) {
                         moves.add(action);
                     } else {
-                        throw new NoSuchMethodException(String.format("Invalid action: %s", out));
+                        throw new NoSuchMethodException(String.format("%s (%s)", checkValidActionErrorMessage, out));
                     }
-                } catch (NoSuchElementException e) {
-                    continue;
+                } catch (NoSuchElementException | NumberFormatException e) {
+                    if (e instanceof NumberFormatException) {
+                        throw new NumberFormatException("Badly formatted double values " + "(" + out + ")");
+                    } else {
+                        throw new NoSuchMethodException("Missing or wrong value provided " + "(" + out + ")");
+                    }
                 }
             }
         }
