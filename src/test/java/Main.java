@@ -10,6 +10,8 @@ public class Main {
         MultiplayerGameRunner gameRunner = new MultiplayerGameRunner();
         gameRunner.setGameParameters(properties);
 
+        gameRunner.setLeagueLevel(3);
+
         gameRunner.addAgent(Agent1.class);
         gameRunner.addAgent(Agent2.class);
 
