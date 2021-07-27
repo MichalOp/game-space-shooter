@@ -134,14 +134,15 @@ public class Player extends AbstractMultiplayerPlayer {
                             break;
                         case "M":
                         case "MISSILE":
-                            if (!missile_enabled)
-                                throw new IllegalArgumentException(String.format("Missiles are not available in this league (%s)", out));
                             // fire a missile
                             action.type = Action.ActionType.Missile;
                             action.direction.x = getActionDirectionValue(scanner);
                             action.direction.y = getActionDirectionValue(scanner);
                             if (scanner.hasNext()) {
                                 throw new IllegalArgumentException(String.format("Some redundant chars found (missing |?) (%s)", out));
+                            }
+                            if (!missile_enabled) {
+                                action.type = Action.ActionType.Wait;
                             }
                             break;
                         case "D":
