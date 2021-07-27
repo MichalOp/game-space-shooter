@@ -16,6 +16,7 @@ public class Player extends AbstractMultiplayerPlayer {
     private String message_text = "";
     Text message;
     private String checkValidActionErrorMessage = "";
+    public boolean missile_enabled;
 
     private boolean checkValidAction(Action action, List<Unit> units) {
         try {
@@ -133,6 +134,8 @@ public class Player extends AbstractMultiplayerPlayer {
                             break;
                         case "M":
                         case "MISSILE":
+                            if (!missile_enabled)
+                                throw new IllegalArgumentException(String.format("Missiles are not available in this league (%s)", out));
                             // fire a missile
                             action.type = Action.ActionType.Missile;
                             action.direction.x = getActionDirectionValue(scanner);
