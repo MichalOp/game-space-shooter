@@ -63,7 +63,7 @@ while True:
                         target_vel = s.vel - u.vel
 
             target = target_pos
-            print("%d | F %.2f %.2f | A %.2f %.2f | M %.2f %.2f" % (u.id, target[0], target[1],0, 0, 2*random.random()-1,2*random.random()-1))
+            print("%d | F %.2f %.2f | A %.2f %.2f | M %.2f %.2f" % (u.id, target[0]*100, target[1]*100,0, 0, 2*random.random()-1,2*random.random()-1))
 
         if u.unit_type == "M":
             for s in enemy_units:
