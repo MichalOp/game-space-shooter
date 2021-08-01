@@ -8,6 +8,7 @@ public class Ship extends Unit {
 
     Vector2d acceleration;
     double gunCooldown;
+    double missileCooldown;
     int missilesCount;
     Sprite graphics;
     int verticalLayout;
@@ -22,6 +23,7 @@ public class Ship extends Unit {
         verticalLayout = faction == 0 ? 0 : Consts.MAP_Y / 2;
         health = Consts.SHIP_MAX_HEALTH;
         gunCooldown = Consts.GUN_COOLDOWN;
+        missileCooldown = Consts.MISSILE_COOLDOWN;
         acceleration = Vector2d.zero;
         missilesCount = Consts.MISSILES_COUNT;
         graphics = ref.graphicEntityModule.createSprite()
@@ -104,8 +106,9 @@ public class Ship extends Unit {
     }
 
     public int launchMissile(){
-        if(missilesCount > 0){
+        if(missilesCount > 0 && missileCooldown > Consts.MISSILE_COOLDOWN-0.001){
             missilesCount--;
+            missileCooldown = 0;
             return referee.addUnit(new Missile(position, velocity, faction, referee, Consts.MISSILES_COUNT- missilesCount-1));
         }
         return -1;
@@ -127,6 +130,7 @@ public class Ship extends Unit {
     public void tick(){
         velocity = velocity.add(acceleration.mul(Consts.TIME_DELTA));
         gunCooldown += Consts.TIME_DELTA;
+        missileCooldown += Consts.TIME_DELTA;
     }
 
 
