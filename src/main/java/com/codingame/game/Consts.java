@@ -10,6 +10,7 @@ public final class Consts {
     public static final double BULLET_MAX_HEALTH = 10;
     public static final double TIME_DELTA = 0.2;
     public static final double GUN_COOLDOWN = 2.0;
+    public static final double MISSILE_COOLDOWN = 0.9;
     public static final double GUN_BLAST_RADIUS = 120;
     public static final double GUN_DAMAGE = 10;
     public static final double BULLET_LIFETIME = 7;
