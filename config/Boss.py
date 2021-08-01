@@ -205,7 +205,7 @@ def main():
             else:
                 print()
         else:
-            print(my_ship.unitID, '|')
+            print(my_ship.unitID, '| W')
 
         for unitID in my_units:
             unit = my_units[unitID]

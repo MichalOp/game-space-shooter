@@ -146,7 +146,10 @@ public class Referee extends AbstractReferee {
 
         int start_position = (int)Math.floor(random()*3.0);
 
+        boolean missile_enabled = gameManager.getLeagueLevel() > 1;
+
         for (Player p : gameManager.getPlayers()) {
+            p.missile_enabled = missile_enabled;
             p.setMessage(this, true);
             int faction = p.getIndex();
             Ship s = new Ship(new Vector2d(faction == 0 ? WIDTH / 4.0 : WIDTH / 4.0 * 3,
