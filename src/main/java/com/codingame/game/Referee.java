@@ -222,6 +222,7 @@ public class Referee extends AbstractReferee {
                 } else {
                     message += "Bad input!";
                 }
+                gameManager.addToGameSummary(message);
                 p.deactivate(message);
             }
         }
