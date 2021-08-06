@@ -16,6 +16,7 @@ public class Player extends AbstractMultiplayerPlayer {
     private String message_text = "";
     Text message;
     private String checkValidActionErrorMessage = "";
+    public boolean missile_enabled;
 
     private boolean checkValidAction(Action action, List<Unit> units) {
         try {
@@ -139,6 +140,9 @@ public class Player extends AbstractMultiplayerPlayer {
                             action.direction.y = getActionDirectionValue(scanner);
                             if (scanner.hasNext()) {
                                 throw new IllegalArgumentException(String.format("Some redundant chars found (missing |?) (%s)", out));
+                            }
+                            if (!missile_enabled) {
+                                action.type = Action.ActionType.Wait;
                             }
                             break;
                         case "D":
