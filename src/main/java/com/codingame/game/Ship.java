@@ -18,7 +18,7 @@ public class Ship extends Unit {
     Text positionText;
 
 
-    public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref, String nickName) {
+    public Ship(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref, String nickName, String avatar) {
         super(startPosition, startVelocity, faction, ref);
         verticalLayout = faction == 0 ? 0 : Consts.MAP_Y / 2;
         health = Consts.SHIP_MAX_HEALTH;
@@ -39,23 +39,32 @@ public class Ship extends Unit {
         ref.tooltips.setTooltipText(graphics, toString());
 
         debug_graphics.setRadius(15);
+        debug_graphics.setLineWidth(1.5).setLineColor(0xffcc33);
         referee.toggleModule.displayOnToggleState(graphics, "debugToggle", false);
+
+        referee.graphicEntityModule.createSprite().setImage(avatar)
+                .setX((Consts.SIDE_BAR_LEFT * 6 + Consts.SIDE_BAR_RIGHT) / 7)
+                .setY(verticalLayout + 4)
+                .setAnchorX(0.5)
+                .setBaseWidth(50)
+                .setBaseHeight(50);
 
         referee.graphicEntityModule.createText(nickName)
                 .setStrokeThickness(5) // Adding an outline
                 .setStrokeColor(0xffffff) // a white outline
                 .setFontSize(25)
                 .setFillColor(0x000000) // Setting the text color to black
-                .setX((Consts.SIDE_BAR_LEFT + Consts.SIDE_BAR_RIGHT) / 2)
+                .setX((Consts.SIDE_BAR_LEFT * 2 + Consts.SIDE_BAR_RIGHT * 3) / 5)
                 .setY(verticalLayout)
-                .setAnchorX(0.5);
+                .setAnchorX(0.5)
+                .setMaxWidth((Consts.SIDE_BAR_RIGHT - Consts.SIDE_BAR_LEFT) * 3 / 5);
 
-        healthText = referee.graphicEntityModule.createText("Health: " + Consts.SHIP_MAX_HEALTH + "/10")
+        healthText = referee.graphicEntityModule.createText("Health: " + Consts.SHIP_MAX_HEALTH + "/" + Consts.SHIP_MAX_HEALTH)
                 .setStrokeThickness(5) // Adding an outline
                 .setStrokeColor(0xffffff) // a white outline
                 .setFontSize(15)
                 .setFillColor(0x000000) // Setting the text color to black
-                .setX((Consts.SIDE_BAR_LEFT + Consts.SIDE_BAR_RIGHT) / 2)
+                .setX((Consts.SIDE_BAR_LEFT * 2 + Consts.SIDE_BAR_RIGHT * 3) / 5)
                 .setY(verticalLayout + 30)
                 .setAnchorX(0.5);
         healthBar = referee.graphicEntityModule.createRectangle()
@@ -85,7 +94,7 @@ public class Ship extends Unit {
 
     }
     void drawSideBar(){
-        healthText.setText("Health: "+String.format("%.1f", health)+"/10");
+        healthText.setText("Health: "+String.format("%.1f", health)+"/" + Consts.SHIP_MAX_HEALTH);
         healthBar.setScaleX(health/10);
         missilesLeft.setText(missilesCount+" missiles left");
         positionText.setText("position (x, y): "+position.toString());
@@ -134,8 +143,10 @@ public class Ship extends Unit {
 
     @Override
     public String toString(){
-        return  "acceleration: "+ acceleration.toString()+
-                "\nvelocity: "+velocity.toString();
+        return  "Ship, id "+this.id+
+                "\nposition: "+position.toString()+
+                "\nvelocity: "+velocity.toString()+
+                "\nacceleration: "+ acceleration.toString();
 
     }
 }

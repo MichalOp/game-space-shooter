@@ -21,6 +21,7 @@ import com.codingame.view.ViewerEvent;
 import com.google.inject.Inject;
 
 import static java.lang.Math.max;
+import static java.lang.Math.random;
 import static java.lang.Thread.sleep;
 
 public class Referee extends AbstractReferee {
@@ -111,6 +112,10 @@ public class Referee extends AbstractReferee {
         graphicEntityModule.commitWorldState(0);
         while (t < 1 - 0.000001) {
             t += Consts.TIME_DELTA;
+            for (Unit u : unitList){
+                u.tick();
+            }
+            updateUnits(t);
             for (Unit u : unitList) {
                 u.move();
             }
@@ -118,11 +123,6 @@ public class Referee extends AbstractReferee {
                 u.graphicsTick(t);
             }
             graphicEntityModule.commitWorldState(t);
-            for (Unit u : unitList){
-                u.tick();
-            }
-            updateUnits(t);
-
         }
     }
 
@@ -136,17 +136,28 @@ public class Referee extends AbstractReferee {
         gameManager.setTurnMaxTime(100);
 
         graphicEntityModule.createSprite().setImage("Background.jpg").setAnchor(0);
+        double thickness = 0.03;
+        graphicEntityModule.createSprite().setImage("grad.png").setScaleY(Consts.MAP_Y/400.0).setScaleX(thickness);
+        graphicEntityModule.createSprite().setImage("grad.png").setScaleY(Consts.MAP_X/400.0).setScaleX(thickness).setRotation(Math.PI/2).setX(Consts.MAP_X);
+        graphicEntityModule.createSprite().setImage("grad.png").setScaleY(Consts.MAP_X/400.0).setScaleX(thickness).setRotation(-Math.PI/2).setY(Consts.MAP_Y);
+        graphicEntityModule.createSprite().setImage("grad.png").setScaleY(Consts.MAP_Y/400.0).setScaleX(thickness).setRotation(Math.PI).setX(Consts.MAP_X).setY(Consts.MAP_Y);
 
         sidebar = graphicEntityModule.createSprite().setImage("sidebar.png").setX(Consts.MAP_X);
+
+        int start_position = (int)Math.floor(random()*3.0);
 
         for (Player p : gameManager.getPlayers()) {
             p.setMessage(this, true);
             int faction = p.getIndex();
-            Ship s = new Ship(new Vector2d(faction == 0 ? WIDTH / 4 : WIDTH / 4 * 3, HEIGHT / 2), Vector2d.zero, faction, this, p.getNicknameToken());
+            Ship s = new Ship(new Vector2d(faction == 0 ? WIDTH / 4.0 : WIDTH / 4.0 * 3,
+                    faction == 0 ? HEIGHT * Consts.START_POSITION_0[start_position] : HEIGHT * Consts.START_POSITION_1[start_position]),
+                    Vector2d.zero, faction, this, p.getNicknameToken(), p.getAvatarToken());
+
 
             addUnit(s);
             p.ship = s;
             p.expectedOutputLines += 1;
+            s.graphicsTick(-1);
         }
     }
 
@@ -213,14 +224,12 @@ public class Referee extends AbstractReferee {
                     }
                 }
 
-            } catch (TimeoutException | NoSuchMethodException | InputMismatchException | NumberFormatException e) {
+            } catch (TimeoutException | NoSuchMethodException | InputMismatchException | IllegalArgumentException e) {
                 String message = String.format("%s eliminated! Reason: ", p.getNicknameToken());
                 if (e instanceof TimeoutException) {
                     message += String.format("Timeout! (%d lines expected)", p.getExpectedOutputLines());
-                } else if (e instanceof NoSuchMethodException) {
-                    message += e.getMessage();
                 } else {
-                    message += "Bad input!";
+                    message += e.getMessage();
                 }
                 gameManager.addToGameSummary(message);
                 p.deactivate(message);

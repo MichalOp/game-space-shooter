@@ -11,6 +11,7 @@ public class Missile extends Unit{
     Sprite fire;
     int number;
     Text text;
+    Rectangle healthBar;
 
     public Missile(Vector2d startPosition, Vector2d startVelocity, int faction, Referee ref, int number) {
         super(startPosition, startVelocity, faction, ref);
@@ -35,6 +36,7 @@ public class Missile extends Unit{
                 .setY(graphics.getY());
         ref.graphicEntityModule.commitEntityState(0, fire);
         debug_graphics.setRadius(8);
+        debug_graphics.setLineWidth(1.5).setLineColor(0x33a0ff);
         debug_blast.setRadius((int)Consts.MISSILE_BLAST_RADIUS);
         referee.toggleModule.displayOnToggleState(fire, "debugToggle", false);
         referee.toggleModule.displayOnToggleState(graphics, "debugToggle", false);
@@ -46,6 +48,10 @@ public class Missile extends Unit{
                 .setX((Consts.SIDE_BAR_LEFT + Consts.SIDE_BAR_RIGHT) / 2)
                 .setY((faction == 0 ? 0 : Consts.MAP_Y / 2) + 130 + 30 * number)
                 .setAnchorX(0.5);
+        healthBar = referee.graphicEntityModule.createRectangle().setFillColor(faction == 1 ? Consts.COLOR_0 : Consts.COLOR_1)
+                .setX((Consts.SIDE_BAR_LEFT + Consts.SIDE_BAR_RIGHT) / 2 - 100)
+                .setY((faction == 0 ? 0 : Consts.MAP_Y / 2) + 130 + 30 * number+20)
+                .setHeight(3).setWidth(200);
     }
 
     @Override
@@ -72,6 +78,8 @@ public class Missile extends Unit{
         referee.registerExplosion(position, Consts.MISSILE_BLAST_RADIUS, Consts.MISSILE_DAMAGE);
         text.setVisible(false);
         referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, text);
+        healthBar.setVisible(false);
+        referee.graphicEntityModule.commitEntityState(t-Consts.TIME_DELTA, healthBar);
         graphics.setVisible(false);
         fire.setX(move_group.getX()).setY(move_group.getY());
         fire.setScale(0.1);
@@ -90,16 +98,17 @@ public class Missile extends Unit{
     @Override
     public void graphicsTick(double t){
         super.graphicsTick(t);
+        healthBar.setScaleX(health/Consts.MISSILE_MAX_HEALTH);
         referee.tooltips.setTooltipText(graphics, toString());
     }
 
     @Override
     public String toString(){
-        return "position: "+position.toString()+
-                "\nacceleration: "+ acceleration.toString()+
+        return "Missile, id "+this.id+
+                "\nposition: "+position.toString()+
                 "\nvelocity: "+velocity.toString()+
-                "\nhealth: "+health+
-                "\nid"+this.id;
+                "\nacceleration: "+ acceleration.toString()+
+                "\nhealth: "+health;
 
     }
 }
