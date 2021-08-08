@@ -238,7 +238,15 @@
                 <!-- END -->
             </table>
         </div>
+            <div>
+            <br>
+            <br>
+            
+            Note that there is a debug mode available in the game settings!
     </div>
+
+    </div>
+
 
     <div style="color: #7cc576;
                     background-color: rgba(124, 197, 118,.1);
