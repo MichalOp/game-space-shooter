@@ -58,9 +58,9 @@
         <div class="statement-rules-content">
             <p>The game is played on a map
                 <const>1700</const>
-                units wide and
+                units wide (along x axis) and
                 <const>1080</const>
-                units high.
+                units high (along y axis). Point (0,0) is in the upper left corner.
             </p>
             <br>
 
