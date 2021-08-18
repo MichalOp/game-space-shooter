@@ -72,8 +72,7 @@
 
 
             <p>The ship has an
-                <const>infinite number of bullets</const>
-                .
+                <const>infinite number of bullets</const>.
             </p>
             <br>
 
@@ -90,7 +89,7 @@
             <br>
             <!-- END -->
 
-            <p>The bullet can be shot every two rounds. It detonates automatically in the first tick, when its distance
+            <p>The bullet can be shot every two turns. It detonates automatically in the first tick, when its distance
                 to the closest enemy unit, that was in its damage radius, starts to increase. Ending it's lifetime
                 (after
                 <const>7</const>
@@ -100,15 +99,13 @@
             </p>
             <p>
                 Bullet's damage radius is
-                <const>120</const>
-                , the damage caused at the bullet's position is
+                <const>120</const>, the damage caused at the bullet's position is
                 <const>10</const>
                 and decreases linearly with the distance to it, reaching
                 <const>0</const>
                 at damage radius. The bullet is shot with the given velocities along each axis (in relation to the
                 ship), with the resultant velocity being clipped to be at most
-                <const>100</const>
-                .
+                <const>100</const>.
             </p>
             <br>
 
@@ -116,14 +113,13 @@
             <!-- BEGIN level2 -->
             <div class="statement-new-league-rule">
                 <!-- END -->
-                <p>Missiles can be shot each round, as long as you have one. They are detonated with a command or when
+                <p>Missiles can be shot each turn, as long as you have one. They are detonated with a command or when
                     they lose all their health points (they start having
                     <const>7</const>
                     of them).
                 </p>
                 <p>Their damage radius is
-                    <const>200</const>
-                    , and the damage done is
+                    <const>200</const>, and the damage done is
                     <const>15</const>
                     in the center of explosion, decreasing in the same manner as bullet's.
                     They have their own engines, so they can be moved around just as the spaceship.
@@ -138,8 +134,7 @@
             <!-- BEGIN level1 -->
             <p> Ships move with the given acceleration along each axis, with the resultant acceleration (interpreted as
                 a vector) being clipped to length
-                <const>10</const>
-                .
+                <const>10</const>.
             </p>
             <br>
             <!-- END -->
@@ -161,13 +156,11 @@
             <!-- END -->
             <!-- BEGIN level1 -->
             <p> Hitting the edge of the board immediately sets the unit's (ship's or bullet's) health to
-                <const>0</const>
-                , causing it to die/detonate.
+                <const>0</const>, causing it to die/detonate.
                 <!-- END -->
                 <!-- BEGIN level2 level3 -->
             <p> Hitting the edge of the board immediately sets the unit's (bullet's, missile's or ship's) health to
-                <const>0</const>
-                , causing it to die/detonate.
+                <const>0</const>, causing it to die/detonate.
                 <!-- END -->
         </div>
         <br>
@@ -175,7 +168,9 @@
         <br>
         <div>Each game turn consists of
             <const>5</const>
-            ticks, so that the units' positions are updated 5 times a turn.
+            ticks, so that the units' positions are updated 5 times a turn. 
+        <br><br>    
+        Each turn takes exactly 1 time unit, so that every tick takes 1/5 of a time unit - for example, a ship moving with the speed of 10 will travel 2 units of space every tick, so 10 every turn.
         </div>
         <br>
         <div>
@@ -185,7 +180,7 @@
         </div>
         <br>
         <div>
-            The game lasts up to 100 rounds. If both players survive that long, it's a draw.
+            The game lasts up to 100 turns. If both players survive that long, it's a draw.
         </div>
         <br>
         <div>
@@ -277,33 +272,33 @@
             <div class="title">Input for one game turn</div>
             <div class="text"><span class="statement-lineno">Line 1:</span> One integer <var>units</var> for the number
                 of units on the board. <br>
+                <!-- BEGIN level1 -->
                 <span class="statement-lineno">Next <var>units</var> lines:</span> Two integers <var>unit_id</var>,
-                <var>faction</var>, being the unit's unique ID and faction (
-                <const>1</const>
+                <var>faction</var>, being the unit's unique ID and faction (<const>1</const>
                 for the player,
                 <const>-1</const>
                 for the opponent), one char <var>type</var> being
-                <const>S</const>
-                hip
-                <!-- BEGIN level1 -->
-                or
-                <!-- END -->
-                <!-- BEGIN level2 level3 -->
-                ,
-                <!-- END -->
-                <const>B</const>
-                ullet
-                <!-- BEGIN level2 level3 -->
-                or
-                <const>M</const>
-                issile
-                <!-- END -->
-                , six floats <var>health</var>, <var>position_x</var>, <var>position_y</var>, <var>velocity_x</var>,
+                <const>S</const>hip or <const>B</const>ullet, six floats <var>health</var>, <var>position_x</var>, <var>position_y</var>, <var>velocity_x</var>,
                 <var>velocity_y</var>, <var>gun_cooldown</var> for the unit's health points left, its position on each
-                axis and velocity on each axis, followed by gun cooldown, which indicates the number of rounds till the
-                next bullet can be shot if this unit is a ship,
+                axis and velocity on each axis, followed by gun cooldown, which indicates the number of turns till the
+                next bullet can be shot if this unit is a ship, <const>-1</const> otherwise.
+                <!-- END -->
+                <!-- BEGIN level2 level3 -->
+                <span class="statement-lineno">Next <var>units</var> lines:</span> Two integers <var>unit_id</var>,
+                <var>faction</var>, being the unit's unique ID and faction (<const>1</const>
+                for the player,
                 <const>-1</const>
-                otherwise.
+                for the opponent), one char <var>type</var> being
+                <const>S</const>hip, <const>B</const>ullet or <const>M</const>issile, six floats <var>health</var>, <var>position_x</var>, <var>position_y</var>, <var>velocity_x</var>,
+                <var>velocity_y</var>, <var>gun_cooldown</var> for the unit's health points left, its position on each
+                axis and velocity on each axis, followed by gun cooldown, which indicates the number of turns till the
+                next bullet can be shot if this unit is a ship, <const>-1</const> otherwise.
+                <!-- BEGIN level2 -->
+                <div class="statement-new-league-rule">
+                    Note that there is a new <const>M</const>issile input!
+                </div>
+                <!-- END -->
+                <!-- END -->
                 <br>
             </div>
 
@@ -317,15 +312,13 @@
                 <span class="statement-lineno"><const>1</const> line</span>, a command for your ship in the
                 form: <var> unit_id | A x y | F x y </var>, having one or more commands
                 for the ship separated by
-                <const>|</const>
-                .
+                <const>|</const>.
                 <const>unit_id</const>
                 is your ship's ID.
                 You can also use
                 <const>S</const>
                 instead of
-                <const>unit_id</const>
-                .
+                <const>unit_id</const>.
                 <!-- END -->
                 <!-- BEGIN level2 level3 -->
                 <span class="statement-lineno"><const>n</const> lines</span>, where
@@ -336,13 +329,11 @@
                 for
                 <const>unit_id</const>
                 separated by
-                <const>|</const>
-                .
+                <const>|</const>.
                 For a ship
                 <const>S</const>
                 can be used instead of
-                <const>unit_id</const>
-                .
+                <const>unit_id</const>.
                 <!-- END -->
                 <const>x,y</const>
                 are both dot-formatted doubles - if given with more
@@ -433,7 +424,7 @@
                 which has id 23, and at the same time fire a bullet with velocity (relative to the ship) (2, 1).<br>
                 <var>23 | A 0 -4 | F 2 1</var>
                 <br><br>
-                You want to not do anything in this round.<br>
+                You want to not do anything in this turn.<br>
                 <var>23 | W</var>
                 <br><br>
                 You want to only fire a bullet with velocity (relative to the ship) (1, 1) and print "Hello there" and a
