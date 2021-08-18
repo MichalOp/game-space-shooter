@@ -45,9 +45,9 @@
         <div class="statement-rules-content">
             <p>The game is played on a map
                 <const>1700</const>
-                units wide and
+                units wide (along x axis) and
                 <const>1080</const>
-                units high.
+                units high (along y axis). Point (0,0) is in the upper left corner.
             </p>
             <br>
 
@@ -59,13 +59,12 @@
 
 
             <p>The ship has an
-                <const>infinite number of bullets</const>
-                .
+                <const>infinite number of bullets</const>.
             </p>
             <br>
 
 
-            <p>The bullet can be shot every two rounds. It detonates automatically in the first tick, when its distance
+            <p>The bullet can be shot every two turns. It detonates automatically in the first tick, when its distance
                 to the closest enemy unit, that was in its damage radius, starts to increase. Ending it's lifetime
                 (after
                 <const>7</const>
@@ -75,15 +74,13 @@
             </p>
             <p>
                 Bullet's damage radius is
-                <const>120</const>
-                , the damage caused at the bullet's position is
+                <const>120</const>, the damage caused at the bullet's position is
                 <const>10</const>
                 and decreases linearly with the distance to it, reaching
                 <const>0</const>
                 at damage radius. The bullet is shot with the given velocities along each axis (in relation to the
                 ship), with the resultant velocity being clipped to be at most
-                <const>100</const>
-                .
+                <const>100</const>.
             </p>
             <br>
 
@@ -91,20 +88,20 @@
             <p>The ships start at symmetrical positions, close to the center of the board.</p>
             <p> Ships move with the given acceleration along each axis, with the resultant acceleration (interpreted as
                 a vector) being clipped to length
-                <const>10</const>
-                .
+                <const>10</const>.
             </p>
             <br>
             <p> Hitting the edge of the board immediately sets the unit's (ship's or bullet's) health to
-                <const>0</const>
-                , causing it to die/detonate.
+                <const>0</const>, causing it to die/detonate.
         </div>
         <br>
         <div>Keep in mind that your own weapons are as harmful to you as your opponent's!</div>
         <br>
         <div>Each game turn consists of
             <const>5</const>
-            ticks, so that the units' positions are updated 5 times a turn.
+            ticks, so that the units' positions are updated 5 times a turn. 
+        <br><br>    
+        Each turn takes exactly 1 time unit, so that every tick takes 1/5 of a time unit - for example, a ship moving with the speed of 10 will travel 2 units of space every tick, so 10 every turn.
         </div>
         <br>
         <div>
@@ -114,7 +111,7 @@
         </div>
         <br>
         <div>
-            The game lasts up to 100 rounds. If both players survive that long, it's a draw.
+            The game lasts up to 100 turns. If both players survive that long, it's a draw.
         </div>
         <br>
         <div>
@@ -191,22 +188,14 @@
             <div class="text"><span class="statement-lineno">Line 1:</span> One integer <var>units</var> for the number
                 of units on the board. <br>
                 <span class="statement-lineno">Next <var>units</var> lines:</span> Two integers <var>unit_id</var>,
-                <var>faction</var>, being the unit's unique ID and faction (
-                <const>1</const>
+                <var>faction</var>, being the unit's unique ID and faction (<const>1</const>
                 for the player,
                 <const>-1</const>
                 for the opponent), one char <var>type</var> being
-                <const>S</const>
-                hip
-                or
-                <const>B</const>
-                ullet
-                , six floats <var>health</var>, <var>position_x</var>, <var>position_y</var>, <var>velocity_x</var>,
+                <const>S</const>hip or <const>B</const>ullet, six floats <var>health</var>, <var>position_x</var>, <var>position_y</var>, <var>velocity_x</var>,
                 <var>velocity_y</var>, <var>gun_cooldown</var> for the unit's health points left, its position on each
-                axis and velocity on each axis, followed by gun cooldown, which indicates the number of rounds till the
-                next bullet can be shot if this unit is a ship,
-                <const>-1</const>
-                otherwise.
+                axis and velocity on each axis, followed by gun cooldown, which indicates the number of turns till the
+                next bullet can be shot if this unit is a ship, <const>-1</const> otherwise.
                 <br>
             </div>
 
@@ -219,15 +208,13 @@
                 <span class="statement-lineno"><const>1</const> line</span>, a command for your ship in the
                 form: <var> unit_id | A x y | F x y </var>, having one or more commands
                 for the ship separated by
-                <const>|</const>
-                .
+                <const>|</const>.
                 <const>unit_id</const>
                 is your ship's ID.
                 You can also use
                 <const>S</const>
                 instead of
-                <const>unit_id</const>
-                .
+                <const>unit_id</const>.
                 <const>x,y</const>
                 are both dot-formatted doubles - if given with more
                 precision than 2 decimal places, then rounded up to at most 2 decimal places.
@@ -266,7 +253,7 @@
                 which has id 23, and at the same time fire a bullet with velocity (relative to the ship) (2, 1).<br>
                 <var>23 | A 0 -4 | F 2 1</var>
                 <br><br>
-                You want to not do anything in this round.<br>
+                You want to not do anything in this turn.<br>
                 <var>23 | W</var>
                 <br><br>
                 You want to only fire a bullet with velocity (relative to the ship) (1, 1) and print "Hello there" and a
