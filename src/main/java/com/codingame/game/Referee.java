@@ -152,9 +152,16 @@ public class Referee extends AbstractReferee {
             p.missile_enabled = missile_enabled;
             p.setMessage(this, true);
             int faction = p.getIndex();
-            Ship s = new Ship(new Vector2d(faction == 0 ? WIDTH / 4.0 : WIDTH / 4.0 * 3,
-                    faction == 0 ? HEIGHT * Consts.START_POSITION_0[start_position] : HEIGHT * Consts.START_POSITION_1[start_position]),
-                    Vector2d.zero, faction, this, p.getNicknameToken(), p.getAvatarToken());
+
+            Vector2d initial_position = new Vector2d(faction == 0 ? WIDTH / 4.0 : WIDTH / 4.0 * 3,
+                    faction == 0 ? HEIGHT * Consts.START_POSITION_0[start_position] : HEIGHT * Consts.START_POSITION_1[start_position]);
+
+            if (gameManager.getLeagueLevel() == 1) {
+                initial_position.x = faction == 0 ? WIDTH / 2.0 - 350 : WIDTH / 2.0 + 350;
+                initial_position.y = HEIGHT / 2.0;
+            }
+
+            Ship s = new Ship(initial_position, Vector2d.zero, faction, this, p.getNicknameToken(), p.getAvatarToken());
 
 
             addUnit(s);
