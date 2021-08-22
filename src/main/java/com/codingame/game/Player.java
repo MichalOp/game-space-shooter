@@ -84,11 +84,16 @@ public class Player extends AbstractMultiplayerPlayer {
             try {
                 unitId = scanner.nextInt();
             } catch (NoSuchElementException e) {
-                String maybeShip = scanner.next();
-                if (maybeShip.length() == 1 && maybeShip.charAt(0) == 'S') {
-                    unitId = ship.id;
-                } else {
-                    throw new InputMismatchException("\"" + maybeShip + "\"" + " is not a correct unit identifier (" + out + ")");
+                try {
+                    String maybeShip = scanner.next();
+                    if (maybeShip.length() == 1 && maybeShip.charAt(0) == 'S') {
+                        unitId = ship.id;
+                    } else {
+                        throw new InputMismatchException("\"" + maybeShip + "\"" + " is not a correct unit identifier (" + out + ")");
+                    }
+                }
+                catch (NoSuchElementException ee) {
+                    throw new InputMismatchException("\"" + " " + "\"" + " is not a correct unit identifier (" + out + ")");
                 }
             }
             if (scanner.hasNext()) {
