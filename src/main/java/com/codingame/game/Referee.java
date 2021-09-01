@@ -1,9 +1,6 @@
 package com.codingame.game;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.InputMismatchException;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.codingame.gameengine.core.AbstractPlayer.TimeoutException;
@@ -144,7 +141,8 @@ public class Referee extends AbstractReferee {
 
         sidebar = graphicEntityModule.createSprite().setImage("sidebar.png").setX(Consts.MAP_X);
 
-        int start_position = (int)Math.floor(random()*3.0);
+        Random generator = new Random(gameManager.getSeed());
+        int start_position = (int)Math.floor(generator.nextDouble()*3.0);
 
         boolean missile_enabled = gameManager.getLeagueLevel() > 1;
 
